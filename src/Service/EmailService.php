@@ -16,16 +16,17 @@ class EmailService
             $mail = new PHPMailer(true);
             $mail->CharSet = 'UTF-8';
             $mail->isSMTP();
-            $mail->Host = 'mail.msg-pro.com';
+            $mail->Host = $_ENV['MAILER_HOST'] ?? 'mail.msg-pro.com';
             $mail->Port = 587;
             $mail->SMTPAuth = true;
-            $mail->Username = 'info@msg-pro.com';
-            $mail->Password = 'Insoft@123';
+            $mail->Username = $_ENV['MAILER_USERNAME'] ?? 'info@msg-pro.com';
+            $mail->Password = $_ENV['MAILER_PASSWORD'];
             $mail->SMTPSecure = 'tls';
             $mail->isHTML(true);
             $mail->SetFrom('info@msg-pro.com', 'MSG PRO');
             $mail->addBCC('gabrielkatonge@gmail.com');
             $mail->addBCC('katonge@insoftware.tech');
+            $mail->addBCC('gabykatonge@isicom.education');
 
 
 
@@ -68,6 +69,20 @@ class EmailService
         $body .= "<p>Cordialement !</p>";
         $body .= "<p>MSG-PRO</p>";
         $body .= "<p>Telephone: +243 851 331 051</p>";
+        return $body;
+    }
+
+    public function contactMessageBody($name, $email, $subject, $message){
+        $body = "<div style='padding: 10px; font-family: Arial, sans-serif;'>";
+        $body .= "<h3>Nouveau message depuis le formulaire de contact</h3>";
+        $body .= "<hr>";
+        $body .= "<p><strong>Nom :</strong> " . htmlspecialchars($name) . "</p>";
+        $body .= "<p><strong>Email :</strong> " . htmlspecialchars($email) . "</p>";
+        $body .= "<p><strong>Sujet :</strong> " . htmlspecialchars($subject) . "</p>";
+        $body .= "<hr>";
+        $body .= "<p><strong>Message :</strong></p>";
+        $body .= "<p>" . nl2br(htmlspecialchars($message)) . "</p>";
+        $body .= "</div>";
         return $body;
     }
 

@@ -1,20 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>MSG-PRO : Envoi de SMS Rapide et Fiable en RDC | Solution SMS Professionnelle</title>
-    <meta name="description" content="Envoyez des SMS en masse en toute simplicité avec notre plateforme. Solutions personnalisées pour les entreprises, les associations et les particuliers en RDC. Rapidité et fiabilité garanties.">
-    <meta name="keywords" content="Campagne SMS, Envoi de SMS, SMS marketing, Vente de SMS, Achat des SMS, Message professionel, Message Rapide, Message pro, bulk sms, SMS pro en RDC, SMS Tous reseaux ">
+    <title>{% block title %}MSG-PRO : Envoi de SMS Rapide et Fiable en RDC | Solution SMS Professionnelle{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Envoyez des SMS en masse en toute simplicité avec MSG-PRO. Plateforme SMS professionnelle pour entreprises, associations et particuliers en RDC. Tous réseaux : Vodacom, Airtel, Orange, Africell. À partir de 0,06 $/SMS.{% endblock %}">
+    <meta name="keywords" content="envoi SMS RDC, SMS en masse Congo, bulk SMS Kinshasa, campagne SMS Kolwezi, SMS Vodacom Airtel Orange Africell, plateforme SMS professionnelle, SMS marketing RDC, achat crédits SMS">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="MSG-PRO">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="{% block canonical %}https://msg-pro.com/{% endblock %}">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fr_CD">
+    <meta property="og:site_name" content="MSG-PRO">
+    <meta property="og:title" content="{% block og_title %}MSG-PRO : Envoi de SMS Rapide et Fiable en RDC{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Plateforme SMS professionnelle en RDC — Vodacom, Airtel, Orange, Africell. À partir de 0,06 $/SMS. 5 SMS offerts à l'inscription.{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}https://msg-pro.com/{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ absolute_url(asset('landing/assets/img/hero-bg.jpg')) }}{% endblock %}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block tw_title %}MSG-PRO : SMS Rapide en RDC{% endblock %}">
+    <meta name="twitter:description" content="{% block tw_description %}Envoyez des SMS en masse sur tous les réseaux en RDC. Vodacom, Airtel, Orange, Africell. À partir de 0,06 $/SMS.{% endblock %}">
+    <meta name="twitter:image" content="{% block tw_image %}{{ absolute_url(asset('landing/assets/img/hero-bg.jpg')) }}{% endblock %}">
 
     <!-- Favicons -->
     <link href="{{ asset("landing/assets/img/favicon.png") }}" rel="icon">
-{#    <link href="{{ asset("landing/assets/img/apple-touch-icon.png") }}" rel="apple-touch-icon">#}
+    <link href="{{ asset("landing/assets/img/apple-touch-icon.png") }}" rel="apple-touch-icon">
 
-    <!-- Fonts -->
+    <!-- Fonts (variantes réduites pour performance) -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;600;700;800&family=Raleway:wght@600;700&display=swap" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="{{ asset("landing/assets/vendor/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet">
@@ -25,6 +46,67 @@
 
     <!-- Main CSS File -->
     <link href="{{ asset("landing/assets/css/main.css") }}" rel="stylesheet">
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://msg-pro.com/#organization",
+                "name": "MSG-PRO",
+                "url": "https://msg-pro.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://msg-pro.com/msg-logo.PNG"
+                },
+                "description": "Plateforme professionnelle d'envoi de SMS en masse en République Démocratique du Congo. Tous réseaux couverts : Vodacom, Airtel, Orange, Africell.",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Kinshasa",
+                    "addressCountry": "CD"
+                },
+                "contactPoint": {
+                    "@type": "ContactPoint",
+                    "telephone": "+243-851-331-051",
+                    "contactType": "customer support",
+                    "availableLanguage": "French",
+                    "contactOption": "TollFree"
+                },
+                "sameAs": []
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://msg-pro.com/#website",
+                "url": "https://msg-pro.com",
+                "name": "MSG-PRO",
+                "description": "Envoi de SMS en masse en RDC",
+                "publisher": {
+                    "@id": "https://msg-pro.com/#organization"
+                },
+                "inLanguage": "fr-CD"
+            },
+            {
+                "@type": "SoftwareApplication",
+                "@id": "https://msg-pro.com/#app",
+                "name": "MSG-PRO",
+                "url": "https://msg-pro.com",
+                "applicationCategory": "BusinessApplication",
+                "operatingSystem": "Web",
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0.06",
+                    "priceCurrency": "USD",
+                    "description": "À partir de 0,06 $ par SMS"
+                },
+                "provider": {
+                    "@id": "https://msg-pro.com/#organization"
+                }
+            }
+        ]
+    }
+    </script>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VE017Z3E5K"></script>
     <script>

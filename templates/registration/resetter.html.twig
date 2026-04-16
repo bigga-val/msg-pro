@@ -1,96 +1,204 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Nouveau mot de passe — MSG-PRO{% endblock %}
+
+{% block stylesheets %}
+<style>
+    html, body.hold-transition.login-page {
+        height: 100% !important;
+        min-height: 100vh !important;
+    }
+    body.hold-transition.login-page {
+        background: #f1f5f9 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 20px !important;
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+    .login-wrapper {
+        display: flex;
+        width: 100%;
+        max-width: 900px;
+        min-height: 500px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .login-brand {
+        flex: 0 0 340px;
+        background: linear-gradient(160deg, #1a2e5a 0%, #2563eb 100%);
+        padding: 50px 36px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #fff;
+    }
+    .login-brand .brand-logo img { height: 52px; width: auto; object-fit: contain; }
+    .login-brand .brand-headline { margin-top: 40px; }
+    .login-brand .brand-headline h2 { font-size: 1.6rem; font-weight: 800; line-height: 1.25; margin-bottom: 12px; color: #fff; }
+    .login-brand .brand-headline p { color: rgba(255,255,255,0.75); font-size: 0.93rem; line-height: 1.6; }
+    .login-brand .brand-footer { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 32px; }
+    .login-form-panel {
+        flex: 1;
+        background: #fff;
+        padding: 50px 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .login-form-panel .form-title { margin-bottom: 28px; }
+    .login-form-panel .form-title h3 { font-size: 1.55rem; font-weight: 800; color: #1a2e5a; margin-bottom: 4px; }
+    .login-form-panel .form-title p { color: #888; font-size: 0.92rem; }
+    .login-form-panel label { font-size: 0.84rem; font-weight: 600; color: #444; margin-bottom: 5px; display: block; }
+    .login-form-panel .form-control {
+        border: 1.5px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        padding: 11px 14px !important;
+        font-size: 0.93rem !important;
+        color: #1e293b !important;
+        transition: 0.25s !important;
+        width: 100% !important;
+        margin-bottom: 16px !important;
+        box-shadow: none !important;
+    }
+    .login-form-panel .form-control:focus {
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.12) !important;
+        outline: none !important;
+    }
+    .login-form-panel .btn-submit {
+        width: 100%;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 13px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.25s;
+        margin-top: 4px;
+    }
+    .login-form-panel .btn-submit:hover { background: #1d4ed8; }
+    .login-form-panel .btn-submit:disabled { background: #93c5fd; cursor: not-allowed; }
+    .login-form-panel .btn-login-link {
+        display: none;
+        width: 100%;
+        background: #22c55e;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 13px;
+        font-size: 1rem;
+        font-weight: 700;
+        text-align: center;
+        margin-top: 12px;
+        text-decoration: none;
+        transition: 0.25s;
+    }
+    .login-form-panel .btn-login-link:hover { background: #16a34a; color: #fff; }
+    .login-form-panel .form-links { margin-top: 18px; font-size: 0.88rem; color: #888; text-align: center; }
+    .login-form-panel .form-links a { color: #2563eb; font-weight: 600; text-decoration: none; }
+    .login-form-panel .form-links a:hover { text-decoration: underline; }
+    #p-error { font-size: 0.88rem; margin-bottom: 10px; }
+    @media (max-width: 700px) {
+        .login-brand { display: none; }
+        .login-form-panel { padding: 36px 24px; }
+        .login-wrapper { border-radius: 16px; }
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row col-12 mt-3">
-            <div class="col-12">
-                <a href="{{ path("app_landing") }}">
-{#                    <img class="img-rounded w-25 " src="{{ asset("rapide-logo.png") }}" alt="Envoi des SMS rapides | SMS en masse">#}
-                    <input type="hidden" value="{{ pwdid }}" id="pwdid">
-{#                    <p>{{ date_donnee | format_datetime() }}</p>#}
-{#                    <p>{{ date_actuelle | format_datetime() }}</p>#}
-{#                    <p>{{ result }}</p>#}
+<input type="hidden" value="{{ pwdid }}" id="pwdid">
+
+<div class="login-wrapper">
+
+    <!-- Panneau gauche -->
+    <div class="login-brand">
+        <div>
+            <div class="brand-logo">
+                <a href="{{ path('app_landing') }}">
+                    <img src="{{ asset('msg-logo.PNG') }}" alt="MSG-PRO">
                 </a>
             </div>
-
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Réinitialisation du mot de passe</h1>
-                <p class=""></p>
-                <div class="form-group">
-                    <label for="">Nouveau mot de passe</label>
-                    <input type="text" class="form-control col-8" name="pwd" id="pwd">
-                </div>
-                <div class="form-group">
-                    <label for="">Confirmer le mot de Passe</label>
-                    <input type="text" class="form-control col-8" name="pwd2" id="pwd2">
-                </div>
-                <p id="p-error"></p>
-                <button class="btn btn- btn-dark" id="btn-save">Réinitialiser</button>
-                <br>
-
-                <a href="{{ path("app_landing") }}">Retourner à la page d'Accueil</a>
-
+            <div class="brand-headline">
+                <h2>Choisissez un nouveau mot de passe</h2>
+                <p>Utilisez un mot de passe fort d'au moins 8 caractères, mélangeant lettres, chiffres et symboles.</p>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <a class="btn btn-success" id="btn-login" href="{{ path("app_login") }}">Connexion</a>
-
-            </div>
+        <div class="brand-footer">
+            © {{ "now"|date("Y") }} MSG-PRO — Tous droits réservés
         </div>
-
-
-
-
     </div>
-    <script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
-    <script>
-        $(document).ready(function(e){
-            $("#btn-login").hide()
-            $("#btn-save").on("click", function(e){
-                let pwd = $('#pwd').val()
-                let pwd2 = $('#pwd2').val()
-                let pwdid = $('#pwdid').val()
-                if( pwd === "") {
-                    $('#p-error').text("Entrer un mot de passe")
-                        .addClass("text-danger")
-                    $('#pwd').addClass("border border-danger").focus()
-                    $('#pwd2').removeClass("border border-danger")
-                }else if(pwd2 === ""){
-                    $("#p-error").text("Veuillez confirmer votre mot de passe")
-                        .addClass("text-danger")
-                    $("#pwd2").addClass("border border-danger").focus()
-                    $("#pwd").removeClass("border border-danger")
-                }else if(pwd !== pwd2) {
-                    $("#p-error").text("Les mots de passe ne sont pas identiques.").addClass("text-danger")
-                    $("#pwd, #pwd2").removeClass("border border-danger")
-                }else{
-                    $("#btn-save").addClass("disabled")
-                    $.ajax({
-                        url: 'JsonSaveResetPwd?pwd='+pwd+'&pwd2='+pwd2+'&pwdid='+pwdid,
-                        method: 'GET',
-                        data: {},
-                        success: function (data) {
-                            $("#p-error").text(data['msg']).addClass('text-success')
-                            if(data['data'] === true){
-                                $("#btn-login").show()
-                            }
 
-                        },
-                        error: function () {
-                            alert('Une erreur est survenue. Veuillez contacter votre admin.');
-                            // Autres actions à effectuer en cas d'erreur
+    <!-- Panneau droit -->
+    <div class="login-form-panel">
+        <div class="form-title">
+            <h3>Nouveau mot de passe</h3>
+            <p>Saisissez et confirmez votre nouveau mot de passe</p>
+        </div>
+
+        <label for="pwd">Nouveau mot de passe</label>
+        <input type="password" class="form-control" name="pwd" id="pwd" placeholder="••••••••">
+
+        <label for="pwd2">Confirmer le mot de passe</label>
+        <input type="password" class="form-control" name="pwd2" id="pwd2" placeholder="••••••••">
+
+        <p id="p-error"></p>
+
+        <button class="btn-submit" id="btn-save">Réinitialiser le mot de passe</button>
+        <a class="btn-login-link" id="btn-login" href="{{ path('app_login') }}">
+            <i class="fas fa-sign-in-alt me-2"></i> Se connecter maintenant
+        </a>
+
+        <div class="form-links">
+            <a href="{{ path('app_landing') }}">← Retour à la page d'accueil</a>
+        </div>
+    </div>
+
+</div>
+
+<script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
+<script>
+    $(document).ready(function (e) {
+        $("#btn-save").on("click", function (e) {
+            let pwd = $('#pwd').val();
+            let pwd2 = $('#pwd2').val();
+            let pwdid = $('#pwdid').val();
+
+            if (pwd === "") {
+                $('#p-error').text("Veuillez entrer un mot de passe.").removeClass("text-success").addClass("text-danger");
+                $('#pwd').addClass("border border-danger").focus();
+                $('#pwd2').removeClass("border border-danger");
+            } else if (pwd2 === "") {
+                $("#p-error").text("Veuillez confirmer votre mot de passe.").removeClass("text-success").addClass("text-danger");
+                $("#pwd2").addClass("border border-danger").focus();
+                $("#pwd").removeClass("border border-danger");
+            } else if (pwd !== pwd2) {
+                $("#p-error").text("Les mots de passe ne sont pas identiques.").removeClass("text-success").addClass("text-danger");
+                $("#pwd, #pwd2").addClass("border border-danger");
+            } else {
+                $("#btn-save").prop("disabled", true).text("Réinitialisation en cours...");
+                $("#pwd, #pwd2").removeClass("border border-danger");
+
+                $.ajax({
+                    url: 'JsonSaveResetPwd?pwd=' + encodeURIComponent(pwd) + '&pwd2=' + encodeURIComponent(pwd2) + '&pwdid=' + encodeURIComponent(pwdid),
+                    method: 'GET',
+                    success: function (data) {
+                        $("#p-error").text(data['msg']).removeClass("text-danger").addClass("text-success");
+                        if (data['data'] === true) {
+                            $("#btn-save").hide();
+                            $("#btn-login").css("display", "block");
+                        } else {
+                            $("#btn-save").prop("disabled", false).text("Réinitialiser le mot de passe");
                         }
-                        //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
-                    })
-                }
-            })
-        })
-    </script>
-
-
+                    },
+                    error: function () { alert('Une erreur est survenue. Veuillez contacter votre admin.'); }
+                });
+            }
+        });
+    });
+</script>
 {% endblock %}

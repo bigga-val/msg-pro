@@ -1,64 +1,330 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion — MSG-PRO{% endblock %}
+{% block meta_description %}Connectez-vous à votre espace MSG-PRO pour envoyer des SMS en masse en RDC.{% endblock %}
+{% block canonical %}https://msg-pro.com/login{% endblock %}
+
+{% block stylesheets %}
+<style>
+    html, body.hold-transition.login-page {
+        height: 100% !important;
+        min-height: 100vh !important;
+    }
+    body.hold-transition.login-page {
+        background: #f1f5f9 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 20px !important;
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+
+    .login-wrapper {
+        display: flex;
+        width: 100%;
+        max-width: 960px;
+        min-height: 560px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    /* ---- Panneau gauche ---- */
+    .login-brand {
+        flex: 1;
+        background: linear-gradient(160deg, #1a2e5a 0%, #2563eb 100%);
+        padding: 50px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #fff;
+    }
+    .login-brand .brand-logo img {
+        height: 52px;
+        width: auto;
+        object-fit: contain;
+    }
+    .login-brand .brand-logo span {
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+    .login-brand .brand-headline {
+        margin-top: 48px;
+    }
+    .login-brand .brand-headline h2 {
+        font-size: 1.9rem;
+        font-weight: 800;
+        line-height: 1.25;
+        margin-bottom: 14px;
+        color: #fff;
+    }
+    .login-brand .brand-headline p {
+        color: rgba(255,255,255,0.78);
+        font-size: 0.97rem;
+        line-height: 1.65;
+    }
+    .login-brand .brand-features {
+        list-style: none;
+        padding: 0;
+        margin: 28px 0 0;
+    }
+    .login-brand .brand-features li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(255,255,255,0.85);
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+    .login-brand .brand-features li i {
+        background: rgba(255,255,255,0.15);
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        flex-shrink: 0;
+    }
+    .login-brand .brand-footer {
+        font-size: 0.78rem;
+        color: rgba(255,255,255,0.45);
+        margin-top: 40px;
+    }
+
+    /* ---- Panneau droit ---- */
+    .login-form-panel {
+        flex: 1;
+        background: #fff;
+        padding: 50px 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .login-form-panel .form-title {
+        margin-bottom: 32px;
+    }
+    .login-form-panel .form-title h3 {
+        font-size: 1.65rem;
+        font-weight: 800;
+        color: #1a2e5a;
+        margin-bottom: 6px;
+    }
+    .login-form-panel .form-title p {
+        color: #888;
+        font-size: 0.93rem;
+    }
+    .login-form-panel label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 5px;
+        display: block;
+    }
+    .login-form-panel .form-control {
+        border: 1.5px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 11px 14px;
+        font-size: 0.95rem;
+        color: #1e293b;
+        transition: 0.25s;
+        width: 100%;
+        margin-bottom: 18px;
+    }
+    .login-form-panel .form-control:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+        outline: none;
+    }
+    .login-form-panel .btn-login {
+        width: 100%;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 13px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.25s;
+        margin-top: 4px;
+        letter-spacing: 0.3px;
+    }
+    .login-form-panel .btn-login:hover {
+        background: #1d4ed8;
+    }
+    .login-form-panel .form-links {
+        margin-top: 20px;
+        font-size: 0.88rem;
+        color: #888;
+        text-align: center;
+    }
+    .login-form-panel .form-links a {
+        color: #2563eb;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .login-form-panel .form-links a:hover {
+        text-decoration: underline;
+    }
+    .login-form-panel .divider {
+        margin: 6px 0 12px;
+        color: #aaa;
+        font-size: 0.82rem;
+        text-align: center;
+    }
+    .msg-error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #dc2626;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 0.88rem;
+        margin-bottom: 14px;
+    }
+
+    /* Mobile top bar */
+    .mobile-topbar {
+        display: none;
+        background: linear-gradient(90deg, #1a2e5a 0%, #2563eb 100%);
+        padding: 14px 20px;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .mobile-topbar a.back-home {
+        color: rgba(255,255,255,0.85);
+        font-size: 0.85rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .mobile-topbar a.back-home:hover { color: #fff; }
+    .mobile-topbar img { height: 32px; width: auto; }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+        .login-brand { display: none; }
+        .mobile-topbar { display: flex; }
+        .login-form-panel { padding: 28px 24px; }
+        .login-wrapper {
+            max-width: 420px;
+            border-radius: 16px;
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block body %}
+<div class="login-wrapper">
 
-
-<div class="login-box">
-    <div class="login-logo">
-        <a href="{{ path("app_landing") }}">
-            <img class="img-rounded w-50 " src="{{ asset("msg-logo.png") }}" alt="Envoi des SMS rapides | SMS en masse">
+    <!-- Barre mobile (logo + retour accueil) -->
+    <div class="mobile-topbar">
+        <a href="{{ path('app_landing') }}">
+            <img src="{{ asset('msg-logo.PNG') }}" alt="MSG-PRO">
+        </a>
+        <a href="{{ path('app_landing') }}" class="back-home">
+            <i class="fas fa-arrow-left"></i> Accueil
         </a>
     </div>
 
-    <div class="card">
-        <div class="card-header bg-dark">
-            <h4>Se Connecter</h4>
+    <!-- Panneau gauche : marque -->
+    <div class="login-brand">
+        <div>
+            <div class="brand-logo">
+                <a href="{{ path('app_landing') }}">
+                    <img src="{{ asset('msg-logo.PNG') }}" alt="MSG-PRO">
+                </a>
+            </div>
+            <div class="brand-headline">
+                <h2>Envoyez des SMS en masse, simplement</h2>
+                <p>La plateforme SMS professionnelle pour les entreprises, associations et particuliers en RDC.</p>
+                <ul class="brand-features">
+                    <li><i class="fas fa-check"></i> Tous réseaux — Vodacom, Airtel, Orange, Africell</li>
+                    <li><i class="fas fa-check"></i> 5 SMS offerts dès l'inscription</li>
+                    <li><i class="fas fa-check"></i> Crédits SMS sans expiration</li>
+                    <li><i class="fas fa-check"></i> Support disponible 24h/7j</li>
+                </ul>
+            </div>
         </div>
-        <div class="card-body">
-            <form method="post">
-                {% if error %}
-                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                {% endif %}
-
-                {% if app.user %}
-                    <div class="mb-3">
-                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-                    </div>
-                {% endif %}
-
-                <label for="username">Username</label>
-                <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="username" required autofocus>
-                <label for="password">Password</label>
-                <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-
-                <input type="hidden" name="_csrf_token"
-                       value="{{ csrf_token('authenticate') }}"
-                >
-
-                {#
-                Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-                See https://symfony.com/doc/current/security/remember_me.html
-
-                <div class="checkbox mb-3">
-                    <input type="checkbox" name="_remember_me" id="_remember_me">
-                    <label for="_remember_me">Remember me</label>
-                </div>
-                #}
-                <br>
-                <button class="btn btn-lg btn-info" type="submit">
-                    Connexion
-                </button>
-
-                <br>
-                {% if not app.user %}
-                    Pas de Compte? <a href="{{ path("app_register") }}">S'inscrire</a>
-                    <p>Mot de Passe oublié ? <a target="_blank" href="{{ path("app_reset") }}">Réinitialiser</a></p>
-
-                {% endif %}
-            </form>
+        <div class="brand-footer">
+            © {{ "now"|date("Y") }} MSG-PRO — Tous droits réservés
         </div>
     </div>
+
+    <!-- Panneau droit : formulaire -->
+    <div class="login-form-panel">
+        <div class="form-title">
+            <h3>Bon retour 👋</h3>
+            <p>Connectez-vous à votre compte MSG-PRO</p>
+        </div>
+
+        {% if error %}
+            <div class="msg-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+        <div id="msg-error"></div>
+
+        {% if app.user %}
+            <div class="alert alert-info mb-3" style="border-radius:8px; font-size:0.9rem;">
+                Connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>.
+                <a href="{{ path('app_logout') }}">Se déconnecter</a>
+            </div>
+        {% endif %}
+
+        <form id="login-form" method="post">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <label for="username">Nom d'utilisateur</label>
+            <input type="text" value="{{ last_username }}" name="_username" id="username"
+                   class="form-control" autocomplete="username" required autofocus
+                   placeholder="Votre identifiant">
+
+            <label for="password">Mot de passe</label>
+            <input type="password" name="_password" id="password"
+                   class="form-control" autocomplete="current-password" required
+                   placeholder="••••••••">
+
+            <button id="btn-login" class="btn-login" type="submit">
+                Se connecter
+            </button>
+        </form>
+
+        <div class="form-links">
+            <div class="divider mt-3">Mot de passe oublié ? <a href="{{ path('app_reset') }}">Réinitialiser</a></div>
+            Pas encore de compte ? <a href="{{ path('app_register') }}">Créer un compte gratuit</a>
+        </div>
+    </div>
+
 </div>
+
+<script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
+<script>
+    $(document).ready(function () {
+        $('#btn-login').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'JsonCheckAccount?username=' + encodeURIComponent($('#username').val()),
+                method: 'GET',
+                success: function (data) {
+                    if (data !== true) {
+                        $("#msg-error").html(
+                            '<div class="msg-error">' + $('<div>').text(data).html() + '</div>'
+                        );
+                    } else {
+                        $("#login-form").submit();
+                    }
+                },
+                error: function () {
+                    alert('Une erreur est survenue. Veuillez contacter votre admin.');
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}

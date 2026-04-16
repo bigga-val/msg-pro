@@ -42,7 +42,7 @@ class SecurityController extends AbstractController
     public function listeusers(UserRepository $userRepository): Response
     {
         if(!$this->isGranted('ROLE_ADMIN')){
-            return throw $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
         $users = $userRepository->findAll();
         return $this->render('security/liste.html.twig', [
@@ -56,7 +56,7 @@ class SecurityController extends AbstractController
         return $this->render('security/profile.html.twig');
     }
 
-    #[Route(path:'/recharge', name: 'app_user_recharge')]
+    #[Route(path:'/recharge', name: 'app_user_recharge', methods: ['POST'])]
     public function recharge(Request $request,
         UserRepository $userRepository,
     RechargeRepository $rechargeRepository,

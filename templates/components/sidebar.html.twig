@@ -1,207 +1,162 @@
-<!-- Main Sidebar Container -->
 {% include("components/topbar.html.twig") %}
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="" class="brand-link">
-        <img src="{{ asset("landing/assets/img/favicon.png") }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">MSG-PRO</span>
+    <a href="{{ path('app_landing') }}" class="brand-link">
+        <img src="{{ asset('msg-logo.PNG') }}" alt="MSG-PRO Logo" class="brand-image img-circle elevation-3" style="opacity:.9">
+        <span class="brand-text">MSG-PRO</span>
     </a>
 
-    <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <!-- User panel -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
             <div class="image">
-                <img src="{{ asset("dist/img/user2-160x160.jpg") }}" class="img-circle elevation-2" alt="User Image">
-            </div>
-            <div class="info">
-                <a href="#" class="d-block d-flex">
-                    {% if(app.user) %}
-                        <h5>{{ app.user.username | upper }}<span class="badge badge-info ml-3"><span id="qty-sms">{{ app.user.totalSMS }}</span> SMS</span></h5>
-                    {% endif %}
-
-                </a>
-            </div>
-        </div>
-
-        <!-- SidebarSearch Form -->
-        <div class="form-inline">
-            <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                    </button>
+                <div style="width:36px;height:36px;border-radius:50%;background:rgba(37,99,235,0.25);display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-user" style="color:#93c5fd;font-size:0.9rem;"></i>
                 </div>
             </div>
+            <div class="info ms-2" style="margin-left:10px;">
+                {% if app.user %}
+                    <span style="color:#e2e8f0;font-weight:700;font-size:0.88rem;display:block;">
+                        {{ app.user.username | upper }}
+                    </span>
+                    <span class="badge badge-info" style="font-size:0.72rem;">
+                        <i class="fas fa-sms me-1"></i>
+                        <span id="qty-sms">{{ app.user.totalSMS ?? 0 }}</span> SMS
+                    </span>
+                {% endif %}
+            </div>
         </div>
 
-        <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-                     with font-awesome or any other icon font library -->
-
 
                 <li class="nav-item">
-                    <a href="{{ path("app_home") }}" class="nav-link">
-                        <i class="nav-icon far fa-calendar-alt"></i>
-                        <p>
-                            Tableau de Board
-{#                            <span class="badge badge-info right">2</span>#}
-                        </p>
+                    <a href="{{ path('app_home') }}" class="nav-link {% if app.request.get('_route') == 'app_home' %}active{% endif %}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Tableau de bord</p>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a href="{{ path("app_envoi_sms") }}" class="nav-link">
-                        <i class="nav-icon far fa-image"></i>
-                        <p>
-                            Envoyer SMS
-                        </p>
+                    <a href="{{ path('app_envoi_sms') }}" class="nav-link {% if app.request.get('_route') == 'app_envoi_sms' %}active{% endif %}">
+                        <i class="nav-icon fas fa-paper-plane"></i>
+                        <p>Envoyer SMS</p>
                     </a>
                 </li>
-{#                <li class="nav-item">#}
-{#                    <a href="pages/kanban.html" class="nav-link">#}
-{#                        <i class="nav-icon fas fa-columns"></i>#}
-{#                        <p>#}
-{#                            Envoyez Mail#}
-{#                        </p>#}
-{#                    </a>#}
-{#                </li>#}
+
                 <li class="nav-item">
-                    <a href="{{ path("app_templatesms_index") }}" class="nav-link">
-                        <i class="nav-icon fas fa-columns"></i>
-                        <p>
-                            Modeles SMS
-                        </p>
+                    <a href="{{ path('app_templatesms_index') }}" class="nav-link {% if app.request.get('_route') starts with 'app_templatesms' %}active{% endif %}">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>Modèles SMS</p>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a href="{{ path("app_historique_index") }}" class="nav-link">
-                        <i class="nav-icon fas fa-columns"></i>
-                        <p>
-                            Historique
-                        </p>
+                    <a href="{{ path('app_historique_index') }}" class="nav-link {% if app.request.get('_route') starts with 'app_historique' %}active{% endif %}">
+                        <i class="nav-icon fas fa-history"></i>
+                        <p>Historique</p>
                     </a>
                 </li>
+
+                <!-- Contacts -->
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-envelope"></i>
-                        <p>
-                            Gerer les Contacts
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
+                        <i class="nav-icon fas fa-address-book"></i>
+                        <p>Contacts <i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ path("app_contact_index") }}" class="nav-link">
+                            <a href="{{ path('app_contact_index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Mes Contacts</p>
+                                <p>Mes contacts</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ path("app_groupe_new") }}" class="nav-link">
+                            <a href="{{ path('app_groupe_new') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Importer Par Excel</p>
+                                <p>Importer via Excel</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ path("app_groupe_index") }}" class="nav-link">
+                            <a href="{{ path('app_groupe_index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Mes Groupes de Contacts</p>
+                                <p>Mes groupes</p>
                             </a>
                         </li>
-
-{#                        <li class="nav-item">#}
-{#                            <a href="pages/mailbox/read-mail.html" class="nav-link">#}
-{#                                <i class="far fa-circle nav-icon"></i>#}
-{#                                <p>Modifier</p>#}
-{#                            </a>#}
-{#                        </li>#}
                     </ul>
                 </li>
+
+                <!-- Paramètres -->
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-envelope"></i>
-                        <p>
-                            Parametres
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
+                        <i class="nav-icon fas fa-cog"></i>
+                        <p>Paramètres <i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ path("app_type_organisation_index") }}" class="nav-link">
+                            <a href="{{ path('app_organisation_index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Types d'Organisation</p>
+                                <p>Mes organisations</p>
                             </a>
                         </li>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <li class="nav-item">
-                            <a href="{{ path("app_organisation_index") }}" class="nav-link">
+                            <a href="{{ path('app_type_organisation_index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Mes Organisations</p>
+                                <p>Types d'organisation</p>
                             </a>
                         </li>
-
+                        {% endif %}
                     </ul>
                 </li>
 
-                {% if(app.user) %}
+                {% if app.user %}
                     <li class="nav-item">
-                        <a href="{{ path("app_profile") }}" class="nav-link">
-                            <i class="nav-icon far fa-image"></i>
-                            <p>
-                                Profile
-                            </p>
+                        <a href="{{ path('app_profile') }}" class="nav-link {% if app.request.get('_route') == 'app_profile' %}active{% endif %}">
+                            <i class="nav-icon fas fa-user-circle"></i>
+                            <p>Mon profil</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ path("app_documentation") }}" class="nav-link">
-                            <i class="nav-icon far fa-image"></i>
-                            <p>
-                                Documentation
-                            </p>
+                        <a href="{{ path('app_documentation') }}" class="nav-link">
+                            <i class="nav-icon fas fa-book"></i>
+                            <p>Documentation</p>
                         </a>
                     </li>
+
                     {% if is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item" style="margin-top:8px;">
+                            <p class="nav-header">Administration</p>
+                        </li>
                         <li class="nav-item">
-                            <a href="{{ path("app_liste_users") }}" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
-                                <p>
-                                    Users
-                                </p>
+                            <a href="{{ path('app_liste_users') }}" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Utilisateurs</p>
                             </a>
                         </li>
                         <li class="nav-item">
-
-                            <a href="{{ path("app_commande_index") }}" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
-                                <p>
-                                    Commande
-                                </p>
+                            <a href="{{ path('app_commande_index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-shopping-cart"></i>
+                                <p>Commandes</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ path("app_liste_recharges") }}" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
-                                <p>
-                                    Recharges
-                                </p>
+                            <a href="{{ path('app_liste_recharges') }}" class="nav-link">
+                                <i class="nav-icon fas fa-credit-card"></i>
+                                <p>Recharges</p>
                             </a>
                         </li>
                     {% endif %}
-                    <li class="nav-item">
-                        <a href="{{ path("app_logout") }}" class="nav-link">
-                            <i class="nav-icon far fa-image"></i>
-                            <p>
-                                Logout
-                            </p>
+
+                    <li class="nav-item" style="margin-top:8px; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px;">
+                        <a href="{{ path('app_logout') }}" class="nav-link">
+                            <i class="nav-icon fas fa-sign-out-alt"></i>
+                            <p>Déconnexion</p>
                         </a>
                     </li>
                 {% endif %}
 
             </ul>
         </nav>
-        <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
 </aside>

@@ -58,23 +58,7 @@ final class HistoriqueController extends AbstractController
         ]);
     }
 
-    public function create($sender, $message, $numero, $reponse, $ticket,
-        EntityManagerInterface $entityManager
-    ): void{
-        $historique = new Historique();
-        $historique->setSender($sender);
-        $historique->setUser($this->getUser());
-        $historique->setMessage($message);
-        $historique->setDate(new \DateTime());
-        $historique->setNumero($numero);
-        $historique->setReponse($reponse);
-        $historique->setTicket($ticket);
-        $entityManager->persist($historique);
-        $entityManager->flush();
-
-    }
-
-    #[Route('/{id}', name: 'app_historique_show', methods: ['GET'])]
+#[Route('/{id}', name: 'app_historique_show', methods: ['GET'])]
     public function show(Historique $historique): Response
     {
         if(!$this->getUser()){

@@ -1,204 +1,279 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - SMS{% endblock %}
+{% block title %}Tableau de bord — MSG-PRO{% endblock %}
+
+{% block stylesheets %}
+<style>
+.stat-card {
+    border-radius: 12px !important;
+    border: none !important;
+    padding: 24px 20px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    transition: 0.25s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+}
+.stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.18) !important; }
+.stat-card .stat-icon {
+    position: absolute; right: 18px; top: 18px;
+    font-size: 2.4rem; opacity: 0.2;
+}
+.stat-card .stat-value { font-size: 2.2rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.stat-card .stat-label { font-size: 0.85rem; opacity: 0.85; font-weight: 500; }
+.stat-card .stat-link {
+    display: inline-block; margin-top: 14px;
+    font-size: 0.8rem; font-weight: 700;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none; letter-spacing: 0.3px;
+}
+.stat-card .stat-link:hover { color: #fff; }
+.stat-card .stat-link i { margin-left: 4px; }
+.stat-blue   { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); }
+.stat-teal   { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); }
+.stat-amber  { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
+.stat-violet { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); }
+
+.shortcut-card {
+    border-radius: 10px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #fff;
+    padding: 20px;
+    text-align: center;
+    transition: 0.2s;
+    text-decoration: none;
+    display: block;
+    color: #1e293b;
+}
+.shortcut-card:hover {
+    border-color: #2563eb !important;
+    background: #eff6ff;
+    color: #1e3a8a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(37,99,235,0.12) !important;
+}
+.shortcut-card .sc-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: #eff6ff; color: #2563eb;
+    font-size: 1.3rem; display: flex; align-items: center;
+    justify-content: center; margin: 0 auto 12px;
+    transition: 0.2s;
+}
+.shortcut-card:hover .sc-icon { background: #2563eb; color: #fff; }
+.shortcut-card span { font-size: 0.88rem; font-weight: 700; display: block; }
+
+.section-title { font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; }
+.section-title span { color: #2563eb; }
+
+.status-badge {
+    display: inline-block; padding: 2px 10px; border-radius: 20px;
+    font-size: 0.78rem; font-weight: 700;
+}
+.status-ok    { background: #dcfce7; color: #166534; }
+.status-fail  { background: #fee2e2; color: #991b1b; }
+.status-other { background: #f1f5f9; color: #475569; }
+
+.quick-send-form .form-control {
+    border-radius: 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+.quick-send-form .form-control:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1) !important;
+}
+.quick-send-form textarea { resize: none; }
+</style>
+{% endblock %}
 
 {% block body %}
+<div class="container-fluid py-3">
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-3 col-12">
-            <!-- small box -->
-            <div class="small-box bg-info">
-                <div class="inner">
-                    <h3>
-{#                        {{ app.user.totalSMS }}#}
-                        {% if app.user.totalSMS is null or app.user.totalSMS is empty %}
-                            0
-                        {% else %}
-                            {{ app.user.totalSMS }}
-                        {% endif %}
-                        
-                    </h3>
-
-                    <p>SMS</p>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        {{ myBalance }}
-                    {% endif %}
+    <!-- Stat cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-3 col-sm-6">
+            <div class="stat-card stat-blue">
+                <i class="fas fa-sms stat-icon"></i>
+                <div class="stat-value">
+                    {{ app.user.totalSMS is not null ? app.user.totalSMS : 0 }}
                 </div>
-                <div class="icon">
-                    <i class="ion ion-bag"></i>
-                </div>
-                <a href="{{ path("app_commande") }}" class="small-box-footer">Commander <i class="fas fa-arrow-circle-right"></i></a>
+                <div class="stat-label">SMS disponibles</div>
+                <a href="{{ path('app_commande') }}" class="stat-link">Recharger <i class="fas fa-arrow-right"></i></a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div style="margin-top:6px;font-size:0.78rem;opacity:0.7;">Solde opérateur : {{ myBalance }}</div>
+                {% endif %}
             </div>
         </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-12">
-            <!-- small box -->
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3>
-{#                        {{ app.user.usedSMS }}#}
-                        {% if app.user.usedSMS is null or app.user.usedSMS is empty %}
-                            0
-                        {% else %}
-                            {{ app.user.usedSMS }}
-                        {% endif %}
-                        <sup style="font-size: 20px"></sup></h3>
-
-                    <p>SMS Utilises</p>
+        <div class="col-lg-3 col-sm-6">
+            <div class="stat-card stat-teal">
+                <i class="fas fa-check-circle stat-icon"></i>
+                <div class="stat-value">
+                    {{ app.user.usedSMS is not null ? app.user.usedSMS : 0 }}
                 </div>
-                <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
-                </div>
-                <a href="{{ path("app_historique_index") }}" class="small-box-footer">Historique <i class="fas fa-arrow-circle-right"></i></a>
+                <div class="stat-label">SMS envoyés</div>
+                <a href="{{ path('app_historique_index') }}" class="stat-link">Voir l'historique <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-12">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-                <div class="inner">
-                    <h3>{{ contacts }}</h3>
-
-                    <p>Numeros</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                </div>
-                <a href="{{ path("app_contact_index") }}" class="small-box-footer">Details<i class="fas fa-arrow-circle-right"></i></a>
+        <div class="col-lg-3 col-sm-6">
+            <div class="stat-card stat-amber">
+                <i class="fas fa-address-book stat-icon"></i>
+                <div class="stat-value">{{ contacts }}</div>
+                <div class="stat-label">Contacts</div>
+                <a href="{{ path('app_contact_index') }}" class="stat-link">Gérer les contacts <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-12">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-                <div class="inner">
-                    <h3>{{ groupes }}</h3>
-
-                    <p>Groupes de Contacts</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-pie-graph"></i>
-                </div>
-                <a href="{{ path("app_groupe_index") }}" class="small-box-footer">Details <i class="fas fa-arrow-circle-right"></i></a>
+        <div class="col-lg-3 col-sm-6">
+            <div class="stat-card stat-violet">
+                <i class="fas fa-layer-group stat-icon"></i>
+                <div class="stat-value">{{ groupes }}</div>
+                <div class="stat-label">Groupes de contacts</div>
+                <a href="{{ path('app_groupe_index') }}" class="stat-link">Gérer les groupes <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
-        <!-- ./col -->
     </div>
-    <div class="row">
-        <div class="col-lg-8 col-12">
+
+    <div class="row g-3">
+
+        <!-- Accès rapides + Envoi rapide -->
+        <div class="col-lg-8">
+
+            <!-- Accès rapides -->
+            <div class="card mb-3">
+                <div class="card-header bg-gradient-dark">
+                    <h5>Accès rapides</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-4">
+                            <a href="{{ path('app_envoi_sms') }}" class="shortcut-card">
+                                <div class="sc-icon"><i class="fas fa-paper-plane"></i></div>
+                                <span>Envoyer SMS</span>
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            <a href="{{ path('app_contact_index') }}" class="shortcut-card">
+                                <div class="sc-icon"><i class="fas fa-address-book"></i></div>
+                                <span>Contacts</span>
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            <a href="{{ path('app_commande') }}" class="shortcut-card">
+                                <div class="sc-icon"><i class="fas fa-plus-circle"></i></div>
+                                <span>Acheter des SMS</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Derniers envois -->
             <div class="card">
                 <div class="card-header bg-gradient-dark">
-                    <h5>Acces directs</h5>
+                    <h5>5 derniers envois</h5>
                 </div>
-                <div class="card-body d-flex text-center">
-                    <div class="card card-body mx-2">
-                        <a href="{{ path("app_envoi_sms") }}">ENVOI SMS</a>
-
+                <div class="card-body p-0">
+                    {% if historiques is empty %}
+                        <div class="text-center py-5 text-muted">
+                            <i class="fas fa-inbox fa-2x mb-2 d-block" style="color:#cbd5e1;"></i>
+                            <span style="font-size:0.9rem;">Aucun envoi pour l'instant</span>
+                        </div>
+                    {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Expéditeur</th>
+                                    <th>Numéro</th>
+                                    <th>Message</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for h in historiques %}
+                                <tr>
+                                    <td style="font-size:0.82rem;color:#64748b;white-space:nowrap;">{{ h.date | format_datetime('short', 'short') }}</td>
+                                    <td style="font-size:0.85rem;font-weight:600;">{{ h.sender }}</td>
+                                    <td style="font-size:0.85rem;">{{ h.numero | replace({'%2b': '+'}) }}</td>
+                                    <td style="font-size:0.82rem;color:#475569;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                                        {{ h.message | replace({'+': ' '}) | slice(0, 50) }}{% if h.message | length > 50 %}…{% endif %}
+                                    </td>
+                                    <td>
+                                        {% if h.reponse == '0' or h.reponse == 0 %}
+                                            <span class="status-badge status-ok"><i class="fas fa-check me-1"></i> Envoyé</span>
+                                        {% elseif h.reponse == '-1' or h.reponse == -1 %}
+                                            <span class="status-badge status-fail"><i class="fas fa-times me-1"></i> Échec</span>
+                                        {% else %}
+                                            <span class="status-badge status-other">{{ h.reponse }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
-{#                    <div class="card card-body mx-2 ">#}
-{#                        <a href="">ENVOI EMAIL</a>#}
-{#                    </div>#}
-                    <div class="card card-body mx-2">
-                        <a href="{{ path("app_groupe_index") }}">CONTACTS</a>
-                    </div>
-                    <div class="card card-body mx-2">
-                        <a href="">
-                            ACHAT DES SMS
-                        </a>
-                    </div>
+                    {% endif %}
                 </div>
+                {% if historiques is not empty %}
+                <div class="card-footer text-right" style="text-align:right;">
+                    <a href="{{ path('app_historique_index') }}" style="font-size:0.85rem;font-weight:600;color:#2563eb;text-decoration:none;">
+                        Voir tout l'historique <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+                {% endif %}
             </div>
+
         </div>
-        <div class="col-lg-4 col-12">
-            <div class="card">
+
+        <!-- Envoi rapide -->
+        <div class="col-lg-4">
+            <div class="card h-100">
                 <div class="card-header bg-gradient-dark">
                     <h5>Envoi SMS rapide</h5>
                 </div>
-                <div class="card-body">
-                    <form id="form-rapide" action="{{ path("EnvoiRapideSMS") }}">
+                <div class="card-body quick-send-form">
+                    <form id="form-rapide" action="{{ path('EnvoiRapideSMS') }}">
+                        <label>Expéditeur</label>
                         <select class="form-control" name="expediteur" id="expediteur">
-                            <option value="-1">Choisir un expediteur *</option>
+                            <option value="-1">Choisir un expéditeur</option>
                             {% for organisation in organisations %}
                                 <option value="{{ organisation.id }}">
-                                    {% if(organisation.isApproved) %}
-                                        {{ organisation.designation }} <i class="text-success">- Approuve</i>
-                                    {% else %}
-                                        {{ organisation.designation }} <i class="text-danger">- Attente</i>
-                                    {% endif %}
+                                    {{ organisation.designation }}
+                                    {% if organisation.isApproved %} ✓{% else %} (en attente){% endif %}
                                 </option>
                             {% endfor %}
                         </select>
-                        <br>
-                        <input type="number" name="numero" class="form-control" placeholder="Num: 0991234567">
-                        <br>
-                        <textarea name="message" id="" cols="30" rows="" class="form-control" placeholder="Ecrivez le message ici..."></textarea>
-                        <br>
-                        <span id="error-msg"></span>
-                        <br>
-                        <input id="btn-envoyer" type="submit" class="btn btn-info " value="Envoyer">
-                    </form> 
+
+                        <label>Numéro de téléphone</label>
+                        <input type="number" name="numero" class="form-control" placeholder="ex : 0851234567">
+
+                        <label>Message</label>
+                        <textarea name="message" class="form-control" rows="4" placeholder="Rédigez votre message..."></textarea>
+
+                        <span id="error-msg" class="text-danger d-block mb-2" style="font-size:0.82rem;"></span>
+
+                        <button id="btn-envoyer" type="submit" class="btn btn-primary w-100" style="border-radius:8px;font-weight:700;padding:11px;">
+                            <i class="fas fa-paper-plane me-2" style="margin-right:6px;"></i> Envoyer
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-lg-12 col-12">
-            <div class="card">
-                <div class="card-header bg-gradient-dark">
-                    <h5>Mes 5 derniers envois</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <td>Date</td>
-                            <td>Par</td>
-                            <td>Sender</td>
-                            <td>Numero</td>
-                            <td>Message</td>
-                            <td>Resulat</td>
-                            <td>Reponse</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for historique in historiques %}
-                        <tr>
-                            <td>{{ historique.date | format_datetime() }}</td>
-                            <td>{{ historique.user.username }}</td>
-                            <td>{{ historique.sender }}</td>
-                            <td>{{ historique.numero | replace({'%2b': '+'}) }}</td>
-                            <td>{{ historique.message | replace({'+': ' '}) }}</td>
-                            <td>{{ historique.ticket }}</td>
-                            <td>{{ historique.reponse }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table></div>
-            </div>
-        </div>
     </div>
-
 </div>
-    <!-- date-range-picker -->
-    <script src="{{ asset("plugins/jquery/jquery.js") }}"></script>
 
-    <script src="{{ asset("plugins/daterangepicker/daterangepicker.js") }}"></script>
-    <script>
-        $('#reservation').daterangepicker()
-        $('#btn-envoyer').on('click', function(e){
-            let qty = parseInt($("#qty-sms").text())
-
-            if(qty <= 1){
-                $("#error-msg").text("Quantité insuffisante. Veuillez contacter l'administrateur")
-                    .addClass("text-danger")
-                return false
-            }else{
-                $("#error-msg").text("")
-                    .removeClass("text-danger")
-            }
-
-        })
-    </script>
+<script src="{{ asset('plugins/jquery/jquery.js') }}"></script>
+<script>
+$('#btn-envoyer').on('click', function(e) {
+    let qty = parseInt($('#qty-sms').text()) || 0;
+    if (qty <= 0) {
+        $('#error-msg').text('Solde insuffisant. Veuillez recharger votre compte.');
+        e.preventDefault();
+    } else {
+        $('#error-msg').text('');
+    }
+});
+</script>
 {% endblock %}

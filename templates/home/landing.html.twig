@@ -1,6 +1,648 @@
 {% extends 'base_landing.html.twig' %}
 
-{% block title %} MSG-PRO : La meilleure plate-forme d'envoi des SMS rapidement{% endblock %}
+{% block title %}MSG-PRO : Envoi de SMS en Masse en RDC — Vodacom, Airtel, Orange, Africell{% endblock %}
+{% block meta_description %}MSG-PRO est la plateforme SMS #1 en République Démocratique du Congo. Envoyez des SMS en masse sur tous les réseaux (Vodacom, Airtel, Orange, Africell) à seulement 0,06 $/SMS. Pack à partir de 6 $. Inscription gratuite, 5 SMS offerts.{% endblock %}
+{% block og_title %}MSG-PRO : Envoi de SMS en Masse en RDC — 0,06 $/SMS{% endblock %}
+{% block og_description %}La plateforme SMS professionnelle pour entreprises et particuliers en RDC. Tous réseaux couverts, crédits sans expiration, support 24/7. Pack dès 6 $.{% endblock %}
+{% block canonical %}https://msg-pro.com/{% endblock %}
+
+{% block stylesheets %}
+<style>
+/* ========== PALETTE BLEUE PRO ========== */
+:root {
+    --accent-color: #2563eb;
+    --nav-hover-color: #2563eb;
+    --nav-dropdown-hover-color: #2563eb;
+}
+.header {
+    --background-color: #1a2e5a;
+}
+.dark-background {
+    --background-color: #1a2e5a;
+}
+
+/* ========== HERO ========== */
+.hero {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+.hero img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    filter: brightness(0.45);
+}
+.hero .container {
+    position: relative;
+    z-index: 2;
+    padding-top: 160px;
+    padding-bottom: 100px;
+}
+.hero h1 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+.hero .hero-tagline {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.82);
+    margin-bottom: 2rem;
+    max-width: 520px;
+}
+.hero .hero-btns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.hero .btn-get-started {
+    background: var(--accent-color);
+    color: #fff;
+    padding: 14px 36px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    transition: 0.3s;
+    display: inline-block;
+}
+.hero .btn-get-started:hover {
+    background: #1d4ed8;
+    color: #fff;
+}
+.hero .btn-outline-hero {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255,255,255,0.7);
+    padding: 12px 34px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: 0.3s;
+    display: inline-block;
+}
+.hero .btn-outline-hero:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: #fff;
+    color: #fff;
+}
+
+/* Stats bar inside hero */
+.hero-stats {
+    position: relative;
+    z-index: 2;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding: 24px 0;
+    margin-top: auto;
+}
+.hero-stats .stat-item {
+    text-align: center;
+    color: #fff;
+    padding: 0 20px;
+}
+.hero-stats .stat-number {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--accent-color);
+    line-height: 1;
+    font-family: var(--heading-font);
+}
+.hero-stats .stat-label {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.75);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+.hero-stats .stat-divider {
+    width: 1px;
+    background: rgba(255,255,255,0.2);
+    align-self: stretch;
+}
+
+/* ========== ABOUT ========== */
+.about .content ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 0.97rem;
+}
+.about .content ul li i {
+    color: var(--accent-color);
+    font-size: 1.1rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+.about .content img {
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+.about .content .about-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #eff6ff;
+    color: var(--accent-color);
+    border: 1px solid #bfdbfe;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+/* ========== SERVICES ========== */
+.services .service-item {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 36px 28px 28px;
+    transition: all 0.35s ease;
+    height: 100%;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+}
+.services .service-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(37,99,235,0.12);
+    border-color: rgba(37,99,235,0.15);
+}
+.services .service-item .icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: #eff6ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+.services .service-item:hover .icon {
+    background: var(--accent-color);
+}
+.services .service-item .icon i {
+    font-size: 1.7rem;
+    color: var(--accent-color);
+    transition: 0.3s;
+}
+.services .service-item:hover .icon i {
+    color: #fff;
+}
+.services .service-item h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #191919;
+}
+.services .service-item p {
+    color: #666;
+    font-size: 0.93rem;
+    line-height: 1.65;
+    margin-bottom: 0;
+}
+
+/* ========== PRICING ========== */
+.pricing .pricing-item {
+    border-radius: 16px;
+    border: 2px solid #e2e8f0;
+    padding: 36px 30px;
+    background: #f8fafc;
+    transition: 0.3s;
+    position: relative;
+    height: 100%;
+}
+.pricing .pricing-item:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 12px 40px rgba(37,99,235,0.12);
+    transform: translateY(-3px);
+}
+
+/* Pack Mini — teinte bleue très légère */
+.pricing .col-lg-4:first-child .pricing-item {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+/* Pack Midi (featured) — fond bleu foncé, texte blanc */
+.pricing .featured .pricing-item {
+    background: linear-gradient(145deg, #1e3a8a 0%, #2563eb 100%);
+    border-color: #2563eb;
+    box-shadow: 0 12px 48px rgba(37,99,235,0.35);
+    transform: scale(1.03);
+    color: #fff;
+}
+.pricing .featured .pricing-item:hover {
+    transform: scale(1.03) translateY(-3px);
+    box-shadow: 0 20px 56px rgba(37,99,235,0.45);
+}
+
+/* Pack Maxi — teinte ambre/dorée */
+.pricing .col-lg-4:last-child .pricing-item {
+    background: #fffbeb;
+    border-color: #fcd34d;
+}
+
+.pricing .badge-popular {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f59e0b;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 18px;
+    border-radius: 20px;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+}
+.pricing .badge-saving {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: #1d4ed8;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+.pricing .featured .badge-saving {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+}
+.pricing .pricing-item h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 6px;
+}
+.pricing .featured .pricing-item h3 {
+    color: rgba(255,255,255,0.85);
+}
+.pricing .pricing-item h4 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #191919;
+    margin-bottom: 2px;
+}
+.pricing .featured .pricing-item h4 {
+    color: #fff;
+}
+.pricing .pricing-item h4 sup {
+    font-size: 1.2rem;
+    top: -10px;
+    color: var(--accent-color);
+}
+.pricing .featured .pricing-item h4 sup {
+    color: #93c5fd;
+}
+.pricing .pricing-item h4 span {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #888;
+}
+.pricing .featured .pricing-item h4 span {
+    color: rgba(255,255,255,0.65);
+}
+.pricing .pricing-item .old-price {
+    font-size: 0.85rem;
+    color: #aaa;
+    text-decoration: line-through;
+    margin-bottom: 16px;
+}
+.pricing .featured .pricing-item .old-price {
+    color: rgba(255,255,255,0.5);
+}
+.pricing .pricing-item .features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    padding-top: 20px;
+}
+.pricing .featured .pricing-item .features-list {
+    border-top-color: rgba(255,255,255,0.2);
+}
+.pricing .pricing-item .features-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #555;
+    padding: 5px 0;
+}
+.pricing .featured .pricing-item .features-list li {
+    color: rgba(255,255,255,0.88);
+}
+.pricing .pricing-item .features-list li i {
+    color: #2563eb;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+.pricing .featured .pricing-item .features-list li i {
+    color: #93c5fd;
+}
+.pricing .buy-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: var(--accent-color);
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: 0.3s;
+    letter-spacing: 0.3px;
+}
+.pricing .buy-btn:hover {
+    background: #1d4ed8;
+    color: #fff;
+}
+.pricing .featured .buy-btn {
+    background: #fff;
+    color: #1e3a8a;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.pricing .featured .buy-btn:hover {
+    background: #f0f9ff;
+    color: #1e3a8a;
+}
+
+/* Pack personnalisé */
+.custom-pack-section {
+    background: linear-gradient(135deg, #eff6ff 0%, #fff 100%);
+    border: 2px dashed rgba(37,99,235,0.3);
+    border-radius: 16px;
+    padding: 36px;
+    text-align: center;
+    margin-top: 32px;
+}
+.custom-pack-section h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #191919;
+    margin-bottom: 10px;
+}
+.custom-pack-section p {
+    color: #666;
+    margin-bottom: 20px;
+}
+.custom-pack-section .btn-custom {
+    background: var(--accent-color);
+    color: #fff;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: 0.3s;
+    display: inline-block;
+}
+.custom-pack-section .btn-custom:hover {
+    background: #1d4ed8;
+    color: #fff;
+}
+
+/* ========== CTA ========== */
+.call-to-action {
+    background: linear-gradient(135deg, #0f1f3d 0%, #1a2e5a 50%, #2563eb 100%);
+    position: relative;
+    overflow: hidden;
+}
+.call-to-action::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("{{ asset('landing/assets/img/cta-bg.jpg') }}") center/cover no-repeat;
+    opacity: 0.08;
+}
+.call-to-action .container {
+    position: relative;
+    z-index: 2;
+}
+.call-to-action h3 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+}
+.call-to-action p {
+    color: rgba(255,255,255,0.82);
+    max-width: 600px;
+    margin: 0 auto 28px;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+.call-to-action .cta-btn {
+    background: #fff;
+    color: var(--accent-color);
+    padding: 14px 40px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: 0.3s;
+    display: inline-block;
+    letter-spacing: 0.5px;
+}
+.call-to-action .cta-btn:hover {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+/* ========== CONTACT ========== */
+.contact .info-item {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    height: 100%;
+}
+.contact .info-item:hover {
+    border-color: rgba(37,99,235,0.2);
+    box-shadow: 0 8px 30px rgba(37,99,235,0.08);
+    transform: translateY(-3px);
+}
+.contact .info-item i {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 14px;
+    display: block;
+}
+.contact .info-item h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #191919;
+}
+.contact .info-item p, .contact .info-item a {
+    color: #666;
+    font-size: 0.93rem;
+    margin: 0;
+}
+.contact iframe {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+.contact .form-control {
+    border-radius: 8px;
+    border: 1.5px solid #e8e8e8;
+    padding: 12px 16px;
+    font-size: 0.93rem;
+    transition: 0.3s;
+}
+.contact .form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+.contact form button[type="submit"] {
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    padding: 13px 40px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+}
+.contact form button[type="submit"]:hover {
+    background: #1d4ed8;
+}
+</style>
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://msg-pro.com/#organization",
+      "name": "MSG-PRO",
+      "url": "https://msg-pro.com/",
+      "logo": "{{ absolute_url(asset('msg-logo.PNG')) }}",
+      "description": "Plateforme d'envoi de SMS en masse en République Démocratique du Congo. Tous réseaux : Vodacom, Airtel, Orange, Africell.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1434 RN39",
+        "addressLocality": "Kolwezi",
+        "addressRegion": "Lualaba",
+        "addressCountry": "CD"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+243851331051",
+        "contactType": "customer support",
+        "availableLanguage": ["French"]
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61575012670787",
+        "https://www.linkedin.com/company/106139815/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://msg-pro.com/#website",
+      "url": "https://msg-pro.com/",
+      "name": "MSG-PRO",
+      "publisher": { "@id": "https://msg-pro.com/#organization" },
+      "inLanguage": "fr"
+    },
+    {
+      "@type": "ItemList",
+      "name": "Tarifs SMS MSG-PRO",
+      "description": "Packs SMS professionnels pour entreprises et particuliers en RDC à 0,06 $/SMS",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "Offer",
+            "name": "Pack Mini — 100 SMS",
+            "description": "100 SMS valables à vie, tous réseaux (Vodacom, Airtel, Orange, Africell), tableau de bord inclus, support WhatsApp.",
+            "price": "6",
+            "priceCurrency": "USD",
+            "url": "https://msg-pro.com/"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "Offer",
+            "name": "Pack Midi — 500 SMS",
+            "description": "500 SMS valables à vie, tous réseaux, tableau de bord, envoi de groupe, support prioritaire.",
+            "price": "30",
+            "priceCurrency": "USD",
+            "url": "https://msg-pro.com/"
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "Offer",
+            "name": "Pack Maxi — 2500 SMS",
+            "description": "2 500 SMS valables à vie, tous réseaux, importation de contacts Excel, support prioritaire 24/7.",
+            "price": "150",
+            "priceCurrency": "USD",
+            "url": "https://msg-pro.com/"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Les crédits SMS expirent-ils ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non, vos crédits SMS MSG-PRO sont valables à vie. Utilisez-les à votre rythme, sans date d'expiration."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quels réseaux sont couverts en RDC ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "MSG-PRO couvre tous les grands réseaux en République Démocratique du Congo : Vodacom, Airtel, Orange et Africell."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel est le prix d'un SMS avec MSG-PRO ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le prix est de 0,06 $ par SMS, soit 6 $ pour 100 SMS. C'est l'un des tarifs les plus compétitifs du marché en RDC."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment créer un compte MSG-PRO ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "L'inscription est gratuite sur msg-pro.com. Vous recevez 5 SMS offerts immédiatement à la création de votre compte."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+{% endblock %}
 
 {% block body %}
 
@@ -9,24 +651,22 @@
         <div class="topbar d-flex align-items-center">
             <div class="container d-flex justify-content-center justify-content-md-between">
                 <div class="contact-info d-flex align-items-center">
-                    <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:info@msg-pro.com">Info@msg-pro.com</a></i>
+                    <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:info@msg-pro.com">info@msg-pro.com</a></i>
                     <i class="bi bi-phone d-flex align-items-center ms-4"><span>+243 851 331 051</span></i>
                 </div>
                 <div class="social-links d-none d-md-flex align-items-center">
                     <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
                     <a href="https://www.facebook.com/profile.php?id=61575012670787" class="facebook"><i class="bi bi-facebook"></i></a>
                     <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                    <a href="https://www.linkedin.com/company/106139815" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://www.linkedin.com/company/106139815/" class="linkedin"><i class="bi bi-linkedin"></i></a>
                 </div>
             </div>
         </div><!-- End Top Bar -->
 
         <div class="branding d-flex align-items-center">
-
             <div class="container position-relative d-flex align-items-center justify-content-between">
                 <a href="" class="logo d-flex align-items-center">
-                    <!-- Uncomment the line below if you also wish to use an image logo -->
-                    <img src="assets/img/logo.png" alt="">
+                    <img src="{{ asset('msg-logo.PNG') }}" alt="MSG-PRO logo">
                     <h1 class="sitename">MSG-PRO</h1>
                 </a>
 
@@ -39,16 +679,13 @@
                         <li><a href="#contact">Contact</a></li>
                         {% if app.user %}
                             <a href="{{ path("app_home") }}" class="btn btn-outline-danger btn-sm">{{ app.user.username }}</a>
-
                         {% else %}
                             <li><a href="{{ path("app_login") }}">Connexion</a></li>
-
                         {% endif %}
                     </ul>
                     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
                 </nav>
             </div>
-
         </div>
 
     </header>
@@ -56,16 +693,52 @@
     <main class="main">
 
         <!-- Hero Section -->
-        <section id="hero" class="hero section dark-background">
+        <section id="hero" class="hero section dark-background d-flex flex-column">
 
-            <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in">
+            <img src="{{ asset('landing/assets/img/hero-bg.jpg') }}" alt="Envoi SMS professionnel en RDC" data-aos="fade-in">
 
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="row justify-content-start">
-                    <div class="col-lg-8">
-                        <h2>Créer une campagne SMS personnalisée avec notre Outil d'envoi de SMS professionnel</h2>
-                        <p></p>
-                        <a href="#tarifs" class="btn-get-started">Tarifs</a>
+                    <div class="col-lg-7">
+                        <p class="hero-tagline"><i class="bi bi-patch-check-fill me-2" style="color:var(--accent-color)"></i>La plateforme SMS #1 en République Démocratique du Congo</p>
+                        <h1>Envoyez des SMS en masse, rapidement et à moindre coût</h1>
+                        <p class="hero-tagline">Touchez vos clients sur tous les réseaux — Vodacom, Airtel, Orange, Africell — en quelques clics.</p>
+                        <div class="hero-btns">
+                            <a href="#tarifs" class="btn-get-started">Voir les tarifs</a>
+                            <a href="{{ path("app_register") }}" class="btn-outline-hero">Créer un compte gratuit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats bar -->
+            <div class="hero-stats mt-auto" data-aos="fade-up" data-aos-delay="300">
+                <div class="container">
+                    <div class="row justify-content-center text-center gy-3">
+                        <div class="col-6 col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number">4</div>
+                                <div class="stat-label">Réseaux couverts</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number">0,06$</div>
+                                <div class="stat-label">Par SMS</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number">5 SMS</div>
+                                <div class="stat-label">Offerts à l'inscription</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number">24/7</div>
+                                <div class="stat-label">Support disponible</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,199 +748,100 @@
         <!-- About Section -->
         <section id="about" class="about section">
 
-            <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
-                <span>A Propos<br></span>
-                <h2>A Propos<br></h2>
+                <span>A Propos</span>
+                <h2>A Propos</h2>
                 <p>Vos campagnes SMS, boostées à la vitesse de la lumière</p>
-            </div><!-- End Section Title -->
+            </div>
 
             <div class="container">
-
-                <div class="row gy-4">
+                <div class="row gy-4 align-items-center">
 
                     <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
-                        <img src="assets/img/about.jpg" class="img-fluid" alt="">
+                        <img src="{{ asset('landing/assets/img/about.jpg') }}" class="img-fluid" alt="Tableau de bord MSG-PRO">
                     </div>
 
                     <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
+                        <span class="about-badge"><i class="bi bi-award-fill"></i> Solution SMS professionnelle</span>
                         <h3>Gagnez du temps, boostez votre communication. Le SMS simplifié pour tous</h3>
                         <p class="fst-italic">
-                            Nous sommes spécialisés dans la fourniture de solutions d'envoi de SMS en masse personnalisées pour les entreprises en RDC. Notre plateforme robuste et fiable vous permet de créer et d'envoyer des campagnes SMS ciblées à votre audience.
-                            Bénéficiez d'un taux de livraison élevé et d'une personnalisation avancée pour maximiser l'impact de vos communications.
+                            Nous sommes spécialisés dans la fourniture de solutions d'envoi de SMS en masse pour les entreprises, associations et particuliers en RDC. Notre plateforme robuste vous permet de créer et d'envoyer des campagnes SMS ciblées, avec un taux de livraison élevé sur tous les réseaux.
                         </p>
                         <ul>
-                            <li><i class="bi bi-check-circle"></i> <span>Un tableau de Bord intuitif pour le suivi de vos SMS</span></li>
-                            <li><i class="bi bi-check-circle"></i> <span>Des SMS qui n'expirent pas avec le temps</span></li>
-                            <li><i class="bi bi-check-circle"></i> <span>Gestion automatique des vos stocks SMS</span></li>
-                            <li><i class="bi bi-check-circle"></i> <span>Obtenez 5 SMS a la creation de votre Compte</span></li>
+                            <li><i class="bi bi-check-circle-fill"></i> <span>Tableau de bord intuitif pour le suivi en temps réel de vos SMS</span></li>
+                            <li><i class="bi bi-check-circle-fill"></i> <span>Vos crédits SMS n'expirent jamais — utilisez-les à votre rythme</span></li>
+                            <li><i class="bi bi-check-circle-fill"></i> <span>Gestion automatique de votre stock de SMS</span></li>
+                            <li><i class="bi bi-check-circle-fill"></i> <span>5 SMS offerts dès la création de votre compte</span></li>
                         </ul>
-                        <a href="{{ path("app_register") }}" class="read-more"><span>S'inscrire</span><i class="bi bi-arrow-right"></i></a>
+                        <a href="{{ path("app_register") }}" class="read-more"><span>Créer mon compte</span><i class="bi bi-arrow-right"></i></a>
                     </div>
 
                 </div>
-
             </div>
 
         </section><!-- /About Section -->
 
-{#        <!-- Cards Section -->#}
-{#        <section id="cards" class="cards section">#}
-
-{#            <div class="container">#}
-
-{#                <div class="row no-gutters">#}
-
-{#                    <div class="col-lg-4 col-md-6 card" data-aos="fade-up" data-aos-delay="100">#}
-{#                        <span>01</span>#}
-{#                        <h4>Lorem Ipsum</h4>#}
-{#                        <p>Ulamco laboris nisi ut aliquip ex ea commodo consequat. Et consectetur ducimus vero placeat</p>#}
-{#                    </div><!-- End Card Item -->#}
-
-{#                    <div class="col-lg-4 col-md-6 card" data-aos="fade-up" data-aos-delay="200">#}
-{#                        <span>02</span>#}
-{#                        <h4>Repellat Nihil</h4>#}
-{#                        <p>Dolorem est fugiat occaecati voluptate velit esse. Dicta veritatis dolor quod et vel dire leno para dest</p>#}
-{#                    </div><!-- End Card Item -->#}
-
-{#                    <div class="col-lg-4 col-md-6 card" data-aos="fade-up" data-aos-delay="300">#}
-{#                        <span>03</span>#}
-{#                        <h4> Ad ad velit qui</h4>#}
-{#                        <p>Molestiae officiis omnis illo asperiores. Aut doloribus vitae sunt debitis quo vel nam quis</p>#}
-{#                    </div><!-- End Card Item -->#}
-
-{#                    <div class="col-lg-4 col-md-6 card" data-aos="fade-up" data-aos-delay="400">#}
-{#                        <span>04</span>#}
-{#                        <h4>Repellendus molestiae</h4>#}
-{#                        <p>Inventore quo sint a sint rerum. Distinctio blanditiis deserunt quod soluta quod nam mider lando casa</p>#}
-{#                    </div><!-- End Card Item -->#}
-
-{#                    <div class="col-lg-4 col-md-6 card" data-aos="fade-up" data-aos-delay="400">#}
-{#                        <span>05</span>#}
-{#                        <h4>Sapiente Magnam</h4>#}
-{#                        <p>Vitae dolorem in deleniti ipsum omnis tempore voluptatem. Qui possimus est repellendus est quibusdam</p>#}
-{#                    </div><!-- End Card Item -->#}
-
-{#                    <div class="col-lg-4 col-md-6 card" data-aos="fade-up" data-aos-delay="600">#}
-{#                        <span>06</span>#}
-{#                        <h4>Facilis Impedit</h4>#}
-{#                        <p>Quis eum numquam veniam ea voluptatibus voluptas. Excepturi aut nostrum repudiandae voluptatibus corporis sequi</p>#}
-{#                    </div><!-- End Card Item -->#}
-
-{#                </div>#}
-
-{#            </div>#}
-
-{#        </section><!-- /Cards Section -->#}
-
-        <!-- Clients Section -->
-        <section id="clients" class="clients section light-background">
-
-            <div class="container">
-
-                <div class="swiper init-swiper">
-                    <div class="swiper-wrapper align-items-center">
-                        </div>
-                </div>
-
-            </div>
-        </section><!-- /Clients Section -->
-
         <!-- Services Section -->
-        <section id="services" class="services section">
+        <section id="services" class="services section light-background">
 
-            <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
                 <span>Services</span>
                 <h2>Services</h2>
-                <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-            </div><!-- End Section Title -->
+                <p>Tout ce dont vous avez besoin pour gérer vos campagnes SMS efficacement</p>
+            </div>
 
             <div class="container">
-
                 <div class="row gy-4">
 
                     <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                        <div class="service-item  position-relative">
-                            <div class="icon">
-                                <i class="bi bi-activity"></i>
-                            </div>
-                            <a href="#" class="stretched-link">
-                                <h3>Facile à utiliser</h3>
-                            </a>
-                            <p> L'application est simple à prendre en main, même si vous n'êtes pas un expert.</p>
+                        <div class="service-item position-relative">
+                            <div class="icon"><i class="bi bi-phone"></i></div>
+                            <h3>Facile à utiliser</h3>
+                            <p>Interface intuitive pensée pour tous. Pas besoin d'expertise technique — envoyez votre première campagne en moins de 5 minutes.</p>
                         </div>
-                    </div><!-- End Service Item -->
+                    </div>
 
                     <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
                         <div class="service-item position-relative">
-                            <div class="icon">
-                                <i class="bi bi-broadcast"></i>
-                            </div>
-                            <a href="#" class="stretched-link">
-                                <h3>RAPIDE</h3>
-                            </a>
-                            <p>Traitement ultra-rapide des grands volumes pour des campagnes efficaces.</p>
+                            <div class="icon"><i class="bi bi-lightning-charge-fill"></i></div>
+                            <h3>Envoi Ultra-Rapide</h3>
+                            <p>Traitement en temps réel des grands volumes. Des milliers de SMS délivrés en quelques secondes pour des campagnes efficaces.</p>
                         </div>
-                    </div><!-- End Service Item -->
+                    </div>
 
                     <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
                         <div class="service-item position-relative">
-                            <div class="icon">
-                                <i class="bi bi-easel"></i>
-                            </div>
-                            <a href="#" class="stretched-link">
-                                <h3>Support Client Dédié</h3>
-                            </a>
-                            <p>
-                                Bénéficiez d'une assistance technique personnalisée pour vous accompagner dans l'utilisation de l'application et répondre à toutes vos questions.
-                            </p>
+                            <div class="icon"><i class="bi bi-headset"></i></div>
+                            <h3>Support Dédié</h3>
+                            <p>Une équipe disponible 24h/7j pour vous accompagner, répondre à vos questions et résoudre tout problème rapidement.</p>
                         </div>
-                    </div><!-- End Service Item -->
+                    </div>
 
                     <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
                         <div class="service-item position-relative">
-                            <div class="icon">
-                                <i class="bi bi-bounding-box-circles"></i>
-                            </div>
-                            <a href="#" class="stretched-link">
-                                <h3>Clients ciblés</h3>
-                            </a>
-                            <p>Divisez votre base de contacts en segments distincts (par localisation, comportement, intérêts) pour envoyer des messages ciblés et pertinents.</p>
-                            <a href="#" class="stretched-link"></a>
+                            <div class="icon"><i class="bi bi-people-fill"></i></div>
+                            <h3>Ciblage Précis</h3>
+                            <p>Segmentez vos contacts par groupe, localisation ou profil pour envoyer le bon message à la bonne personne au bon moment.</p>
                         </div>
-                    </div><!-- End Service Item -->
+                    </div>
 
                     <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
                         <div class="service-item position-relative">
-                            <div class="icon">
-                                <i class="bi bi-calendar4-week"></i>
-                            </div>
-                            <a href="#" class="stretched-link">
-                                <h3>Envoi Massif</h3>
-                            </a>
-                            <p>
-                                Envoyez un grand nombre de SMS simultanément pour toucher un large public rapidement et efficacement.
-                            </p>
-                            <a href="#" class="stretched-link"></a>
+                            <div class="icon"><i class="bi bi-send-fill"></i></div>
+                            <h3>Envoi Massif</h3>
+                            <p>Envoyez simultanément à des milliers de destinataires sur tous les réseaux — Vodacom, Airtel, Orange et Africell.</p>
                         </div>
-                    </div><!-- End Service Item -->
+                    </div>
 
                     <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
                         <div class="service-item position-relative">
-                            <div class="icon">
-                                <i class="bi bi-chat-square-text"></i>
-                            </div>
-                            <a href="#" class="stretched-link">
-                                <h3>FIABLE</h3>
-                            </a>
-                            <p>Garantissez une haute disponibilité du service, même en cas de pic de trafic ou de problèmes techniques</p>
-                            <a href="#" class="stretched-link"></a>
+                            <div class="icon"><i class="bi bi-shield-check"></i></div>
+                            <h3>Fiable & Sécurisé</h3>
+                            <p>Haute disponibilité garantie avec un taux de livraison optimal, même en cas de pic de trafic ou de volumes importants.</p>
                         </div>
-                    </div><!-- End Service Item -->
+                    </div>
 
                 </div>
-
             </div>
 
         </section><!-- /Services Section -->
@@ -275,19 +849,12 @@
         <!-- Call To Action Section -->
         <section id="call-to-action" class="call-to-action section dark-background">
 
-            <img src="" alt="">
-
             <div class="container">
                 <div class="row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="col-xl-10">
-                        <div class="text-center">
-                            <h3>Prêt à révolutionner votre marketing par SMS ?</h3>
-                            <p>Augmentez votre chiffre d'affaires grâce à des campagnes SMS ciblées. Souscrivez dès maintenant;
-                                Gagnez du temps et améliorez votre relation client. Achetez nos crédits SMS dès aujourd'hui;
-                                Simplifiez votre communication avec nos forfaits sur mesure. Commandez les vôtres !
-                            </p>
-                            <a class="cta-btn" href="{{ path("app_register") }}">S'inscrire</a>
-                        </div>
+                    <div class="col-xl-8 text-center">
+                        <h3>Prêt à booster votre communication ?</h3>
+                        <p>Rejoignez les entreprises, associations et particuliers qui font confiance à MSG-PRO pour leurs campagnes SMS en RDC. Inscription gratuite, 5 SMS offerts immédiatement.</p>
+                        <a class="cta-btn" href="{{ path("app_register") }}">Commencer gratuitement <i class="bi bi-arrow-right ms-2"></i></a>
                     </div>
                 </div>
             </div>
@@ -297,170 +864,154 @@
         <!-- Pricing Section -->
         <section id="tarifs" class="pricing section">
 
-            <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
                 <span>Tarifs</span>
                 <h2>Tarifs</h2>
-                <p>Simplifiez votre communication avec nos forfaits sur mesure. Commandez les vôtres !</p>
-            </div><!-- End Section Title -->
+                <p>Des forfaits simples et transparents. <strong>0,06 $ / SMS</strong> — sans frais cachés.</p>
+            </div>
 
             <div class="container">
-                <div class="row g-12 mb-3">
-                    <div class="col-12">
-                        <p class="text-center font-weight-bolder">0.06 $ / SMS </p>
-                    </div>
-
-                </div>
-                <div class="row g-4 g-lg-0">
+                <div class="row g-4 align-items-stretch">
 
                     <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
                         <div class="pricing-item">
-                            <h3>Pack Mini </h3>
+                            <h3>Pack Mini</h3>
+                            <div class="badge-saving">Économisez 29 %</div>
                             <h4><sup>$</sup>6<span> / 100 SMS</span></h4>
-                            <h5 class="text-decoration-line-through">$ 8.5 / 100 SMS</h5>
-{#                            <ul>#}
-{#                                <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>#}
-{#                                <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>#}
-{#                                <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>#}
-{#                                <li class="na"><i class="bi bi-x"></i> <span>Pharetra massa massa ultricies</span></li>#}
-{#                                <li class="na"><i class="bi bi-x"></i> <span>Massa ultricies mi quis hendrerit</span></li>#}
-{#                            </ul>#}
-                            <div class="text-center"><a href="{{ path("app_confirmer_commande", {prix:0.06, montant:6}) }}" class="buy-btn">Commander</a></div>
+                            <p class="old-price">Prix habituel : $ 8.5</p>
+                            <ul class="features-list">
+                                <li><i class="bi bi-check-circle-fill"></i> 100 SMS valables à vie</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Tous réseaux (Vodacom, Airtel, Orange, Africell)</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Tableau de bord inclus</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Support par WhatsApp</li>
+                            </ul>
+                            <a href="{{ path("app_confirmer_commande", {prix:0.06, montant:6}) }}" class="buy-btn">Commander</a>
                         </div>
-                    </div><!-- End Pricing Item -->
+                    </div>
 
                     <div class="col-lg-4 featured" data-aos="zoom-in" data-aos-delay="200">
                         <div class="pricing-item">
+                            <span class="badge-popular">⭐ Le plus populaire</span>
                             <h3>Pack Midi</h3>
+                            <div class="badge-saving">Économisez 29 %</div>
                             <h4><sup>$</sup>30<span> / 500 SMS</span></h4>
-                            <h5 class="text-decoration-line-through">$ 42.5 / 500 SMS</h5>
-
-{#                            <ul>#}
-{#                                <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>#}
-{#                                <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>#}
-{#                                <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>#}
-{#                                <li><i class="bi bi-check"></i> <span>Pharetra massa massa ultricies</span></li>#}
-{#                                <li><i class="bi bi-check"></i> <span>Massa ultricies mi quis hendrerit</span></li>#}
-{#                            </ul>#}
-                            <div class="text-center"><a href={{ path("app_confirmer_commande", {prix:0.06, montant:30}) }} class="buy-btn">Commander</a></div>
+                            <p class="old-price">Prix habituel : $ 42.5</p>
+                            <ul class="features-list">
+                                <li><i class="bi bi-check-circle-fill"></i> 500 SMS valables à vie</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Tous réseaux (Vodacom, Airtel, Orange, Africell)</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Tableau de bord inclus</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Envoi de groupe & personnalisation</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Support prioritaire</li>
+                            </ul>
+                            <a href="{{ path("app_confirmer_commande", {prix:0.06, montant:30}) }}" class="buy-btn">Commander</a>
                         </div>
-                    </div><!-- End Pricing Item -->
+                    </div>
 
-                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
                         <div class="pricing-item">
                             <h3>Pack Maxi</h3>
+                            <div class="badge-saving">Économisez 29 %</div>
                             <h4><sup>$</sup>150<span> / 2500 SMS</span></h4>
-                            <h5 class="text-decoration-line-through">$ 212.5 / 2500 SMS</h5>
-
-{#                            <ul>#}
-{#                                <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>#}
-{#                                <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>#}
-{#                                <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>#}
-{#                                <li><i class="bi bi-check"></i> <span>Pharetra massa massa ultricies</span></li>#}
-{#                                <li><i class="bi bi-check"></i> <span>Massa ultricies mi quis hendrerit</span></li>#}
-{#                            </ul>#}
-                            <div class="text-center"><a href={{ path("app_confirmer_commande", {prix:0.06, montant:150}) }} class="buy-btn">Commander</a></div>
+                            <p class="old-price">Prix habituel : $ 212.5</p>
+                            <ul class="features-list">
+                                <li><i class="bi bi-check-circle-fill"></i> 2 500 SMS valables à vie</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Tous réseaux (Vodacom, Airtel, Orange, Africell)</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Tableau de bord inclus</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Envoi de groupe & personnalisation</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Importation de contacts (Excel)</li>
+                                <li><i class="bi bi-check-circle-fill"></i> Support prioritaire 24/7</li>
+                            </ul>
+                            <a href="{{ path("app_confirmer_commande", {prix:0.06, montant:150}) }}" class="buy-btn">Commander</a>
                         </div>
-                    </div><!-- End Pricing Item -->
+                    </div>
 
+                </div>
+
+                <!-- Pack personnalisé -->
+                <div class="custom-pack-section" data-aos="fade-up" data-aos-delay="200">
+                    <i class="bi bi-sliders2" style="font-size:2rem; color:var(--accent-color); display:block; margin-bottom:12px;"></i>
+                    <h3>Besoin d'un volume sur mesure ?</h3>
+                    <p>Vous avez un projet spécifique ou un budget différent ? Configurez votre propre pack SMS personnalisé selon vos besoins.</p>
+                    <a href="{{ path("app_commande") }}" class="btn-custom">Configurer mon pack <i class="bi bi-arrow-right ms-2"></i></a>
                 </div>
 
             </div>
 
         </section><!-- /Pricing Section -->
-        <section id="clients" class="clients section light-background">
-
-            <div class="container">
-
-                <div class="swiper">
-
-                    <div class="swiper-wrappe">
-                        <h3>Pack Personnalisé</h3>
-                        <p class="text-black">Commandez un pack personnalisé selon votre budjet en cliquant<a class="btn btn-sm btn-outline-danger" href="{{ path("app_commande") }}"> sur ce lien</a></p>
-                    </div>
-                </div>
-
-            </div>
-
-        </section><!-- /Clients Section -->
-
 
         <!-- Contact Section -->
-        <section id="contact" class="contact section">
+        <section id="contact" class="contact section light-background">
 
-            <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
                 <span>Contact</span>
-                <h2>Contact</h2>
-{#                <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>#}
-            </div><!-- End Section Title -->
+                <h2>Contactez-nous</h2>
+                <p>Une question ? Notre équipe vous répond dans les plus brefs délais.</p>
+            </div>
 
             <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-                <div class="row gy-4">
+                <div class="row gy-4 mb-4">
 
-                    <div class="col-lg-6">
-                        <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="200">
-                            <i class="bi bi-geo-alt"></i>
-                            <h3>Addresse</h3>
-                            <p>1434 RN39, Kolwezi, Lualaba/RDC</p>
+                    <div class="col-lg-4 col-md-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <h3>Adresse</h3>
+                            <p>1434 RN39, Kolwezi, Lualaba / RDC</p>
                         </div>
-                    </div><!-- End Info Item -->
+                    </div>
 
-                    <div class="col-lg-3 col-md-6">
-                        <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="300">
-                            <i class="bi bi-telephone"></i>
-                            <h3>Appel & whatApp</h3>
-                            <p><a href="https://wa.me/+243851331051"> +243 851 331 051</a></p>
+                    <div class="col-lg-4 col-md-4" data-aos="fade-up" data-aos-delay="300">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                            <i class="bi bi-whatsapp"></i>
+                            <h3>Appel & WhatsApp</h3>
+                            <p><a href="https://wa.me/+243851331051">+243 851 331 051</a></p>
                         </div>
-                    </div><!-- End Info Item -->
+                    </div>
 
-                    <div class="col-lg-3 col-md-6">
-                        <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="400">
-                            <i class="bi bi-envelope"></i>
+                    <div class="col-lg-4 col-md-4" data-aos="fade-up" data-aos-delay="400">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center">
+                            <i class="bi bi-envelope-fill"></i>
                             <h3>Email</h3>
-                            <p>info@msg-pro.com</p>
+                            <p><a href="mailto:info@msg-pro.com">info@msg-pro.com</a></p>
                         </div>
-                    </div><!-- End Info Item -->
+                    </div>
 
                 </div>
 
                 <div class="row gy-4 mt-1">
                     <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d48389.78314118045!2d-74.006138!3d40.710059!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a22a3bda30d%3A0xb89d1fe6bc499443!2sDowntown%20Conference%20Center!5e0!3m2!1sen!2sus!4v1676961268712!5m2!1sen!2sus" frameborder="0" style="border:0; width: 100%; height: 400px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div><!-- End Google Maps -->
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63706.98!2d25.4667!3d-10.7167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19f27b4e0a0a0a0b%3A0x0!2sKolwezi%2C+Lualaba%2C+RDC!5e0!3m2!1sfr!2scd!4v1712000000000" frameborder="0" style="border:0; width: 100%; height: 420px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
 
-                    <div class="col-lg-6">
-                        <form action="#" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
-                            <div class="row gy-4">
+                    <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+                        {% for message in app.flashes('success') %}
+                            <div class="alert alert-success mb-3">{{ message }}</div>
+                        {% endfor %}
+                        {% for message in app.flashes('danger') %}
+                            <div class="alert alert-danger mb-3">{{ message }}</div>
+                        {% endfor %}
 
+                        <form action="{{ path('app_landing_contact') }}" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token('landing_contact') }}">
+                            <div class="row gy-3">
                                 <div class="col-md-6">
-                                    <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+                                    <input type="text" name="name" class="form-control" placeholder="Votre Nom" required>
                                 </div>
-
-                                <div class="col-md-6 ">
-                                    <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control" name="email" placeholder="Votre Email" required>
                                 </div>
-
-                                <div class="col-md-12">
-                                    <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
+                                <div class="col-12">
+                                    <input type="text" class="form-control" name="subject" placeholder="Sujet" required>
                                 </div>
-
-                                <div class="col-md-12">
-                                    <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+                                <div class="col-12">
+                                    <textarea class="form-control" name="message" rows="6" placeholder="Votre message..." required></textarea>
                                 </div>
-
-                                <div class="col-md-12 text-center">
-                                    <div class="loading">Loading</div>
-                                    <div class="error-message"></div>
-                                    <div class="sent-message">Your message has been sent. Thank you!</div>
-
-                                    <button type="submit">Envoyer Messag</button>
+                                <div class="col-12">
+                                    <button type="submit">Envoyer le message <i class="bi bi-send ms-2"></i></button>
                                 </div>
-
                             </div>
                         </form>
-                    </div><!-- End Contact Form -->
+                    </div>
 
                 </div>
 
@@ -479,24 +1030,24 @@
                         <a href="" class="logo sitename">MSG-PRO</a>
                         <div class="footer-contact pt-3">
                             <p>1434 RN39,</p>
-                            <p>Kolwezi, Lualaba/RDC</p>
-                            <p class="mt-3"><strong>Phone:</strong> <span>+243 851 331 051 </span></p>
-                            <p><strong>Email:</strong> <span>info@msg-pro.com</span></p>
+                            <p>Kolwezi, Lualaba / RDC</p>
+                            <p class="mt-3"><strong>Tél :</strong> <span>+243 851 331 051</span></p>
+                            <p><strong>Email :</strong> <span>info@msg-pro.com</span></p>
                         </div>
                         <div class="social-links d-flex mt-4">
-                            <a href=""><i class="bi bi-twitter-x"></i></a>
-                            <a href=""><i class="bi bi-facebook"></i></a>
-                            <a href=""><i class="bi bi-instagram"></i></a>
-                            <a href=""><i class="bi bi-linkedin"></i></a>
+                            <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            <a href="https://www.facebook.com/profile.php?id=61575012670787"><i class="bi bi-facebook"></i></a>
+                            <a href="#"><i class="bi bi-instagram"></i></a>
+                            <a href="https://www.linkedin.com/company/106139815/"><i class="bi bi-linkedin"></i></a>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-4 col-md-6 footer-links">
-                    <h4>Liens</h4>
+                    <h4>Liens rapides</h4>
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#about">A Propos</a></li>
+                        <li><a href="#">Accueil</a></li>
+                        <li><a href="#about">À Propos</a></li>
                         <li><a href="#services">Services</a></li>
                         <li><a href="#tarifs">Tarifs</a></li>
                         <li><a href="#contact">Contact</a></li>
@@ -505,48 +1056,27 @@
                 </div>
 
                 <div class="col-lg-4 col-md-6 footer-links">
-                    <h4>Nos Services SMS Pour:</h4>
+                    <h4>Nos services SMS pour</h4>
                     <ul>
-                        <li><a href="#">Entreprise</a></li>
-                        <li><a href="#">Association</a></li>
-                        <li><a href="#">Particulier</a></li>
-{#                        <li><a href="#">Marketing</a></li>#}
-{#                        <li><a href="#">Graphic Design</a></li>#}
+                        <li><a href="#">Entreprises</a></li>
+                        <li><a href="#">Associations</a></li>
+                        <li><a href="#">Particuliers</a></li>
                     </ul>
-                    <img class="img-responsive h-25 w-25" src="{{ asset("landing/assets/img/favicon.png") }}" alt="MSG-PRO log">
+                    <img class="img-responsive mt-3" style="height:60px; width:auto;" src="{{ asset('msg-logo.PNG') }}" alt="MSG-PRO">
                 </div>
-
-{#                <div class="col-lg-4 col-md-12 footer-newsletter">#}
-{#                    <h4>Our Newsletter</h4>#}
-{#                    <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>#}
-{#                    <form action="forms/newsletter.php" method="post" class="php-email-form">#}
-{#                        <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>#}
-{#                        <div class="loading">Loading</div>#}
-{#                        <div class="error-message"></div>#}
-{#                        <div class="sent-message">Your subscription request has been sent. Thank you!</div>#}
-{#                    </form>#}
-{#                </div>#}
 
             </div>
         </div>
 
         <div class="container copyright text-center mt-4">
-            <p>© <span>Copyright</span> <strong class="px-1 sitename"MSG-PRO</strong> <span>All Rights Reserved</span></p>
+            <p>© <span>Copyright</span> <strong class="px-1 sitename">MSG-PRO</strong> <span>Tous droits réservés</span></p>
             <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you've purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
                 Designed by <a href="https://Insoftware.tech/">Insoftware.tech</a>
             </div>
         </div>
 
     </footer>
 
-    <!-- Scroll Top -->
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-    <!-- Preloader -->
-{#    <div id="preloader"></div>#}
 
 {% endblock %}

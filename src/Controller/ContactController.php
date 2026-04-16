@@ -12,7 +12,7 @@ use App\Repository\GroupeRepository;
 use App\Repository\OrganisationRepository;
 use App\Repository\VContactGroupeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Exception;
+use \Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,7 +102,7 @@ final class ContactController extends AbstractController
 
     #[Route('/JsonAttributeContact', name: 'json_contact_attribute', methods: ['GET', 'POST'])]
     public function JsonAttributeContact(Request $request, EntityManagerInterface $entityManager,
-                                   GroupeRepository $groupeRepository, contactRepository $contactRepository,
+                                   GroupeRepository $groupeRepository, ContactRepository $contactRepository,
                                     ContactGroupeRepository $contactGroupeRepository
     ): JsonResponse
     {
@@ -119,7 +119,7 @@ final class ContactController extends AbstractController
 
     #[Route('/JsonDisallocateContact', name: 'json_contact_disallocate', methods: ['GET', 'POST'])]
     public function JsonDisallocateContact(Request $request, EntityManagerInterface $entityManager,
-                                         GroupeRepository $groupeRepository, contactRepository $contactRepository,
+                                         GroupeRepository $groupeRepository, ContactRepository $contactRepository,
                                          ContactGroupeRepository $contactGroupeRepository
     ): JsonResponse
     {

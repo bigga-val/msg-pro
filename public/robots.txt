@@ -1,0 +1,32 @@
+User-agent: *
+
+# Pages publiques autorisées
+Allow: /$
+Allow: /register
+Allow: /login
+Allow: /cgu
+Allow: /documentation
+Allow: /confirm
+Allow: /expired
+
+# Toutes les pages privées et endpoints JSON bloqués
+Disallow: /dashboard
+Disallow: /envoi
+Disallow: /commander
+Disallow: /confirmercommande
+Disallow: /unauthorized
+Disallow: /historique
+Disallow: /contact
+Disallow: /groupe
+Disallow: /organisation
+Disallow: /commande
+Disallow: /templatesms
+Disallow: /type-organisation
+Disallow: /reset
+Disallow: /resetter
+Disallow: /confirmerCompte
+Disallow: /Json
+Disallow: /EnvoiRapideSMS
+
+# Sitemap
+Sitemap: https://msg-pro.com/sitemap.xml

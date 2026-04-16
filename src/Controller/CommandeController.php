@@ -7,7 +7,7 @@ use App\Form\CommandeType;
 use App\Repository\CommandeRepository;
 use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
-use PharIo\Manifest\Email;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,10 +24,9 @@ final class CommandeController extends AbstractController
         }
         $userID = $this->getUser()->getId();
         if(!$this->isGranted('ROLE_ADMIN')){
-            $commandes = $commandeRepository->findBy(['user'=>$userID], ['date' => 'DESC']);
-
+            $commandes = $commandeRepository->findByUserWithUser($userID);
         }else{
-            $commandes = $commandeRepository->findBy([], ['date' => 'DESC']);
+            $commandes = $commandeRepository->findAllWithUser();
         }
 
         return $this->render('commande/index.html.twig', [
@@ -78,7 +77,8 @@ final class CommandeController extends AbstractController
             $emailService->sendEmail($this->getUser()->getEmail(),"Commande Envoyée", $body);
             return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }catch (Exception $e){
-            return $e->getMessage();
+            $this->addFlash('danger', $e->getMessage());
+            return $this->redirectToRoute('app_home');
         }
 
 

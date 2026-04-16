@@ -1,61 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Commande index{% endblock %}
+{% block title %}Liste des Commandes{% endblock %}
 
 {% block body %}
-
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-12">
-
+        <div class="col-12">
             <div class="card">
                 <div class="card-header bg-gradient-dark">
-                    <h4>Liste des Commandes</h4>
+                    <h3 class="card-title mb-0">Liste des Commandes</h3>
                 </div>
                 <div class="card-body">
-
-                    <table class="table table-border datatable">
-                        <thead>
+                    <table class="table table-striped table-hover datatable">
+                        <thead class="thead-dark">
                         <tr>
                             <th>#</th>
+                            {% if is_granted('ROLE_ADMIN') %}
                             <th>Utilisateur</th>
-                            <th>Telephone</th>
-                            <th>Montant</th>
-                            <th>Prix</th>
+                            <th>Téléphone</th>
+                            {% endif %}
+                            <th>Montant (USD)</th>
+                            <th>Prix/SMS (USD)</th>
+                            <th>Nbre SMS</th>
                             <th>Date</th>
-{#                            <th>actions</th>#}
                         </tr>
                         </thead>
                         <tbody>
                         {% set counter = 0 %}
                         {% for commande in commandes %}
                             {% set counter = counter + 1 %}
-
+                            {% set nbresms = (commande.prix is not null and commande.prix > 0 and commande.montant is not null) ? (commande.montant / commande.prix)|round(0, 'floor') : 0 %}
                             <tr>
                                 <td>{{ counter }}</td>
-                                <td>{{ commande.user.username }}</td>
-                                <td>{{ commande.user.telephone }}</td>
-                                <td>{{ commande.montant }}</td>
-                                <td>{{ commande.prix }}</td>
-                                <td>{{ commande.date ? commande.date|date('d-m-Y H:i:s') : '' }}</td>
-{#                                <td>#}
-{#                                    <a href="{{ path('app_commande_show', {'id': commande.id}) }}">show</a>#}
-{#                                    <a href="{{ path('app_commande_edit', {'id': commande.id}) }}">edit</a>#}
-{#                                </td>#}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                <td>{{ commande.user is not null ? commande.user.username : '' }}</td>
+                                <td>{{ commande.user is not null ? commande.user.telephone : '' }}</td>
+                                {% endif %}
+                                <td>{{ commande.montant is not null ? commande.montant|number_format(2, ',', '.') ~ ' $' : '' }}</td>
+                                <td>{{ commande.prix is not null ? commande.prix|number_format(4, ',', '.') ~ ' $' : '' }}</td>
+                                <td><span class="badge badge-info">{{ nbresms }}</span></td>
+                                <td>{{ commande.date ? commande.date|date('d/m/Y H:i') : '' }}</td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="5">no records found</td>
+                                <td colspan="{{ is_granted('ROLE_ADMIN') ? 7 : 5 }}" class="text-center text-muted">Aucune commande trouvée</td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-{#    <a href="{{ path('app_commande_new') }}">Create new</a>#}
 {% endblock %}

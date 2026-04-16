@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://msg-pro.com/</loc>
+        <lastmod>2025-04-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://msg-pro.com/register</loc>
+        <lastmod>2025-04-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://msg-pro.com/login</loc>
+        <lastmod>2025-04-01</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://msg-pro.com/cgu</loc>
+        <lastmod>2025-04-16</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+
+    <url>
+        <loc>https://msg-pro.com/documentation</loc>
+        <lastmod>2025-04-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+</urlset>

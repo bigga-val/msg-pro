@@ -1,199 +1,370 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Créer un compte gratuit — MSG-PRO | 5 SMS offerts{% endblock %}
+{% block meta_description %}Créez votre compte MSG-PRO gratuitement et recevez 5 SMS offerts. Envoyez des SMS en masse sur tous les réseaux en RDC : Vodacom, Airtel, Orange, Africell.{% endblock %}
+{% block meta_robots %}index, follow{% endblock %}
+{% block canonical %}https://msg-pro.com/register{% endblock %}
+
+{% block stylesheets %}
+<style>
+    html, body.hold-transition.login-page {
+        height: 100% !important;
+        min-height: 100vh !important;
+    }
+    body.hold-transition.login-page {
+        background: #f1f5f9 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 20px !important;
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+    .login-wrapper {
+        display: flex;
+        width: 100%;
+        max-width: 980px;
+        min-height: 600px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .login-brand {
+        flex: 0 0 340px;
+        background: linear-gradient(160deg, #1a2e5a 0%, #2563eb 100%);
+        padding: 50px 36px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #fff;
+    }
+    .login-brand .brand-logo img {
+        height: 52px;
+        width: auto;
+        object-fit: contain;
+    }
+    .login-brand .brand-headline { margin-top: 40px; }
+    .login-brand .brand-headline h2 {
+        font-size: 1.6rem;
+        font-weight: 800;
+        line-height: 1.25;
+        margin-bottom: 12px;
+        color: #fff;
+    }
+    .login-brand .brand-headline p {
+        color: rgba(255,255,255,0.75);
+        font-size: 0.93rem;
+        line-height: 1.6;
+    }
+    .login-brand .brand-features {
+        list-style: none;
+        padding: 0;
+        margin: 24px 0 0;
+    }
+    .login-brand .brand-features li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(255,255,255,0.85);
+        font-size: 0.88rem;
+        margin-bottom: 10px;
+    }
+    .login-brand .brand-features li i {
+        background: rgba(255,255,255,0.15);
+        border-radius: 50%;
+        width: 26px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+    }
+    .login-brand .brand-footer {
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.4);
+        margin-top: 32px;
+    }
+    .login-form-panel {
+        flex: 1;
+        background: #fff;
+        padding: 44px 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow-y: auto;
+    }
+    .login-form-panel .form-title { margin-bottom: 24px; }
+    .login-form-panel .form-title h3 {
+        font-size: 1.55rem;
+        font-weight: 800;
+        color: #1a2e5a;
+        margin-bottom: 4px;
+    }
+    .login-form-panel .form-title p { color: #888; font-size: 0.92rem; }
+    .login-form-panel label {
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 4px;
+        display: block;
+    }
+    .login-form-panel .form-control,
+    .login-form-panel input[type="text"],
+    .login-form-panel input[type="email"],
+    .login-form-panel input[type="password"],
+    .login-form-panel input[type="telephone"] {
+        border: 1.5px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        padding: 10px 14px !important;
+        font-size: 0.93rem !important;
+        color: #1e293b !important;
+        transition: 0.25s !important;
+        width: 100% !important;
+        margin-bottom: 14px !important;
+        box-shadow: none !important;
+    }
+    .login-form-panel .form-control:focus,
+    .login-form-panel input:focus {
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.12) !important;
+        outline: none !important;
+    }
+    .login-form-panel .btn-submit {
+        width: 100%;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 13px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.25s;
+        margin-top: 6px;
+        letter-spacing: 0.3px;
+    }
+    .login-form-panel .btn-submit:hover { background: #1d4ed8; }
+    .login-form-panel .form-links {
+        margin-top: 18px;
+        font-size: 0.88rem;
+        color: #888;
+        text-align: center;
+    }
+    .login-form-panel .form-links a {
+        color: #2563eb;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .login-form-panel .form-links a:hover { text-decoration: underline; }
+    .row-fields { display: flex; gap: 14px; }
+    .row-fields > div { flex: 1; }
+    #msg-return .alert { border-radius: 8px; font-size: 0.88rem; }
+    /* Mobile top bar */
+    .mobile-topbar {
+        display: none;
+        background: linear-gradient(90deg, #1a2e5a 0%, #2563eb 100%);
+        padding: 14px 20px;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .mobile-topbar a.back-home {
+        color: rgba(255,255,255,0.85);
+        font-size: 0.85rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .mobile-topbar a.back-home:hover { color: #fff; }
+    .mobile-topbar img { height: 32px; width: auto; }
+
+    @media (max-width: 700px) {
+        .login-brand { display: none; }
+        .mobile-topbar { display: flex; }
+        .login-form-panel { padding: 28px 24px; }
+        .login-wrapper {
+            max-width: 100%;
+            border-radius: 16px;
+            flex-direction: column;
+        }
+        .row-fields { flex-direction: column; gap: 0; }
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-    <div class="login-box">
-        <div class="login-logo">
-            <div class="login-logo">
-                <a href="{{ path("app_landing") }}">
-                    <img class="img-rounded w-50 " src="{{ asset("msg-logo.png") }}" alt="Envoi des SMS rapides | SMS en masse">
+<div class="login-wrapper">
+
+    <!-- Barre mobile (logo + retour accueil) -->
+    <div class="mobile-topbar">
+        <a href="{{ path('app_landing') }}">
+            <img src="{{ asset('msg-logo.PNG') }}" alt="MSG-PRO">
+        </a>
+        <a href="{{ path('app_landing') }}" class="back-home">
+            <i class="fas fa-arrow-left"></i> Accueil
+        </a>
+    </div>
+
+    <!-- Panneau gauche -->
+    <div class="login-brand">
+        <div>
+            <div class="brand-logo">
+                <a href="{{ path('app_landing') }}">
+                    <img src="{{ asset('msg-logo.PNG') }}" alt="MSG-PRO">
                 </a>
             </div>
-        </div>
-
-            <div class="card">
-                <div class="card-header bg-dark">
-                    <h4>Creer un compte</h4>
-                </div>
-                <div class="card-body">
-                    {{ form_errors(registrationForm) }}
-
-                    {{ form_start(registrationForm) }}
-                    <div id="msg-return" class="form-group">
-                        {% for label, messages in app.flashes %}
-                            {% for message in messages %}
-                                <div class="alert alert-{{ label }}">
-                                    <span>{{ message }}</span>
-                                </div>
-                            {% endfor %}
-                        {% endfor %}
-                    </div>
-                        <div class="form-group">
-                            <label for="">Nom d'Utilisateur *</label>
-                            {{ form_widget(registrationForm.username, {'attr': {'class':'form-control'}}) }}
-                        </div>
-                    <div class="form-group">
-                        <label for="">Email *</label>
-                        {{ form_widget(registrationForm.Email, {'attr': {'class':'form-control', 'type':'email', 'required':'true'}}) }}
-
-                    </div>
-                    <div class="form-group">
-                        <label for="">Telephone *</label>
-                        {{ form_widget(registrationForm.telephone, {'attr': {'class':'form-control', 'type':'telephone', 'required':'true'}}) }}
-
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Mot de Passe</label>
-                        {{ form_widget(registrationForm.plainPassword,{'attr':{'class':'form-control'}}) }}
-                    </div>
-{#                        {{ form_row(registrationForm.username, {'label': 'Nom d\'Utilisateur'}) }}#}
-                    <div class="form-group">
-                        <label for="">Confirmer le Mot de Passe *</label>
-                        {{ form_widget(registrationForm.plainPassword2,{'attr':{'class':'form-control'}}) }}
-
-                    </div>
-{#                    <div class="form-group g-recaptcha"#}
-{#                         data-sitekey="{{ site_key }}"#}
-{#                         data-callback="recaptchaSuccess"#}
-{#                         data-expired-callback="recaptchaExpired">#}
-{#                        {{ form_row(registrationForm.recaptcha) }}#}
-{#                    </div>#}
-
-{#                        {{ form_row(registrationForm.agreeTerms) }}#}
-
-
-                        <button type="submit" id="btn-register" class="btn btn-info">S'inscrire</button>
-                        <span>Deja un compte? <a href="{{ path("app_login") }}">Se connecter</a></span>
-                    {{ form_end(registrationForm) }}
-                </div>
+            <div class="brand-headline">
+                <h2>Rejoignez MSG-PRO dès aujourd'hui</h2>
+                <p>Créez votre compte gratuitement et commencez à envoyer des SMS professionnels en RDC.</p>
+                <ul class="brand-features">
+                    <li><i class="fas fa-gift"></i> 5 SMS offerts dès l'inscription</li>
+                    <li><i class="fas fa-infinity"></i> Crédits SMS sans expiration</li>
+                    <li><i class="fas fa-network-wired"></i> Tous réseaux — Vodacom, Airtel, Orange, Africell</li>
+                    <li><i class="fas fa-headset"></i> Support disponible 24h/7j</li>
+                </ul>
             </div>
-
         </div>
-    <script src="https://www.google.com/recaptcha/api.js?render=6LfUJ0UsAAAAAN6V75teV6YuXPCS2cfe7GR7xeg7"></script>
+        <div class="brand-footer">
+            © {{ "now"|date("Y") }} MSG-PRO — Tous droits réservés
+        </div>
+    </div>
 
-    <script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
+    <!-- Panneau droit -->
+    <div class="login-form-panel">
+        <div class="form-title">
+            <h3>Créer un compte</h3>
+            <p>Remplissez les informations ci-dessous pour commencer</p>
+        </div>
 
-    <script>
-        let site_key = "{{ site_key }}";
-        let myToken = ""
+        <div id="msg-return">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}"><span>{{ message }}</span></div>
+                {% endfor %}
+            {% endfor %}
+        </div>
 
+        {{ form_errors(registrationForm) }}
+        {{ form_start(registrationForm) }}
 
-        $(document).ready(function(e){
-{#            {{ recaptcha3_script() }}#}
-            console.log($("#registration_form_captcha").val())
-            grecaptcha.ready(() => {
-                grecaptcha.execute('{{ site_key }}', { action: 'test' })
-                    .then(token => {
-                        console.log('TOKEN:', token);
-                        myToken = token;
-                    });
-            });
+        <div class="row-fields">
+            <div>
+                <label>Nom d'utilisateur *</label>
+                {{ form_widget(registrationForm.username, {'attr': {'class': 'form-control', 'placeholder': 'ex: jean_dupont'}}) }}
+            </div>
+            <div>
+                <label>Téléphone *</label>
+                {{ form_widget(registrationForm.telephone, {'attr': {'class': 'form-control', 'type': 'telephone', 'required': 'true', 'placeholder': '0851234567'}}) }}
+            </div>
+        </div>
 
-            //$("#btn-register").on('click', function(e){
-            $('form[name="registration_form"]').on('submit', function(e) {
-                e.preventDefault();
-                let form = this;
-                let email = $("#registration_form_Email").val()
-                let username = $("#registration_form_username").val()
-                let pwd = $("#registration_form_plainPassword").val()
-                let pwd2 = $("#registration_form_plainPassword2").val()
-                if(!validateEmail(email)){
-                    $("#msg-return")
-                        .text("Email invalide.")
-                        .addClass("text-danger")
-                    return false
-                }else if(pwd !== pwd2){
-                    $("#msg-return")
-                        .text("Les mots de passe ne sont pas identiques .")
-                        .addClass("text-danger")
-                    return false
-                }
-                //checking email availability
-                $.ajax({
-                    url: 'JsonCheckCredentials?email='+email+'&username='+username,
-                    method: 'GET',
-                    data: {},
-                    success: function (data) {
-                        if(data !== true){
-                            $("#msg-return")
-                                .text(data)
-                                .addClass("text-danger")
-                            return false
-                        }
-                    },
-                    error: function () {
-                        alert('Une erreur est survenue. Veuillez contacter votre admin.');
-                        // Autres actions à effectuer en cas d'erreur
-                    }
-                    //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
-                })
+        <label>Email *</label>
+        {{ form_widget(registrationForm.Email, {'attr': {'class': 'form-control', 'type': 'email', 'required': 'true', 'placeholder': 'vous@exemple.com'}}) }}
 
-                //cheking recaptcha
-                $.ajax({
-                    url: 'JsonVerifyRecaptcha?token='+ myToken,
-                    method: 'GET',
-                    data: {
-                    },
-                    success: function (data) {
-                        console.log(data);
-                        if(data["success"] === true && data["score"] > 0.5){
-                            form.submit()
-                        }else{
-                            alert('Une erreur est survenue. Veuillez rafraichir la page.');
-                        }
-                    },
-                    error: function () {
-                        alert('Une erreur est survenue. Veuillez rafraichir la page.');
-                        // Autres actions à effectuer en cas d'erreur
-                    }
-                    //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
-                })
-                return false
-            })
-            function validateEmail(email) {
-                const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                return re.test(String(email).toLowerCase());
-            }
-        })
+        <div class="row-fields">
+            <div>
+                <label>Mot de passe *</label>
+                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': '••••••••'}}) }}
+            </div>
+            <div>
+                <label>Confirmer le mot de passe *</label>
+                {{ form_widget(registrationForm.plainPassword2, {'attr': {'class': 'form-control', 'placeholder': '••••••••'}}) }}
+            </div>
+        </div>
 
-        function recaptchaSuccess() {
-            // L'utilisateur a validé le captcha
-            document.getElementById('btn-register').disabled = false;
-        }
+        <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:14px;">
+            {{ form_widget(registrationForm.agreeTerms, {'attr': {'id': 'agreeTerms'}}) }}
+            <label for="agreeTerms" style="font-size:0.85rem; font-weight:400; color:#555; margin:0; cursor:pointer;">
+                J'ai lu et j'accepte les <a href="{{ path('app_cgu') }}" target="_blank" style="color:#2563eb; font-weight:600;">conditions générales d'utilisation</a>
+            </label>
+        </div>
+        {{ form_errors(registrationForm.agreeTerms) }}
 
-        function recaptchaExpired() {
-            // Le captcha a expiré, on bloque à nouveau le bouton
-            document.getElementById('btn-register').disabled = true;
-        }
+        <button type="submit" id="btn-register" class="btn-submit">Créer mon compte</button>
 
-        function getRecaptchaToken(){
-            let mytok
-            grecaptcha.ready(() => {
-                grecaptcha.execute('{{ site_key }}', { action: 'test' })
-                    .then(token => {
-                        console.log('TOKEN:', token);
-                        myToken = token;
-                    });
-            });
-        }
+        {{ form_end(registrationForm) }}
 
-    </script>
+        <div class="form-links">
+            Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
+        </div>
+    </div>
 
-    <script>
-        grecaptcha.ready(function () {
-            grecaptcha.execute('6LfUJ0UsAAAAAN6V75teV6YuXPCS2cfe7GR7xeg7', { action: 'submit' })
-                .then(function (token) {
-                    document.getElementById('registration_form_captcha').value = token;
-                });
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js?render={{ site_key }}"></script>
+<script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
+<script>
+    let site_key = "{{ site_key }}";
+
+    $(document).ready(function (e) {
+        grecaptcha.ready(() => {
+            grecaptcha.execute('{{ site_key }}', { action: 'test' })
+                .then(token => { myToken = token; });
         });
 
-        grecaptcha.execute('{{ site_key }}', { action: 'login' })
-            .then(function(token) {
+        $('form[name="registration_form"]').on('submit', function (e) {
+            e.preventDefault();
+            let form = this;
+            let email = $("#registration_form_Email").val();
+            let username = $("#registration_form_username").val();
+            let pwd = $("#registration_form_plainPassword").val();
+            let pwd2 = $("#registration_form_plainPassword2").val();
+
+            if (!validateEmail(email)) {
+                $("#msg-return").html('<div class="alert alert-danger">Email invalide.</div>');
+                return false;
+            } else if (pwd !== pwd2) {
+                $("#msg-return").html('<div class="alert alert-danger">Les mots de passe ne sont pas identiques.</div>');
+                return false;
+            } else if (!$("#agreeTerms").is(":checked")) {
+                $("#msg-return").html('<div class="alert alert-danger">Vous devez accepter les conditions générales d\'utilisation.</div>');
+                return false;
+            }
+
+            $.ajax({
+                url: 'JsonCheckCredentials?email=' + encodeURIComponent(email) + '&username=' + encodeURIComponent(username),
+                method: 'GET',
+                success: function (data) {
+                    if (data !== true) {
+                        $("#msg-return").html('<div class="alert alert-danger">' + $('<div>').text(data).html() + '</div>');
+                        return false;
+                    }
+                },
+                error: function () { alert('Une erreur est survenue. Veuillez contacter votre admin.'); }
+            });
+
+            $.ajax({
+                url: 'JsonVerifyRecaptcha?token=' + myToken,
+                method: 'GET',
+                success: function (data) {
+                    if (data["success"] === true && data["score"] > 0.5) {
+                        form.submit();
+                    } else {
+                        alert('Une erreur est survenue. Veuillez rafraîchir la page.');
+                    }
+                },
+                error: function () { alert('Une erreur est survenue. Veuillez rafraîchir la page.'); }
+            });
+            return false;
+        });
+
+        function validateEmail(email) {
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+    });
+
+    grecaptcha.ready(function () {
+        grecaptcha.execute('{{ site_key }}', { action: 'submit' })
+            .then(function (token) {
                 document.getElementById('registration_form_captcha').value = token;
             });
-    </script>
+        grecaptcha.execute('{{ site_key }}', { action: 'login' })
+            .then(function (token) {
+                document.getElementById('registration_form_captcha').value = token;
+            });
+    });
+</script>
 {% endblock %}
-{% block javascripts %}
-{% endblock %}
+{% block javascripts %}{% endblock %}

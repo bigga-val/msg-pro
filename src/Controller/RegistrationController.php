@@ -79,6 +79,22 @@ class RegistrationController extends AbstractController
         }
     }
 
+    #[Route('/JsonCheckAccount', name: 'JsonCheckAccount', methods: ['GET'])]
+    public function JsonCheckAccount(UserRepository $userRepository, Request $request): JsonResponse
+    {
+
+        $username = $request->get('username');
+        $account = $userRepository->findOneBy(['username' => $username]);
+        if ($account === null) {
+            return new JsonResponse("Compte introuvable.");
+        }
+        if ($account->isConfirmer()) {
+            return new JsonResponse(true);
+        } else {
+            return new JsonResponse("Compte inactif, veuillez l'activer ou contacter l'administrateur.");
+        }
+    }
+
     #[Route('/JsonCheckExistentUser', name: 'JsonCheckExistentUser', methods: ['GET'])]
     public function JsonCheckExistentUser(UserRepository $userRepository,
                                           Request $request,
@@ -132,14 +148,16 @@ class RegistrationController extends AbstractController
     {
         $userID = $request->get('id');
         $user = $userRepository->find($userID);
-        if($user->isConfirmer() == null){
+        if ($user === null) {
+            return $this->redirectToRoute('app_expired_link');
+        }
+        if ($user->isConfirmer() !== true) {
             $user->setTotalSMS(5);
             $user->setConfirmer(true);
             $entityManager->persist($user);
             $entityManager->flush();
             return $this->redirectToRoute('app_login');
-
-        }else{
+        } else {
             return $this->redirectToRoute('app_expired_link');
         }
 
@@ -187,7 +205,7 @@ class RegistrationController extends AbstractController
         $date_actuelle = new DateTime(); // Date actuelle avec le fuseau horaire par défaut du serveur
 
 // Important : Définir le même fuseau horaire pour les deux dates pour une comparaison correcte
-        $timezone = new DateTimeZone('Europe/Paris'); // Exemple : fuseau horaire de Paris. Adaptez-le à votre besoin.
+        $timezone = new DateTimeZone('Africa/Kinshasa');
 
         $date_donnee->setTimezone($timezone);
         $date_actuelle->setTimezone($timezone);
@@ -213,17 +231,33 @@ class RegistrationController extends AbstractController
                                 PwdResettingRepository $pwdResettingRepository
     ): Response
     {
-        $pwd= $request->get('pwd');
-        $pwd2= $request->get('pwd2');
+        $pwd  = $request->get('pwd');
+        $pwd2 = $request->get('pwd2');
         $pwdid = $request->get('pwdid');
+
+        if (empty($pwd) || strlen($pwd) < 6) {
+            return new JsonResponse(['data' => false, 'msg' => 'Le mot de passe doit contenir au moins 6 caractères.']);
+        }
+        if ($pwd !== $pwd2) {
+            return new JsonResponse(['data' => false, 'msg' => 'Les mots de passe ne correspondent pas.']);
+        }
+
         $reset = $pwdResettingRepository->find($pwdid);
-        $user = $userRepository->find($reset->getUser());
+        if ($reset === null) {
+            return new JsonResponse(['data' => false, 'msg' => 'Lien invalide ou expiré.']);
+        }
+
+        $user = $reset->getUser();
+        if ($user === null) {
+            return new JsonResponse(['data' => false, 'msg' => 'Utilisateur introuvable.']);
+        }
+
         $user->setPassword($userPasswordHasher->hashPassword($user, $pwd));
         $entityManager->persist($user);
         $reset->setActive(false);
         $entityManager->flush();
 
-        return new JsonResponse(['data'=>true, 'msg'=>"Votre mot de passe a bien été réinitialisé."]);
+        return new JsonResponse(['data' => true, 'msg' => "Votre mot de passe a bien été réinitialisé."]);
     }
 
     #[Route('/JsonVerifyRecaptcha', name: 'JsonVerifyRecaptcha')]

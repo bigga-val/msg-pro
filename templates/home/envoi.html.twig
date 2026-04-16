@@ -1,92 +1,135 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Envoyer SMS{% endblock %}
+{% block title %}Envoyer SMS — MSG-PRO{% endblock %}
+
+{% block stylesheets %}
+<style>
+.envoi-form .form-control {
+    border-radius: 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    font-size: 0.9rem;
+    padding: 10px 14px !important;
+}
+.envoi-form .form-control:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1) !important;
+}
+.envoi-form label { font-weight: 600; font-size: 0.85rem; color: #374151; margin-bottom: 5px; display: block; }
+.btn-variable {
+    background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af;
+    border-radius: 6px; padding: 4px 12px; font-size: 0.82rem; font-weight: 700;
+    cursor: pointer; transition: 0.2s; font-family: monospace;
+}
+.btn-variable:hover { background: #2563eb; color: #fff; border-color: #2563eb; }
+.char-counter {
+    font-size: 0.82rem; color: #64748b; margin-top: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.char-counter .bar { flex: 1; height: 4px; background: #e2e8f0; border-radius: 4px; margin: 0 10px; }
+.char-counter .bar-fill { height: 100%; background: #2563eb; border-radius: 4px; transition: width 0.2s; }
+.callout-warning-box {
+    background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px;
+    padding: 12px 16px; font-size: 0.88rem; color: #92400e; margin-bottom: 20px;
+    display: flex; gap: 10px; align-items: flex-start;
+}
+.callout-warning-box i { color: #d97706; flex-shrink: 0; margin-top: 2px; }
+</style>
+{% endblock %}
 
 {% block body %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-gradient-dark">
-                        <h3>Contacts</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <h6 class="alert alert-default-warning">
-                                Au cas ou vous utiliseriez un Expediteur non appouvé par les operateurs reseaux,
-                                <b>Insoft</b> sera votre nom d'expediteur par defaut.
-                                <br>
-                                Cliquez <a class="text-dark" href="{{ path("app_commande") }}"> ici pour demander</a> l'approbation de votre nom d'expediteur.
-                            </h6>
-                        </div>
-                        <div class="form-group">
-                            <label for="organisation">Mes Organisations (Expediteur)</label>
-                            <select name="organisation" id="organisation" class="form-control">
-                                <option value="-1">Choisir Une Organisation</option>
-                                {% for organisation in organisations %}
-                                    <option value="{{ organisation.id }}">
-                                        {% if(organisation.isApproved) %}
-                                            {{ organisation.designation }} <i class="text-success">- Approuve</i>
-                                        {% else %}
-                                            {{ organisation.designation }} <i class="text-danger">- Attente</i>
-                                        {% endif %}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="destinataires">Liste des contacts</label>
-{#                            <input type="text" class="form-control" name="destinataires" placeholder="0991234567">#}
-                            <select name="listes" id="listes" class="form-control"></select>
-                        </div>
+    <div class="container-fluid py-3">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
 
-
-                    </div>
-                    <div class="card-footer">
-{#                        <a href="{{ path('app_groupe_new') }}">Create new</a>#}
-
+                <!-- Avertissement expéditeur -->
+                <div class="callout-warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        Si votre organisation n'est pas encore approuvée par les opérateurs réseau, <strong>insoft</strong> sera utilisé comme expéditeur par défaut.
+                        <a href="{{ path('app_commande') }}" style="color:#92400e;font-weight:700;text-decoration:underline;">Demander l'approbation →</a>
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card envoi-form">
                     <div class="card-header bg-gradient-dark">
-                        <h3>Redigez le message</h3>
+                        <h5>Nouvelle campagne SMS</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="template">Modele</label>
-{#                            <input type="text" class="form-control" name="destinataires" placeholder="Mes Modeles des SMS">#}
+                    <div class="card-body" style="padding:28px;">
+
+                        <!-- Expéditeur & groupe -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label>Expéditeur (Organisation)</label>
+                                <select name="organisation" id="organisation" class="form-control">
+                                    <option value="-1">Choisir une organisation</option>
+                                    {% for organisation in organisations %}
+                                        <option value="{{ organisation.id }}">
+                                            {{ organisation.designation }}
+                                            {% if organisation.isApproved %} ✓ Approuvée{% else %} — En attente{% endif %}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Groupe de contacts</label>
+                                <select name="listes" id="listes" class="form-control">
+                                    <option value="-1">— Sélectionnez d'abord une organisation —</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr style="border-color:#f1f5f9;margin:20px 0;">
+
+                        <!-- Template -->
+                        <div class="mb-3">
+                            <label>Modèle de message <span style="font-weight:400;color:#94a3b8;">(optionnel)</span></label>
                             <select name="template" id="template" class="form-control">
-                                <option value="-1">Choisir votre modele de message</option>
+                                <option value="-1">Choisir un modèle existant</option>
                                 {% for template in templates %}
                                     <option value="{{ template.texte }}">{{ template.titre }}</option>
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="destinataires">Message
-{#                                <span id="save-model" class="btn btn-sm btn-info d-none">Enregistrer comme modele</span>#}
-                                <button id="save-model" type="button" class="btn btn-sm btn-info d-none" data-toggle="modal" data-target="#modal-default">
-                                    Enregistrer comme modele
+
+                        <!-- Message -->
+                        <div class="mb-3">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                                <label style="margin:0;">Message</label>
+                                <button id="save-model" type="button" class="btn btn-sm btn-info d-none"
+                                        data-toggle="modal" data-target="#modal-default"
+                                        style="border-radius:20px;font-size:0.78rem;padding:3px 12px;">
+                                    <i class="fas fa-save me-1" style="margin-right:4px;"></i> Sauvegarder comme modèle
                                 </button>
-                            </label>
-                            <div>
-                                Inclure <button class="btn btn-include">[Nom]</button> <button class="btn btn-include">[Postnom]</button>
-                                <button class="btn btn-include">[Fonction]</button> <button class="btn btn-include">[Adresse]</button>
                             </div>
-                            <textarea name="message" maxlength="159" id="message" cols="30" rows="5" class="form-control"></textarea>
-                            <i id="texte-longueur"><span id="longueur">0</span>  Sur 160 Caracteres  SMS</i>
-                            <i id="erreur-longueur" class=" text-danger d-none"> Impossible de mesurer la longueur des valeurs des variables.</i>
+
+                            <div style="margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap;">
+                                <span style="font-size:0.8rem;color:#94a3b8;align-self:center;">Insérer :</span>
+                                <button class="btn-variable btn-include">[Nom]</button>
+                                <button class="btn-variable btn-include">[Postnom]</button>
+                                <button class="btn-variable btn-include">[Fonction]</button>
+                                <button class="btn-variable btn-include">[Adresse]</button>
+                            </div>
+
+                            <textarea name="message" maxlength="159" id="message" rows="5" class="form-control"
+                                      placeholder="Rédigez votre message SMS ici..."></textarea>
+
+                            <div class="char-counter">
+                                <span><span id="longueur">0</span> / 160 caractères</span>
+                                <div class="bar"><div class="bar-fill" id="bar-fill" style="width:0%"></div></div>
+                                <span id="erreur-longueur" class="text-danger d-none" style="font-size:0.78rem;">
+                                    <i class="fas fa-info-circle me-1"></i> Longueur variable avec les balises
+                                </span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <input type="submit" id="btn-envoyer-sms" value="Envoyer" class="btn btn-success">
-                        </div>
-                    </div>
-                    <div class="card-footer">
-{#                        <a href="{{ path('app_groupe_new') }}">Create new</a>#}
+
+                        <button type="button" id="btn-envoyer-sms" class="btn btn-primary w-100"
+                                style="border-radius:8px;font-weight:700;padding:13px;font-size:0.95rem;">
+                            <i class="fas fa-paper-plane" style="margin-right:8px;"></i> Envoyer la campagne
+                        </button>
 
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -201,8 +244,8 @@
             $("#enregistrer-model").click(function(e){
                 //console.log($('#message').val(), $('#titre').val())
                 $.ajax({
-                    url: 'JsonSaveTemplate?titre='+
-                        $('#titre').val() + '&texte='+$('#message').val(),
+                    url: 'JsonSaveTemplate?titre=' +
+                        encodeURIComponent($('#titre').val()) + '&texte=' + encodeURIComponent($('#message').val()),
                     method: 'GET',
                     data: {},
                     success: function (data) {
@@ -232,7 +275,7 @@
                 }else{
                     $("#organisation, #message, #listes").removeClass('border border-danger')
                     $.ajax({
-                        url: 'JsonEnvoyerSMS?sender='+sender+'&message='+message+'&groupeID='+listID+'&expID='+sender,
+                        url: 'JsonEnvoyerSMS?sender='+encodeURIComponent(sender)+'&message='+encodeURIComponent(message)+'&groupeID='+encodeURIComponent(listID)+'&expID='+encodeURIComponent(sender),
                         method: 'GET',
                         data: {},
                         success: function (data) {

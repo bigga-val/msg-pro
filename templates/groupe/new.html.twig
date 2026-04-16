@@ -105,14 +105,14 @@
                 data = XLSX.utils.sheet_to_json(worksheet);
                 //console.log(workbook, worksheet, sheetName)
                 //console.log(data, typeof worksheet)
+                function esc(v) { return $('<span>').text(v ?? '').html(); }
                 let tbody = ""
                 for(let i = 0; i < data.length; i++){
-                    //console.log(data[i]['Telephone'], data[i]['Nom'], data[i]['Postnom'], data[i]['Adresse'], data[i]['Fonction'])
-                    tbody += "<tr><td>" +data[i]['Telephone']+"</td>"
-                        +"<td>" +data[i]['Nom']+"</td>"
-                        +"<td>" +data[i]['Postnom']+"</td>"
-                        +"<td>" +data[i]['Adresse']+"</td>"
-                        +"<td>" +data[i]['Fonction']+"</td></tr>"
+                    tbody += "<tr><td>" + esc(data[i]['Telephone']) + "</td>"
+                        + "<td>" + esc(data[i]['Nom']) + "</td>"
+                        + "<td>" + esc(data[i]['Postnom']) + "</td>"
+                        + "<td>" + esc(data[i]['Adresse']) + "</td>"
+                        + "<td>" + esc(data[i]['Fonction']) + "</td></tr>"
                 }
                 $('#btn-savexlsx').removeAttr("disabled")
 
@@ -136,8 +136,9 @@
                         console.log(data)
                         console.log($("#groupe_designation").val(), $("#groupe_organisation").val())
                         $.ajax({
-                            url: '/groupe/JsonSaveGroupe?designation='+
-                                $('#groupe_designation').val() + '&organisationID='+$('#groupe_organisation').val(),
+                            url: '/groupe/JsonSaveGroupe?designation='
+                                + encodeURIComponent($('#groupe_designation').val())
+                                + '&organisationID=' + encodeURIComponent($('#groupe_organisation').val()),
                             method: 'GET',
                             data: {},
                             success: function (groupeID) {
@@ -146,13 +147,13 @@
                                 for(let i = 0; i < data.length; i++){
                                     //console.log(data[i]['Telephone'], data[i]['Nom'], data[i]['Postnom'], data[i]['Adresse'], data[i]['Fonction'])
                                     $.ajax({
-                                        url: '/contact/JsonSaveContact?' +
-                                            'telephone='+ data[i]['Telephone'] +
-                                            '&nom='+data[i]['Nom']+
-                                            '&postnom='+data[i]['Postnom']+
-                                            '&adresse='+data[i]['Adresse']+
-                                            '&fonction='+data[i]['Fonction']+
-                                            '&groupeID='+mylastGroupID
+                                        url: '/contact/JsonSaveContact?'
+                                            + 'telephone=' + encodeURIComponent(data[i]['Telephone'] ?? '')
+                                            + '&nom=' + encodeURIComponent(data[i]['Nom'] ?? '')
+                                            + '&postnom=' + encodeURIComponent(data[i]['Postnom'] ?? '')
+                                            + '&adresse=' + encodeURIComponent(data[i]['Adresse'] ?? '')
+                                            + '&fonction=' + encodeURIComponent(data[i]['Fonction'] ?? '')
+                                            + '&groupeID=' + encodeURIComponent(mylastGroupID)
                                         ,method: 'GET',
                                         data: {},
                                         success: function (data) {
@@ -161,7 +162,7 @@
 
                                             //for(let i = 0; i < data.length; i++){
                                                 //console.log(data[i]['Telephone'], data[i]['Nom'], data[i]['Postnom'], data[i]['Adresse'], data[i]['Fonction'])
-                                              //  window.location.replace('{{ path('app_contact_index') }}');
+                                                window.location.replace('{{ path('app_contact_index') }}');
                                             //}
                                         },
                                         error: function () {

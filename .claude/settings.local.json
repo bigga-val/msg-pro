@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({k:v for k,v in d.get\\('require',{}\\).items\\(\\) if 'mail' in k.lower\\(\\) or 'mailer' in k.lower\\(\\) or 'symfony/mailer' in k}, indent=2\\)\\)\")",
+      "Bash(php bin/console debug:router)",
+      "Bash(php -r ':*)",
+      "Bash(ls D:/Projects/rapide-sms/rapide-app/public/assets/landing/assets/img/logo*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "WebSearch",
+      "WebFetch(domain:africastalking.com)",
+      "WebFetch(domain:help.africastalking.com)",
+      "WebFetch(domain:helloduty.com)",
+      "WebFetch(domain:www.twilio.com)"
+    ]
+  }
+}

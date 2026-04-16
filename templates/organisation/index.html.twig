@@ -46,9 +46,9 @@
                             <a class="btn btn-primary btn-sm" href="{{ path('app_organisation_edit', {'id': organisation.id}) }}">Modifier</a>
                             {% if is_granted("ROLE_ADMIN") %}
                                 {% if organisation.isApproved %}
-                                    <a class="btn btn-sm btn-outline-danger" href="{{ path('app_organisation_disapprove', {'id': organisation.id}) }}">Approuver</a>
+                                    <a class="btn btn-sm btn-outline-danger" href="{{ path('app_organisation_disapprove', {'id': organisation.id}) }}">Désapprouver</a>
                                 {% else %}
-                                    <a class="btn btn-sm btn-info" href="{{ path('app_organisation_approve', {'id': organisation.id}) }}">Despprouver</a>
+                                    <a class="btn btn-sm btn-success" href="{{ path('app_organisation_approve', {'id': organisation.id}) }}">Approuver</a>
                                 {% endif %}
                             {% endif %}
                         </td>

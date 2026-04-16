@@ -1,103 +1,189 @@
 {% extends 'base2.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Réinitialisation du mot de passe — MSG-PRO{% endblock %}
+
+{% block stylesheets %}
+<style>
+    html, body.hold-transition.login-page {
+        height: 100% !important;
+        min-height: 100vh !important;
+    }
+    body.hold-transition.login-page {
+        background: #f1f5f9 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 20px !important;
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+    .login-wrapper {
+        display: flex;
+        width: 100%;
+        max-width: 900px;
+        min-height: 500px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .login-brand {
+        flex: 0 0 340px;
+        background: linear-gradient(160deg, #1a2e5a 0%, #2563eb 100%);
+        padding: 50px 36px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #fff;
+    }
+    .login-brand .brand-logo img { height: 52px; width: auto; object-fit: contain; }
+    .login-brand .brand-headline { margin-top: 40px; }
+    .login-brand .brand-headline h2 { font-size: 1.6rem; font-weight: 800; line-height: 1.25; margin-bottom: 12px; color: #fff; }
+    .login-brand .brand-headline p { color: rgba(255,255,255,0.75); font-size: 0.93rem; line-height: 1.6; }
+    .login-brand .brand-footer { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 32px; }
+    .login-form-panel {
+        flex: 1;
+        background: #fff;
+        padding: 50px 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .login-form-panel .form-title { margin-bottom: 28px; }
+    .login-form-panel .form-title h3 { font-size: 1.55rem; font-weight: 800; color: #1a2e5a; margin-bottom: 4px; }
+    .login-form-panel .form-title p { color: #888; font-size: 0.92rem; }
+    .login-form-panel label { font-size: 0.84rem; font-weight: 600; color: #444; margin-bottom: 5px; display: block; }
+    .login-form-panel .form-control {
+        border: 1.5px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        padding: 11px 14px !important;
+        font-size: 0.93rem !important;
+        color: #1e293b !important;
+        transition: 0.25s !important;
+        width: 100% !important;
+        margin-bottom: 16px !important;
+        box-shadow: none !important;
+    }
+    .login-form-panel .form-control:focus {
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.12) !important;
+        outline: none !important;
+    }
+    .login-form-panel .btn-submit {
+        width: 100%;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 13px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.25s;
+        margin-top: 4px;
+    }
+    .login-form-panel .btn-submit:hover { background: #1d4ed8; }
+    .login-form-panel .btn-submit:disabled { background: #93c5fd; cursor: not-allowed; }
+    .login-form-panel .form-links { margin-top: 18px; font-size: 0.88rem; color: #888; text-align: center; }
+    .login-form-panel .form-links a { color: #2563eb; font-weight: 600; text-decoration: none; }
+    .login-form-panel .form-links a:hover { text-decoration: underline; }
+    #p-error { font-size: 0.88rem; margin-bottom: 10px; border-radius: 8px; padding: 8px 12px; }
+    @media (max-width: 700px) {
+        .login-brand { display: none; }
+        .login-form-panel { padding: 36px 24px; }
+        .login-wrapper { border-radius: 16px; }
+    }
+</style>
+{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row col-12 mt-3">
-            <div class="col-12">
-                <a href="{{ path("app_landing") }}">
-{#                    <img class="img-rounded w-25 " src="{{ asset("rapide-logo.png") }}" alt="Envoi des SMS rapides | SMS en masse">#}
+<div class="login-wrapper">
+
+    <!-- Panneau gauche -->
+    <div class="login-brand">
+        <div>
+            <div class="brand-logo">
+                <a href="{{ path('app_landing') }}">
+                    <img src="{{ asset('msg-logo.PNG') }}" alt="MSG-PRO">
                 </a>
             </div>
-
-        </div>
-        <div class="row">
-            <div class="">
-                <h1>Réinitialisation du mot de passe</h1>
-                <p class="">Veuillez entrer vos informations pour verification</p>
-                <div class="form-group">
-                    <label for="">Nom d'utilisateur</label>
-                    <input type="text" class="form-control col-8" name="username" id="username">
-                </div>
-                <div class="form-group">
-                    <label for="">Email</label>
-                    <input type="email" class="form-control col-8" name="email" id="email">
-                </div>
-                <p id="p-error"></p>
-                <button class="btn btn- btn-dark" id="btn-verifier">Verifier</button>
-                <br>
-
-                <a href="{{ path("app_landing") }}">Retourner à la page d'Accueil</a>
+            <div class="brand-headline">
+                <h2>Mot de passe oublié ?</h2>
+                <p>Pas de panique. Entrez votre nom d'utilisateur et votre email — nous vous enverrons un lien de réinitialisation.</p>
             </div>
+        </div>
+        <div class="brand-footer">
+            © {{ "now"|date("Y") }} MSG-PRO — Tous droits réservés
+        </div>
+    </div>
 
+    <!-- Panneau droit -->
+    <div class="login-form-panel">
+        <div class="form-title">
+            <h3>Réinitialiser le mot de passe</h3>
+            <p>Veuillez entrer vos informations pour vérification</p>
         </div>
 
+        <label for="username">Nom d'utilisateur</label>
+        <input type="text" class="form-control" name="username" id="username" placeholder="Votre identifiant">
 
+        <label for="email">Email</label>
+        <input type="email" class="form-control" name="email" id="email" placeholder="vous@exemple.com">
 
+        <p id="p-error"></p>
 
+        <button class="btn-submit" id="btn-verifier">Envoyer le lien de réinitialisation</button>
+
+        <div class="form-links">
+            <a href="{{ path('app_login') }}">← Retour à la connexion</a>
+            &nbsp;·&nbsp;
+            <a href="{{ path('app_landing') }}">Page d'accueil</a>
+        </div>
     </div>
-    <script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
-    <script>
-        $(document).ready(function(e){
-            $("#btn-verifier").on("click", function(e){
-                let email = $('#email').val()
-                let username = $('#username').val()
-                if( username === "") {
-                    $('#p-error').text("Remplissez ce champ")
-                        .addClass("text-danger")
-                    $('#username').addClass("border border-danger")
-                    $('#email').removeClass("border border-danger")
-                }else if(email === ""){
-                    $("#p-error").text("Remplissez ce champ")
-                        .addClass("text-danger")
-                    $("#email").addClass("border border-danger")
-                    $("#username").removeClass("border border-danger")
-                }else if(!validateEmail(email)){
-                    $("#p-error").text("Email invalide")
-                        .addClass("text-danger")
-                    $("#email").removeClass("border border-danger")
-                }else{
-                    $("#btn-verifier").addClass("disabled")
-                    $("#p-error").text("")
-                    $("#email, #username").removeClass("border border-danger")
 
-                    $.ajax({
-                        url: 'JsonCheckExistentUser?email='+email+'&username='+username,
-                        method: 'GET',
-                        data: {},
-                        success: function (data) {
-                            console.log(data)
-                            if(data['result'] === true){
-                                // $("#btn-verifier")
-                                //     .hide()
-                                $("#p-error")
-                                    .text(data['msg'])
-                                    .addClass("text-success")
-                                return false
-                            }else{
-                                $("#btn-verifier").removeClass("disabled")
+</div>
 
-                                $("#p-error")
-                                    .text(data['msg'])
-                                    .addClass("text-danger")
-                            }
-                        },
-                        error: function () {
-                            alert('Une erreur est survenue. Veuillez contacter votre admin.');
-                            // Autres actions à effectuer en cas d'erreur
+<script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
+<script>
+    $(document).ready(function (e) {
+        $("#btn-verifier").on("click", function (e) {
+            let email = $('#email').val();
+            let username = $('#username').val();
+
+            if (username === "") {
+                $('#p-error').text("Veuillez renseigner votre nom d'utilisateur.").removeClass("text-success").addClass("text-danger");
+                $('#username').addClass("border border-danger").focus();
+                $('#email').removeClass("border border-danger");
+            } else if (email === "") {
+                $("#p-error").text("Veuillez renseigner votre email.").removeClass("text-success").addClass("text-danger");
+                $("#email").addClass("border border-danger").focus();
+                $("#username").removeClass("border border-danger");
+            } else if (!validateEmail(email)) {
+                $("#p-error").text("Email invalide.").removeClass("text-success").addClass("text-danger");
+                $("#email").addClass("border border-danger");
+            } else {
+                $("#btn-verifier").prop("disabled", true).text("Envoi en cours...");
+                $("#p-error").text("");
+                $("#email, #username").removeClass("border border-danger");
+
+                $.ajax({
+                    url: 'JsonCheckExistentUser?email=' + encodeURIComponent(email) + '&username=' + encodeURIComponent(username),
+                    method: 'GET',
+                    success: function (data) {
+                        if (data['result'] === true) {
+                            $("#p-error").text(data['msg']).removeClass("text-danger").addClass("text-success");
+                        } else {
+                            $("#btn-verifier").prop("disabled", false).text("Envoyer le lien de réinitialisation");
+                            $("#p-error").text(data['msg']).removeClass("text-success").addClass("text-danger");
                         }
-                        //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
-                    })
-                }
-            })
-
-            function validateEmail(email) {
-                const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                return re.test(String(email).toLowerCase());
+                    },
+                    error: function () { alert('Une erreur est survenue. Veuillez contacter votre admin.'); }
+                });
             }
-        })
-    </script>
+        });
 
-
+        function validateEmail(email) {
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+    });
+</script>
 {% endblock %}
