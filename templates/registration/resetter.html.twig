@@ -195,7 +195,10 @@
                             $("#btn-save").prop("disabled", false).text("Réinitialiser le mot de passe");
                         }
                     },
-                    error: function () { alert('Une erreur est survenue. Veuillez contacter votre admin.'); }
+                    error: function () {
+                        $("#btn-save").prop("disabled", false).text("Réinitialiser le mot de passe");
+                        $("#p-error").text("Impossible de réinitialiser le mot de passe. Vérifiez votre connexion et réessayez.").removeClass("text-success").addClass("text-danger");
+                    }
                 });
             }
         });

@@ -175,7 +175,10 @@
                             $("#p-error").text(data['msg']).removeClass("text-success").addClass("text-danger");
                         }
                     },
-                    error: function () { alert('Une erreur est survenue. Veuillez contacter votre admin.'); }
+                    error: function () {
+                        $("#btn-verifier").prop("disabled", false).text("Envoyer le lien de réinitialisation");
+                        $("#p-error").text("Impossible d'envoyer le lien. Vérifiez votre connexion et réessayez.").removeClass("text-success").addClass("text-danger");
+                    }
                 });
             }
         });

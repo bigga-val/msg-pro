@@ -166,16 +166,14 @@
                                             //}
                                         },
                                         error: function () {
-                                            console.log('Erreur lors de la requête AJAX.');
-                                            // Autres actions à effectuer en cas d'erreur
+                                            $('#error-msg').text("Impossible d'enregistrer le contact. Vérifiez votre connexion et réessayez.");
                                         }
                                         //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
                                     })
                                 }
                             },
                             error: function () {
-                                console.log('Erreur lors de la requête AJAX.');
-                                // Autres actions à effectuer en cas d'erreur
+                                $('#error-msg').text("Impossible de créer le groupe. Vérifiez votre connexion et réessayez.");
                             }
                             //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
                         })

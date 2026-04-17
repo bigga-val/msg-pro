@@ -373,7 +373,7 @@
                     submitAfterRecaptcha(form);
                 },
                 error: function () {
-                    $("#msg-return").html('<div class="alert alert-danger">Une erreur est survenue. Veuillez réessayer.</div>');
+                    $("#msg-return").html('<div class="alert alert-danger">Impossible de vérifier vos informations. Vérifiez votre connexion et réessayez.</div>');
                     $("#btn-register").prop('disabled', false).text('Créer mon compte');
                 }
             });

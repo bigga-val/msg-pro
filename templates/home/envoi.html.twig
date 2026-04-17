@@ -177,8 +177,7 @@
                         //console.log(options)
                     },
                     error: function () {
-                        alert('Erreur lors de la requête AJAX.');
-                        // Autres actions à effectuer en cas d'erreur
+                        $("#listes").html('<option value="-1">Impossible de charger les groupes. Réessayez.</option>');
                     }
                     //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
                 })
@@ -253,8 +252,7 @@
                         //$('#modal-default').toggle()
                     },
                     error: function () {
-                        alert('Erreur lors de la requête AJAX.');
-                        // Autres actions à effectuer en cas d'erreur
+                        $("#erreur-longueur").text("Impossible d'enregistrer le modèle. Réessayez.").removeClass("d-none");
                     }
                     //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
                 })
@@ -289,8 +287,7 @@
                             }
                         },
                         error: function () {
-                            alert('Erreur lors de la requête AJAX.');
-                            // Autres actions à effectuer en cas d'erreur
+                            $("#erreur-longueur").text("Échec de l'envoi. Vérifiez votre connexion et réessayez.").removeClass("d-none");
                         }
                         //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
                     })

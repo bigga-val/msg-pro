@@ -321,7 +321,7 @@
                     }
                 },
                 error: function () {
-                    alert('Une erreur est survenue. Veuillez contacter votre admin.');
+                    $("#msg-error").html('<div class="msg-error">Impossible de vérifier votre compte. Vérifiez votre connexion et réessayez.</div>');
                 }
             });
         });
