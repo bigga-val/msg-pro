@@ -63,8 +63,14 @@
 
                 {# Header #}
                 <div class="profile-header">
-                    <div class="profile-avatar">
-                        {{ app.user.username|first|upper }}
+                    <div class="profile-avatar" style="overflow:hidden; padding:0;">
+                        {% if app.user.avatar %}
+                            <img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}"
+                                 alt="avatar"
+                                 style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                        {% else %}
+                            {{ app.user.username|first|upper }}
+                        {% endif %}
                     </div>
                     <div>
                         <h4>{{ app.user.username }}</h4>

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -136,19 +137,48 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path:'/edit_profile', name: 'edit_profile')]
-    public function edit_profile(Request $request, UserRepository $user, EntityManagerInterface $entityManager): Response
+    public function edit_profile(Request $request, UserRepository $user, EntityManagerInterface $entityManager, KernelInterface $kernel, SluggerInterface $slugger): Response
     {
-        if($request->isMethod('POST')) {
-//            dd($request->request->all());
-            //dd($request->get('profile_token'));
+        if ($request->isMethod('POST')) {
             $myUser = $this->getUser();
             $myUser->setUsername($request->get('username'));
             $myUser->setEmail($request->get('email'));
             $myUser->setTelephone($request->get('telephone'));
-            $entityManager->persist($myUser);
+
+            $avatarFile = $request->files->get('avatar');
+            if ($avatarFile !== null) {
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+                if (!in_array($avatarFile->getMimeType(), $allowedTypes)) {
+                    $this->addFlash('danger', 'Format de photo invalide. Acceptés : JPG, PNG, WEBP.');
+                    return $this->redirectToRoute('edit_profile');
+                }
+                if ($avatarFile->getSize() > 2 * 1024 * 1024) {
+                    $this->addFlash('danger', 'La photo ne doit pas dépasser 2 Mo.');
+                    return $this->redirectToRoute('edit_profile');
+                }
+
+                $uploadsDir = $kernel->getProjectDir() . '/public/uploads/avatars';
+                $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarFile->guessExtension();
+
+                // Supprimer l'ancienne photo
+                if ($myUser->getAvatar()) {
+                    $oldFile = $uploadsDir . '/' . $myUser->getAvatar();
+                    if (file_exists($oldFile)) {
+                        unlink($oldFile);
+                    }
+                }
+
+                $avatarFile->move($uploadsDir, $newFilename);
+                $myUser->setAvatar($newFilename);
+            }
+
             $entityManager->flush();
+            $this->addFlash('success', 'Profil mis à jour avec succès.');
             return $this->redirectToRoute('app_profile');
         }
+
         return $this->render('security/edit.html.twig');
     }
 

@@ -55,6 +55,26 @@
         text-decoration: none; transition: .2s;
     }
     .btn-cancel:hover { background: #e2e8f0; color: #1e293b; text-decoration: none; }
+    .avatar-wrap { position: relative; display: inline-block; cursor: pointer; }
+    .avatar-preview {
+        width: 90px; height: 90px; border-radius: 50%; object-fit: cover;
+        border: 3px solid rgba(255,255,255,0.4);
+    }
+    .avatar-initial {
+        width: 90px; height: 90px; border-radius: 50%;
+        background: rgba(255,255,255,0.2);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2rem; font-weight: 800; color: #fff;
+        border: 3px solid rgba(255,255,255,0.4);
+    }
+    .avatar-overlay {
+        position: absolute; inset: 0; border-radius: 50%;
+        background: rgba(0,0,0,0.45);
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; transition: .2s; color: #fff; font-size: 1.2rem;
+    }
+    .avatar-wrap:hover .avatar-overlay { opacity: 1; }
+    #avatar-input { display: none; }
 </style>
 {% endblock %}
 
@@ -66,16 +86,27 @@
             <div class="card" style="border-radius:12px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.08);">
 
                 <div class="edit-header">
-                    <div class="avatar">{{ app.user.username|first|upper }}</div>
+                    <label for="avatar-input" class="avatar-wrap mb-0" title="Changer la photo">
+                        {% if app.user.avatar %}
+                            <img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}"
+                                 class="avatar-preview" id="avatar-img" alt="avatar">
+                        {% else %}
+                            <div class="avatar-initial" id="avatar-img-placeholder">
+                                {{ app.user.username|first|upper }}
+                            </div>
+                        {% endif %}
+                        <div class="avatar-overlay"><i class="fas fa-camera"></i></div>
+                    </label>
                     <div>
                         <h4>Modifier mon profil</h4>
-                        <p>Les modifications seront appliquées immédiatement</p>
+                        <p>Cliquez sur la photo pour la changer</p>
                     </div>
                 </div>
 
                 <div class="card-body" style="padding: 28px;">
-                    <form action="" method="POST">
+                    <form action="" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="profile_token" value="{{ csrf_token('profile') }}">
+                        <input type="file" id="avatar-input" name="avatar" accept="image/jpeg,image/png,image/webp,image/gif">
 
                         <div class="field-group">
                             <label><i class="fas fa-user"></i> Nom d'utilisateur</label>
@@ -111,4 +142,25 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('avatar-input').addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const placeholder = document.getElementById('avatar-img-placeholder');
+        let img = document.getElementById('avatar-img');
+        if (placeholder) {
+            // Remplacer le div initial par une vraie image
+            img = document.createElement('img');
+            img.className = 'avatar-preview';
+            img.id = 'avatar-img';
+            placeholder.replaceWith(img);
+        }
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+</script>
 {% endblock %}
