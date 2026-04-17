@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 use App\Entity\Recharge;
+use App\Repository\ContactRepository;
+use App\Repository\HistoriqueRepository;
+use App\Repository\OrganisationRepository;
 use App\Repository\RechargeRepository;
 use App\Repository\UserRepository;
 use DateTimeZone;
@@ -48,6 +51,35 @@ class SecurityController extends AbstractController
         return $this->render('security/liste.html.twig', [
             'users'=> $users]
         );
+    }
+
+    #[Route(path: '/user/{id}', name: 'app_user_detail', methods: ['GET'])]
+    public function userDetail(
+        int $id,
+        UserRepository $userRepository,
+        HistoriqueRepository $historiqueRepository,
+        RechargeRepository $rechargeRepository,
+        OrganisationRepository $organisationRepository,
+        ContactRepository $contactRepository,
+    ): Response
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $user = $userRepository->find($id);
+        if ($user === null) {
+            $this->addFlash('danger', 'Utilisateur introuvable.');
+            return $this->redirectToRoute('app_liste_users');
+        }
+
+        return $this->render('security/user_detail.html.twig', [
+            'user'          => $user,
+            'historiques'   => $historiqueRepository->findBy(['user' => $user], ['date' => 'DESC'], 20),
+            'recharges'     => $rechargeRepository->findBy(['clientid' => $user], ['date' => 'DESC']),
+            'organisations' => $organisationRepository->findBy(['user' => $user]),
+            'nbContacts'    => count($contactRepository->findContactsByUser($user->getId())),
+        ]);
     }
 
     #[Route(path: '/toggle-user/{id}', name: 'app_toggle_user', methods: ['POST'])]

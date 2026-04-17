@@ -126,6 +126,10 @@
                                     {% endif %}
                                 </td>
                                 <td style="white-space:nowrap;">
+                                    <a href="{{ path('app_user_detail', {id: user.id}) }}"
+                                       class="btn btn-sm btn-secondary mr-1">
+                                        <i class="fas fa-eye mr-1"></i> Détails
+                                    </a>
                                     <span id="{{ user.id }}"
                                           title="{{ user.username }}"
                                           type="button"
