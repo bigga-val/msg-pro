@@ -32,6 +32,15 @@
 {% block body %}
 <div class="container-fluid">
 
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show mb-3">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     {# Stats globales #}
     <div class="row mb-2">
         <div class="col-md-4">
@@ -116,15 +125,29 @@
                                         -
                                     {% endif %}
                                 </td>
-                                <td>
+                                <td style="white-space:nowrap;">
                                     <span id="{{ user.id }}"
                                           title="{{ user.username }}"
                                           type="button"
-                                          class="btn-recharge btn btn-sm btn-primary"
+                                          class="btn-recharge btn btn-sm btn-primary mr-1"
                                           data-toggle="modal"
                                           data-target="#modal-recharge">
                                         <i class="fas fa-plus-circle mr-1"></i> Recharger
                                     </span>
+                                    <form action="{{ path('app_toggle_user', {id: user.id}) }}" method="POST" style="display:inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('toggle_user_' ~ user.id) }}">
+                                        {% if user.confirmer %}
+                                            <button type="submit" class="btn btn-sm btn-warning"
+                                                    onclick="return confirm('Désactiver {{ user.username }} ?')">
+                                                <i class="fas fa-ban mr-1"></i> Désactiver
+                                            </button>
+                                        {% else %}
+                                            <button type="submit" class="btn btn-sm btn-success"
+                                                    onclick="return confirm('Activer {{ user.username }} ?')">
+                                                <i class="fas fa-check-circle mr-1"></i> Activer
+                                            </button>
+                                        {% endif %}
+                                    </form>
                                 </td>
                             </tr>
                         {% else %}

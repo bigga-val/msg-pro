@@ -6,7 +6,6 @@ use App\Repository\RechargeRepository;
 use App\Repository\UserRepository;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Client\Curl\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +47,28 @@ class SecurityController extends AbstractController
         return $this->render('security/liste.html.twig', [
             'users'=> $users]
         );
+    }
+
+    #[Route(path: '/toggle-user/{id}', name: 'app_toggle_user', methods: ['POST'])]
+    public function toggleUser(int $id, Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $user = $userRepository->find($id);
+        if ($user === null || !$this->isCsrfTokenValid('toggle_user_' . $id, $request->get('_token'))) {
+            $this->addFlash('danger', 'Action non autorisée.');
+            return $this->redirectToRoute('app_liste_users');
+        }
+
+        $user->setConfirmer(!$user->isConfirmer());
+        $entityManager->flush();
+
+        $status = $user->isConfirmer() ? 'activé' : 'désactivé';
+        $this->addFlash('success', "Compte de {$user->getUsername()} {$status} avec succès.");
+
+        return $this->redirectToRoute('app_liste_users');
     }
 
     #[Route(path:'/profile', name: 'app_profile')]
