@@ -307,10 +307,6 @@
     }
 
     function submitAfterRecaptcha(form) {
-        {% if app.environment == 'dev' %}
-        form.submit();
-        return;
-        {% endif %}
         if (typeof grecaptcha === 'undefined') {
             form.submit();
             return;
@@ -318,21 +314,9 @@
         grecaptcha.ready(function () {
             grecaptcha.execute('{{ site_key }}', { action: 'register' }).then(function (token) {
                 document.getElementById('registration_form_captcha').value = token;
-                $.ajax({
-                    url: 'JsonVerifyRecaptcha?token=' + encodeURIComponent(token),
-                    method: 'GET',
-                    success: function (data) {
-                        if (data["success"] === true && data["score"] > 0.5) {
-                            form.submit();
-                        } else {
-                            $("#msg-return").html('<div class="alert alert-danger">Vérification anti-robot échouée. Veuillez rafraîchir la page.</div>');
-                            $("#btn-register").prop('disabled', false).text('Créer mon compte');
-                        }
-                    },
-                    error: function () {
-                        form.submit();
-                    }
-                });
+                form.submit();
+            }).catch(function () {
+                form.submit();
             });
         });
     }
