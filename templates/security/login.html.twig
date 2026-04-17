@@ -321,7 +321,9 @@
                     }
                 },
                 error: function () {
-                    $("#msg-error").html('<div class="msg-error">Impossible de vérifier votre compte. Vérifiez votre connexion et réessayez.</div>');
+                    // En cas d'erreur de vérification, on soumet quand même
+                    // Symfony gérera l'authentification et affichera le bon message
+                    $("#login-form").submit();
                 }
             });
         });
