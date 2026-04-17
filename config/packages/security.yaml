@@ -35,8 +35,19 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/dashboard,          roles: ROLE_USER }
+        - { path: ^/envoi,              roles: ROLE_USER }
+        - { path: ^/commander,          roles: ROLE_USER }
+        - { path: ^/confirmercommande,  roles: ROLE_USER }
+        - { path: ^/EnvoiRapideSMS,     roles: ROLE_USER }
+        - { path: ^/JsonEnvoyerSMS,     roles: ROLE_USER }
+        - { path: ^/JsonSaveTemplate,   roles: ROLE_USER }
+        - { path: ^/JsonListGroups,     roles: ROLE_USER }
+        - { path: ^/profile,            roles: ROLE_USER }
+        - { path: ^/edit_profile,       roles: ROLE_USER }
+        - { path: ^/recharge,           roles: ROLE_ADMIN }
+        - { path: ^/listeusers,         roles: ROLE_ADMIN }
+        - { path: ^/listerecharge,      roles: ROLE_ADMIN }
 
 when@test:
     security:

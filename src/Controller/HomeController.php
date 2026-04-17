@@ -240,7 +240,9 @@ class HomeController extends AbstractController
             return new JsonResponse('Crédit insuffisant. Vous avez ' . $totalSMS . ' SMS pour ' . count($groupeContacts) . ' contacts.');
         }
 
-        $numbers = '';
+        $numbers      = '';
+        $successCount = 0;
+
         foreach ($groupeContacts as $groupeContact) {
             try {
                 $contact = $groupeContact->getContact();
@@ -258,33 +260,25 @@ class HomeController extends AbstractController
                 $code   = $result['code'];
                 $reason = $result['reason'] ?? '';
 
-                $smsService->logHistorique($user, $sender, $tosend, $numero, $code, $reason, $entityManager);
+                $smsService->logHistoriqueOnly($user, $sender, $tosend, $numero, $code, $reason, $entityManager);
 
                 if ($code == 0) {
-                    $smsService->deductCredit($user, $entityManager);
+                    $successCount++;
                 }
             } catch (\Exception $e) {
                 return new JsonResponse([false, $e->getMessage()]);
             }
         }
 
-        return new JsonResponse($numbers);
-    }
-
-    #[Route('/confirmerCompte', name: 'confirmerCompte', methods: ['GET'])]
-    public function confirmerCompte(Request $request, UserRepository $userRepository): Response
-    {
-        $email    = $request->get('email');
-        $username = $request->get('username');
-        $user     = $userRepository->findOneBy(['Email' => $email, 'username' => $username]);
-
-        if ($user !== null && $user->isConfirmer() !== true) {
-            $user->setConfirmer(true);
-            $user->setTotalSMS(5);
-            $user->setUsedSMS(0);
+        // Déduction atomique en une seule transaction
+        if ($successCount > 0) {
+            $user->setTotalSMS(($user->getTotalSMS() ?? 0) - $successCount);
+            $user->setUsedSMS(($user->getUsedSMS() ?? 0) + $successCount);
+            $entityManager->persist($user);
         }
+        $entityManager->flush();
 
-        return $this->redirectToRoute('app_login');
+        return new JsonResponse($numbers);
     }
 
     #[Route('/documentation', name: 'app_documentation', methods: ['GET'])]

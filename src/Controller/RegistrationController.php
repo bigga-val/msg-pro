@@ -103,35 +103,36 @@ class RegistrationController extends AbstractController
     #[Route('/JsonCheckExistentUser', name: 'JsonCheckExistentUser', methods: ['GET'])]
     public function JsonCheckExistentUser(UserRepository $userRepository,
                                           Request $request,
-                                            EntityManagerInterface $entityManager,
-                                            EmailService $emailService
+                                          EntityManagerInterface $entityManager,
+                                          EmailService $emailService,
+                                          MessageBusInterface $bus,
     ): JsonResponse
     {
-        $email = $request->get('email');
+        $email    = $request->get('email');
         $username = $request->get('username');
-        $user = $userRepository->findOneByEmailUsername($email, $username);
+        $user     = $userRepository->findOneByEmailUsername($email, $username);
 
-        if ($user == null) {
-            return new JsonResponse(['result'=>false, 'msg'=> 'Aucun utilisateur éxistant.']);
-        }else{
-            $pwdreset = new PwdResetting();
-            $pwdreset->setUser($user);
-            $pwdreset->setActive(true);
-            $pwdreset->setDatecreation(new \DateTime());
-            $entityManager->persist($pwdreset);
-            $entityManager->flush();
-
-            //send email when the account is created
-            $subject = "Réinitialisation de votre mot de passe";
-            $body = $emailService->pwdResetBody($user->getUsername(), $pwdreset->getId());
-            $emailService->sendEmail($user->getEmail(),$subject, $body);
-//            $emailService->sendEmail("gabrielkatonge@gmail.com",$subject, $body);
-
-            return  new JsonResponse(['result'=>true,
-                'msg'=>'Votre lien de réinitialisation de votre mot de passe a été transféré à votre adresse email avec succès !',
-                'pwdid'=>$pwdreset->getId()]);
-
+        if ($user === null) {
+            return new JsonResponse(['result' => false, 'msg' => 'Aucun utilisateur existant.']);
         }
+
+        $pwdreset = new PwdResetting();
+        $pwdreset->setUser($user);
+        $pwdreset->setActive(true);
+        $pwdreset->setDatecreation(new \DateTime());
+        $entityManager->persist($pwdreset);
+        $entityManager->flush();
+
+        $resetUrl = $this->generateUrl('app_resetter', ['id' => $pwdreset->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $subject  = "Réinitialisation de votre mot de passe";
+        $body     = $emailService->pwdResetBody($user->getUsername(), $resetUrl);
+        $bus->dispatch(new SendEmailMessage($user->getEmail(), $subject, $body));
+
+        return new JsonResponse([
+            'result' => true,
+            'msg'    => 'Votre lien de réinitialisation a été envoyé à votre adresse email avec succès !',
+            'pwdid'  => $pwdreset->getId(),
+        ]);
     }
 
     #[Route('/confirm', name: 'app_confirm')]

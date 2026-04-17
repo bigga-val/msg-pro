@@ -87,11 +87,11 @@ class EmailService
         return $body;
     }
 
-    public function pwdResetBody($username, $pwdID){
+    public function pwdResetBody($username, $resetUrl){
         $body = "<h4>Cher(e) ". $username;
         $body .=",</h4><p>Une demande de réinitialisation de mot de passe a été effectuée pour votre compte MSG-PRO</p>";
         $body .="<p>Pour créer un nouveau mot de passe, veuillez cliquer sur le lien suivant :</p>";
-        $body .="<a href='https://msg-pro.com/dashboard/resetter?id=" . $pwdID ."'>Votre lien unique</a>";
+        $body .="<a href='" . $resetUrl ."'>Votre lien unique</a>";
         $body .= "<p>Une fois sur la page, vous pourrez saisir et confirmer votre nouveau mot de passe.</p>";
         $body .= "<p>Important : </p><ul>";
         $body .= "<li>Ce lien est valide pendant 1 heure(60 minutes). Passé ce délai, vous devrez refaire une demande de réinitialisation.</li>";

@@ -23,7 +23,7 @@ final class TemplatesmsController extends AbstractController
             $templatesms = $templatesmsRepository->findBy(["user"=>$this->getUser()]);
         }
         return $this->render('templatesms/index.html.twig', [
-            'templatesms' => $templatesmsRepository->findAll(),
+            'templatesms' => $templatesms,
         ]);
     }
 

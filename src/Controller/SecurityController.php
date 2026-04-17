@@ -63,10 +63,15 @@ class SecurityController extends AbstractController
     EntityManagerInterface $entityManager,
     ): Response
     {
-        $userID = $request->get('user');
+        $userID   = $request->get('user');
         $quantite = $request->get('quantite');
 
         $user = $userRepository->find($userID);
+        if ($user === null) {
+            $this->addFlash('danger', 'Utilisateur introuvable.');
+            return $this->redirectToRoute('app_liste_users');
+        }
+
         $this->createRecharge(
             $this->getUser()->getUserIdentifier(),
             $this->getUser(),
@@ -108,7 +113,7 @@ class SecurityController extends AbstractController
         $recharge->setClientid($clientID);
         $recharge->setQuantite($quantite);
         $recharge->setOldQuantite($balance);
-        $recharge->setDate(new \datetime('now', new DateTimeZone('Africa/Harare')));
+        $recharge->setDate(new \datetime('now', new DateTimeZone('Africa/Kinshasa')));
         $entityManager->persist($recharge);
         $entityManager->flush();
     }
