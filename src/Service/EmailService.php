@@ -22,6 +22,7 @@ class EmailService
             $mail->Username = $_ENV['MAILER_USERNAME'] ?? 'info@msg-pro.com';
             $mail->Password = $_ENV['MAILER_PASSWORD'];
             $mail->SMTPSecure = 'tls';
+            $mail->Timeout = 5;
             $mail->isHTML(true);
             $mail->SetFrom('info@msg-pro.com', 'MSG PRO');
             $mail->addBCC('gabrielkatonge@gmail.com');
@@ -54,11 +55,11 @@ class EmailService
         return $body;
     }
 
-    public function confirmerCompteBody($username, $email, $userID){
+    public function confirmerCompteBody($username, $email, $confirmationUrl){
         $body = "<h4>Cher(e) ". $username;
         $body .=",</h4><p> Nous sommes ravis de vous accueillir dans la communauté MSG-PRO, la meilleure plateforme des SMS en RDC</p>";
         $body .="<p>Pour activer votre compte et accéder à toutes nos fonctionnalités, veuillez cliquer sur le lien suivant :</p>";
-        $body .="<a href='https://msg-pro.com/dashboard/confirmer?id=" . $userID ."'>Votre lien unique</a>";
+        $body .="<a href='" . $confirmationUrl ."'>Votre lien unique</a>";
         $body .= "<p>Une fois votre compte confirmé, vous pourrez :</p><ul>";
         $body .= "<li>Beneficier des 5 SMS gratuits</li>";
         $body .= "<li>Envoyer des SMS vers differents reseaux de la RDC sans inquietude(Vodacom, Airtel, Orange et Africell)</li>";

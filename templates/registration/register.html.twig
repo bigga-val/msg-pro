@@ -158,7 +158,13 @@
     .login-form-panel .form-links a:hover { text-decoration: underline; }
     .row-fields { display: flex; gap: 14px; }
     .row-fields > div { flex: 1; }
-    #msg-return .alert { border-radius: 8px; font-size: 0.88rem; }
+    #msg-return .alert {
+        border-radius: 8px;
+        font-size: 0.88rem;
+        background-color: #fff3cd;
+        border-color: #e67e22;
+        color: #7d3c00;
+    }
     /* Mobile top bar */
     .mobile-topbar {
         display: none;
@@ -274,8 +280,8 @@
         </div>
 
         <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:14px;">
-            {{ form_widget(registrationForm.agreeTerms, {'attr': {'id': 'agreeTerms'}}) }}
-            <label for="agreeTerms" style="font-size:0.85rem; font-weight:400; color:#555; margin:0; cursor:pointer;">
+            {{ form_widget(registrationForm.agreeTerms) }}
+            <label for="registration_form_agreeTerms" style="font-size:0.85rem; font-weight:400; color:#555; margin:0; cursor:pointer;">
                 J'ai lu et j'accepte les <a href="{{ path('app_cgu') }}" target="_blank" style="color:#2563eb; font-weight:600;">conditions générales d'utilisation</a>
             </label>
         </div>
@@ -295,32 +301,65 @@
 <script src="https://www.google.com/recaptcha/api.js?render={{ site_key }}"></script>
 <script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
 <script>
-    let site_key = "{{ site_key }}";
+    function validateEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
 
-    $(document).ready(function (e) {
-        grecaptcha.ready(() => {
-            grecaptcha.execute('{{ site_key }}', { action: 'test' })
-                .then(token => { myToken = token; });
+    function submitAfterRecaptcha(form) {
+        {% if app.environment == 'dev' %}
+        form.submit();
+        return;
+        {% endif %}
+        if (typeof grecaptcha === 'undefined') {
+            form.submit();
+            return;
+        }
+        grecaptcha.ready(function () {
+            grecaptcha.execute('{{ site_key }}', { action: 'register' }).then(function (token) {
+                document.getElementById('registration_form_captcha').value = token;
+                $.ajax({
+                    url: 'JsonVerifyRecaptcha?token=' + encodeURIComponent(token),
+                    method: 'GET',
+                    success: function (data) {
+                        if (data["success"] === true && data["score"] > 0.5) {
+                            form.submit();
+                        } else {
+                            $("#msg-return").html('<div class="alert alert-danger">Vérification anti-robot échouée. Veuillez rafraîchir la page.</div>');
+                            $("#btn-register").prop('disabled', false).text('Créer mon compte');
+                        }
+                    },
+                    error: function () {
+                        form.submit();
+                    }
+                });
+            });
         });
+    }
 
+    $(document).ready(function () {
         $('form[name="registration_form"]').on('submit', function (e) {
             e.preventDefault();
             let form = this;
-            let email = $("#registration_form_Email").val();
+            let email    = $("#registration_form_Email").val();
             let username = $("#registration_form_username").val();
-            let pwd = $("#registration_form_plainPassword").val();
-            let pwd2 = $("#registration_form_plainPassword2").val();
+            let pwd      = $("#registration_form_plainPassword").val();
+            let pwd2     = $("#registration_form_plainPassword2").val();
 
             if (!validateEmail(email)) {
                 $("#msg-return").html('<div class="alert alert-danger">Email invalide.</div>');
                 return false;
-            } else if (pwd !== pwd2) {
+            }
+            if (pwd !== pwd2) {
                 $("#msg-return").html('<div class="alert alert-danger">Les mots de passe ne sont pas identiques.</div>');
                 return false;
-            } else if (!$("#agreeTerms").is(":checked")) {
+            }
+            if (!$("#registration_form_agreeTerms").prop('checked')) {
                 $("#msg-return").html('<div class="alert alert-danger">Vous devez accepter les conditions générales d\'utilisation.</div>');
                 return false;
             }
+
+            $("#btn-register").prop('disabled', true).text('Vérification...');
 
             $.ajax({
                 url: 'JsonCheckCredentials?email=' + encodeURIComponent(email) + '&username=' + encodeURIComponent(username),
@@ -328,42 +367,17 @@
                 success: function (data) {
                     if (data !== true) {
                         $("#msg-return").html('<div class="alert alert-danger">' + $('<div>').text(data).html() + '</div>');
-                        return false;
+                        $("#btn-register").prop('disabled', false).text('Créer mon compte');
+                        return;
                     }
+                    submitAfterRecaptcha(form);
                 },
-                error: function () { alert('Une erreur est survenue. Veuillez contacter votre admin.'); }
+                error: function () {
+                    $("#msg-return").html('<div class="alert alert-danger">Une erreur est survenue. Veuillez réessayer.</div>');
+                    $("#btn-register").prop('disabled', false).text('Créer mon compte');
+                }
             });
-
-            $.ajax({
-                url: 'JsonVerifyRecaptcha?token=' + myToken,
-                method: 'GET',
-                success: function (data) {
-                    if (data["success"] === true && data["score"] > 0.5) {
-                        form.submit();
-                    } else {
-                        alert('Une erreur est survenue. Veuillez rafraîchir la page.');
-                    }
-                },
-                error: function () { alert('Une erreur est survenue. Veuillez rafraîchir la page.'); }
-            });
-            return false;
         });
-
-        function validateEmail(email) {
-            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(String(email).toLowerCase());
-        }
-    });
-
-    grecaptcha.ready(function () {
-        grecaptcha.execute('{{ site_key }}', { action: 'submit' })
-            .then(function (token) {
-                document.getElementById('registration_form_captcha').value = token;
-            });
-        grecaptcha.execute('{{ site_key }}', { action: 'login' })
-            .then(function (token) {
-                document.getElementById('registration_form_captcha').value = token;
-            });
     });
 </script>
 {% endblock %}

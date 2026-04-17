@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\PwdResetting;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Message\SendEmailMessage;
 use App\Repository\PwdResettingRepository;
 use App\Repository\UserRepository;
 use App\Service\EmailService;
@@ -13,9 +14,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-//use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use DateTime;
 use DateTimeZone;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -25,8 +27,9 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher,
                              EntityManagerInterface $entityManager,
-                                UserRepository $userRepository,
-                             EmailService $emailService
+                             UserRepository $userRepository,
+                             EmailService $emailService,
+                             MessageBusInterface $bus,
     ): Response
     {
         $user = new User();
@@ -44,14 +47,16 @@ class RegistrationController extends AbstractController
             $user->setUsedSMS(0);
             $user->setTotalSMS(0);
             $user->setDateCreation(new \DateTime());
+            $user->setConfirmationToken(bin2hex(random_bytes(32)));
 
             $entityManager->persist($user);
             $entityManager->flush();
 
             //send email when the account is created
+            $confirmationUrl = $this->generateUrl('app_confirmer', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
             $subject = "Confirmez votre inscription et profitez pleinement de Rapide SMS";
-            $body = $emailService->confirmerCompteBody($user->getUsername(), $user->getEmail(), $user->getId());
-            $emailService->sendEmail($user->getEmail(),$subject, $body);
+            $body = $emailService->confirmerCompteBody($user->getUsername(), $user->getEmail(), $confirmationUrl);
+            $bus->dispatch(new SendEmailMessage($user->getEmail(), $subject, $body));
 
             // do anything else you need here, like send an email
             return $this->redirectToRoute('app_confirm');
@@ -140,27 +145,32 @@ class RegistrationController extends AbstractController
     }
 
         #[Route('/confirmer', name: 'app_confirmer')]
-    public function confirmercompte(Request $request, UserPasswordHasherInterface $userPasswordHasher,
+    public function confirmercompte(Request $request,
                                     EntityManagerInterface $entityManager,
                                     UserRepository $userRepository,
-                                    EmailService $emailService
     ): Response
     {
-        $userID = $request->get('id');
-        $user = $userRepository->find($userID);
-        if ($user === null) {
-            return $this->redirectToRoute('app_expired_link');
-        }
-        if ($user->isConfirmer() !== true) {
-            $user->setTotalSMS(5);
-            $user->setConfirmer(true);
-            $entityManager->persist($user);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_login');
-        } else {
+        $token = $request->get('token');
+        if (!$token) {
             return $this->redirectToRoute('app_expired_link');
         }
 
+        $user = $userRepository->findOneBy(['confirmationToken' => $token]);
+        if ($user === null) {
+            return $this->redirectToRoute('app_expired_link');
+        }
+
+        if ($user->isConfirmer() === true) {
+            return $this->redirectToRoute('app_expired_link');
+        }
+
+        $user->setTotalSMS(5);
+        $user->setConfirmer(true);
+        $user->setConfirmationToken(null);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/expired', name: 'app_expired_link')]
