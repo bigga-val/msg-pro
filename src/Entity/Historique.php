@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HistoriqueRepository::class)]
+#[ORM\Index(columns: ['user_id', 'date'], name: 'idx_historique_user_date')]
 class Historique
 {
     #[ORM\Id]
@@ -17,7 +18,7 @@ class Historique
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $numero = null;
 
-    #[ORM\Column(length: 200, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $message = null;
 
     #[ORM\Column(length: 255, nullable: true)]

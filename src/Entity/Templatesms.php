@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TemplatesmsRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TemplatesmsRepository::class)]
@@ -21,6 +22,9 @@ class Templatesms
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $titre = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $createdAt = null;
 
     public function getId(): ?int
     {
@@ -59,6 +63,18 @@ class Templatesms
     public function setTitre(?string $titre): static
     {
         $this->titre = $titre;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

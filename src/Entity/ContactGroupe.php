@@ -6,6 +6,7 @@ use App\Repository\ContactGroupeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ContactGroupeRepository::class)]
+#[ORM\UniqueConstraint(name: 'uniq_contact_groupe', columns: ['contact_id', 'groupe_id'])]
 class ContactGroupe
 {
     #[ORM\Id]

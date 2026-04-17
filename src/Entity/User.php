@@ -13,7 +13,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['Email'])]
+#[ORM\Index(columns: ['Email'], name: 'idx_user_email')]
 #[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
+#[UniqueEntity(fields: ['Email'], message: 'Cette adresse email est déjà utilisée.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -36,7 +39,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: 180, nullable: true)]
     private ?string $Email = null;
 
     /**
@@ -54,8 +57,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?int $usedSMS = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $confirmer = null;
+    #[ORM\Column(options: ['default' => false])]
+    private bool $confirmer = false;
 
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $confirmationToken = null;
@@ -221,12 +224,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isConfirmer(): ?bool
+    public function isConfirmer(): bool
     {
         return $this->confirmer;
     }
 
-    public function setConfirmer(?bool $confirmer): static
+    public function setConfirmer(bool $confirmer): static
     {
         $this->confirmer = $confirmer;
 

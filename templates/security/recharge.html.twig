@@ -30,8 +30,8 @@
 
                                 <tr>
                                     <td>{{ counter }}</td>
-                                    <td>{{ recharge.user }}</td>
-                                    <td>{{ recharge.client }}</td>
+                                    <td>{{ recharge.utilisateur ? recharge.utilisateur.username : '-' }}</td>
+                                    <td>{{ recharge.clientid ? recharge.clientid.username : '-' }}</td>
                                     <td>{{ recharge.oldQuantite }}</td>
                                     <td>{{ recharge.quantite }}</td>
                                     <td>

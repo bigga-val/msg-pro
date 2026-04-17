@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\OrganisationRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrganisationRepository::class)]
@@ -37,6 +38,9 @@ class Organisation
 
     #[ORM\Column(nullable: true)]
     private ?bool $isApproved = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $createdAt = null;
 
     public function getId(): ?int
     {
@@ -135,6 +139,18 @@ class Organisation
     public function setApproved(?bool $isApproved): static
     {
         $this->isApproved = $isApproved;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

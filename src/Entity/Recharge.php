@@ -14,12 +14,6 @@ class Recharge
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 20, nullable: true)]
-    private ?string $user = null;
-
-    #[ORM\Column(length: 20, nullable: true)]
-    private ?string $client = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $quantite = null;
 
@@ -38,30 +32,6 @@ class Recharge
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUser(): ?string
-    {
-        return $this->user;
-    }
-
-    public function setUser(?string $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getClient(): ?string
-    {
-        return $this->client;
-    }
-
-    public function setClient(?string $client): static
-    {
-        $this->client = $client;
-
-        return $this;
     }
 
     public function getQuantite(): ?int

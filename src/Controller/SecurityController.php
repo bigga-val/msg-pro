@@ -73,9 +73,7 @@ class SecurityController extends AbstractController
         }
 
         $this->createRecharge(
-            $this->getUser()->getUserIdentifier(),
             $this->getUser(),
-            $user->getUsername(),
             $user,
             $quantite,
             $user->getTotalSMS(),
@@ -103,14 +101,12 @@ class SecurityController extends AbstractController
 
     }
 
-    public function createRecharge($user, $userID, $client, $clientID, $quantite, $balance,
+    public function createRecharge($utilisateur, $client, $quantite, $balance,
     EntityManagerInterface $entityManager
     ):void{
         $recharge = new Recharge();
-        $recharge->setUser($user);
-        $recharge->setUtilisateur($userID);
-        $recharge->setClient($client);
-        $recharge->setClientid($clientID);
+        $recharge->setUtilisateur($utilisateur);
+        $recharge->setClientid($client);
         $recharge->setQuantite($quantite);
         $recharge->setOldQuantite($balance);
         $recharge->setDate(new \datetime('now', new DateTimeZone('Africa/Kinshasa')));

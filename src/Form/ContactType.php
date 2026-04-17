@@ -23,6 +23,7 @@ class ContactType extends AbstractType
             ->add('groupe', EntityType::class, [
                 'class' => Groupe::class,
                 'choice_label' => 'designation',
+                'mapped' => false,
             ])
         ;
     }

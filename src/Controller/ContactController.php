@@ -53,14 +53,18 @@ final class ContactController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $contactGroupe = new ContactGroupe();
-            $contactGroupe->setContact($contact);
-            $contactGroupe->setgroupe($contact->getGroupe());
-
-            $entityManager->persist($contactGroupe);
-            $contact->setuser($this->getUser());
+            $contact->setUser($this->getUser());
+            $contact->setCreatedAt(new \DateTime());
             $entityManager->persist($contact);
+
+            $selectedGroupe = $form->get('groupe')->getData();
+            if ($selectedGroupe !== null) {
+                $contactGroupe = new ContactGroupe();
+                $contactGroupe->setContact($contact);
+                $contactGroupe->setGroupe($selectedGroupe);
+                $entityManager->persist($contactGroupe);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_contact_index', [], Response::HTTP_SEE_OTHER);
@@ -87,7 +91,7 @@ final class ContactController extends AbstractController
         $contact->setAdresse($request->get('adresse'));
         $contact->setFonction($request->get('fonction'));
         $contact->setUser($this->getUser());
-        $contact->setGroupe($groupeRepository->find($request->get('groupeID')));
+        $contact->setCreatedAt(new \DateTime());
 
         $contactGroupe = new ContactGroupe();
         $contactGroupe->setContact($contact);
