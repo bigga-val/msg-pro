@@ -2,104 +2,177 @@
 
 {% block title %}Liste des Utilisateurs{% endblock %}
 
-{% block body %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-gradient-dark">
-                        <h3>Liste des Utilisateurs</h3>
-                    </div>
-                    <div class="card-body">
-                        <table class="table datatable">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Telephone</th>
-                                <th>Total SMS</th>
-                                <th>Used SMS</th>
-                                <th>Date d'inscription</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for user in users %}
-                                <tr>
-                                    <td>{{ user.id }}</td>
-                                    <td>{{ user.username }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.telephone }}</td>
-                                    <td>{{ user.totalSms }}</td>
-                                    <td>{{ user.usedSms }}</td>
-                                    <td>
-                                        {% if user.dateCreation is not null %}
-                                            {{ user.dateCreation | format_datetime() }}
-                                        {% endif %}
-                                    </td>
-                                    <td>
-{#                                        <span class="btn btn-sm btn-primary" id="{{ user.id }}">Recha</span>#}
-{#                                        <span class="btn btn-sm btn-primary" id="{{ user.id }}">Recha</span>#}
-{#                                        <a href="{{ path('app_groupe_edit', {'id': groupe.id}) }}">edit</a>#}
-                                        <span id="{{ user.id }}" title="{{ user.username }}" type="button" class="btn-recharge btn btn-sm btn-info" data-toggle="modal" data-target="#modal-default">
-                                            Recharger
-                                        </span>
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="8" class="text-center text-muted">Aucun utilisateur trouvé</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer">
-{#                        <a href="{{ path('app_groupe_new') }}">Create new</a>#}
+{% block stylesheets %}
+<style>
+    .badge-sms {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-weight: 600;
+    }
+    .badge-actif { background: #d1fae5; color: #065f46; }
+    .badge-inactif { background: #fee2e2; color: #991b1b; }
+    .stat-card {
+        border-radius: 12px;
+        padding: 18px 22px;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+    .stat-card .stat-value { font-size: 1.8rem; font-weight: 800; line-height: 1; }
+    .stat-card .stat-label { font-size: 0.82rem; opacity: 0.85; margin-top: 4px; }
+    .stat-blue  { background: linear-gradient(135deg, #1a2e5a, #2563eb); }
+    .stat-green { background: linear-gradient(135deg, #065f46, #10b981); }
+    .stat-orange{ background: linear-gradient(135deg, #92400e, #f59e0b); }
+    .table td, .table th { vertical-align: middle; }
+    .sms-bar-wrap { background: #e5e7eb; border-radius: 8px; height: 6px; min-width: 80px; }
+    .sms-bar { background: #2563eb; border-radius: 8px; height: 6px; }
+</style>
+{% endblock %}
 
-                    </div>
-                </div>
+{% block body %}
+<div class="container-fluid">
+
+    {# Stats globales #}
+    <div class="row mb-2">
+        <div class="col-md-4">
+            <div class="stat-card stat-blue">
+                <div class="stat-value">{{ users|length }}</div>
+                <div class="stat-label">Utilisateurs inscrits</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card stat-green">
+                <div class="stat-value">{{ users|filter(u => u.confirmer)|length }}</div>
+                <div class="stat-label">Comptes actifs</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card stat-orange">
+                {% set totalSms = 0 %}
+                {% for u in users %}{% set totalSms = totalSms + (u.totalSms ?? 0) %}{% endfor %}
+                <div class="stat-value">{{ totalSms }}</div>
+                <div class="stat-label">SMS restants (total)</div>
             </div>
         </div>
     </div>
 
-
-    <div class="modal fade" id="modal-default">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Recharge l'utilisateur <span class="font-weight-bold" id="user_name"></span></h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-gradient-dark d-flex align-items-center justify-content-between">
+                    <h3 class="mb-0" style="color:#fff;">Liste des Utilisateurs</h3>
+                    <span class="badge badge-light" style="font-size:0.9rem;">{{ users|length }} utilisateurs</span>
                 </div>
-                <form action="{{ path("app_user_recharge") }}" method="POST">
+                <div class="card-body p-0">
+                    <table class="table datatable table-hover mb-0">
+                        <thead class="thead-light">
+                        <tr>
+                            <th style="width:50px">#</th>
+                            <th>Utilisateur</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Statut</th>
+                            <th>SMS restants</th>
+                            <th>SMS utilisés</th>
+                            <th>Inscription</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td class="text-muted">{{ loop.index }}</td>
+                                <td>
+                                    <strong>{{ user.username }}</strong>
+                                    {% if 'ROLE_ADMIN' in user.roles %}
+                                        <span class="badge badge-warning ml-1" style="font-size:0.7rem;">Admin</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ user.email ?? '-' }}</td>
+                                <td>{{ user.telephone ?? '-' }}</td>
+                                <td>
+                                    {% if user.confirmer %}
+                                        <span class="badge-sms badge-actif">Actif</span>
+                                    {% else %}
+                                        <span class="badge-sms badge-inactif">Inactif</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% set total = user.totalSms ?? 0 %}
+                                    {% set used  = user.usedSms  ?? 0 %}
+                                    {% set grand  = total + used %}
+                                    <strong>{{ total }}</strong>
+                                    {% if grand > 0 %}
+                                    <div class="sms-bar-wrap mt-1">
+                                        <div class="sms-bar" style="width: {{ ((total / grand) * 100)|round }}%"></div>
+                                    </div>
+                                    {% endif %}
+                                </td>
+                                <td class="text-muted">{{ user.usedSms ?? 0 }}</td>
+                                <td class="text-muted" style="font-size:0.85rem;">
+                                    {% if user.dateCreation is not null %}
+                                        {{ user.dateCreation | format_datetime(pattern='dd/MM/yyyy') }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span id="{{ user.id }}"
+                                          title="{{ user.username }}"
+                                          type="button"
+                                          class="btn-recharge btn btn-sm btn-primary"
+                                          data-toggle="modal"
+                                          data-target="#modal-recharge">
+                                        <i class="fas fa-plus-circle mr-1"></i> Recharger
+                                    </span>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="9" class="text-center text-muted py-4">Aucun utilisateur trouvé</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Modal recharge #}
+<div class="modal fade" id="modal-recharge">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Recharger <strong id="user_name"></strong></h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <form action="{{ path('app_user_recharge') }}" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('recharge') }}">
-                    <input type="hidden" name="user" id="user">
-                    <input name="quantite" placeholder="Entrez le nombre de SMS a ajouter" type="text" class="form-control" id="titre">
+                    <input type="hidden" name="user" id="user_id_input">
+                    <div class="form-group mb-0">
+                        <label style="font-size:0.85rem; font-weight:600;">Nombre de SMS à ajouter</label>
+                        <input name="quantite" type="number" min="1" class="form-control" placeholder="ex: 100" required>
+                    </div>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input id="enregistrer-model" type="submit"  class="btn btn-primary" value="Recharger">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-bolt mr-1"></i>Recharger</button>
                 </div>
-                </form>
-            </div>
-            <!-- /.modal-content -->
+            </form>
         </div>
-        <!-- /.modal-dialog -->
     </div>
-<script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
+</div>
+
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <script>
-    $(document).ready(function(e){
-        //alert("bien")
-        $(".btn-recharge").on("click", function(e){
-            //console.log($(this).attr("id"))
-            let userID = $(this).attr("id")
-            $("#user").val($(this).attr("id"))
-            $("#user_name").text($(this).attr("title"))
-        })
-    })
+$(document).ready(function () {
+    $('.btn-recharge').on('click', function () {
+        $('#user_id_input').val($(this).attr('id'));
+        $('#user_name').text($(this).attr('title'));
+    });
+});
 </script>
 {% endblock %}
