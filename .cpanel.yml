@@ -1,0 +1,8 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/cp2543655p59/rapide-app
+    - /usr/local/bin/php /usr/local/bin/composer install --no-dev --optimize-autoloader --no-interaction
+    - /usr/local/bin/php bin/console cache:clear --env=prod --no-interaction
+    - /usr/local/bin/php bin/console assets:install public --env=prod --no-interaction
+    - /usr/local/bin/php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --env=prod
