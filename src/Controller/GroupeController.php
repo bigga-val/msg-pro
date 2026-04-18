@@ -50,7 +50,11 @@ final class GroupeController extends AbstractController
         }
         $groupe = new Groupe();
         $form = $this->createForm(GroupeType::class, $groupe);
-        $organisations = $organisationRepository->findBy(['user' => $this->getUser()]);
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $organisations = $organisationRepository->findAll();
+        } else {
+            $organisations = $organisationRepository->findBy(['user' => $this->getUser()]);
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

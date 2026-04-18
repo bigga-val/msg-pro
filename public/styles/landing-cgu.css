@@ -1,0 +1,58 @@
+/* =============================================
+   MSG-PRO — Conditions Générales d'Utilisation
+   home/cgu.html.twig
+   ============================================= */
+
+:root {
+    --accent-color: #2563eb;
+    --nav-hover-color: #2563eb;
+    --nav-dropdown-hover-color: #2563eb;
+}
+.header { --background-color: #1a2e5a; }
+
+.cgu-hero {
+    background: linear-gradient(135deg, #1a2e5a 0%, #2563eb 100%);
+    padding: 80px 0 60px;
+    text-align: center;
+    color: #fff;
+}
+.cgu-hero h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 12px; }
+.cgu-hero p  { color: rgba(255,255,255,0.75); font-size: 1rem; }
+
+.cgu-body {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+    color: #2d3748;
+    font-size: 0.97rem;
+    line-height: 1.8;
+}
+.cgu-body h2 {
+    font-size: 1.2rem; font-weight: 700; color: #1a2e5a;
+    margin-top: 44px; margin-bottom: 12px;
+    padding-left: 14px; border-left: 4px solid #2563eb;
+}
+.cgu-body h2:first-of-type { margin-top: 0; }
+.cgu-body p { margin-bottom: 14px; }
+.cgu-body ul { padding-left: 22px; margin-bottom: 14px; }
+.cgu-body ul li { margin-bottom: 6px; }
+.cgu-body strong { color: #1a2e5a; }
+
+.cgu-body .cgu-updated {
+    display: inline-block;
+    background: #eff6ff; color: #2563eb;
+    font-size: 0.82rem; font-weight: 600;
+    border-radius: 20px; padding: 4px 14px; margin-bottom: 36px;
+}
+.cgu-notice {
+    background: #fffbeb; border-left: 4px solid #f59e0b;
+    border-radius: 6px; padding: 14px 18px; margin-bottom: 14px;
+    font-size: 0.93rem; color: #78350f;
+}
+.cgu-back { text-align: center; margin-top: 48px; }
+.cgu-back a {
+    display: inline-block; background: #2563eb; color: #fff;
+    border-radius: 8px; padding: 12px 32px; font-weight: 700;
+    font-size: 0.95rem; text-decoration: none; transition: 0.2s;
+}
+.cgu-back a:hover { background: #1d4ed8; color: #fff; }

@@ -104,6 +104,65 @@ final class ContactController extends AbstractController
     }
 
 
+    #[Route('/JsonImportContacts', name: 'json_import_contacts', methods: ['POST'])]
+    public function JsonImportContacts(Request $request, EntityManagerInterface $entityManager,
+                                       GroupeRepository $groupeRepository
+    ): JsonResponse
+    {
+        if (!$this->getUser()) {
+            return new JsonResponse(['success' => false, 'message' => 'Non authentifié'], 401);
+        }
+
+        $payload = json_decode($request->getContent(), true);
+        $designation = trim($payload['designation'] ?? '');
+        $organisationID = $payload['organisationID'] ?? null;
+        $rows = $payload['contacts'] ?? [];
+
+        if ($designation === '') {
+            return new JsonResponse(['success' => false, 'message' => 'La désignation du groupe est requise.']);
+        }
+        if (empty($rows)) {
+            return new JsonResponse(['success' => false, 'message' => 'Aucun contact à importer.']);
+        }
+
+        // Créer le groupe
+        $groupe = new Groupe();
+        $groupe->setDesignation($designation);
+        $groupe->setActive(true);
+        if ($organisationID) {
+            $org = $entityManager->getReference(\App\Entity\Organisation::class, $organisationID);
+            $groupe->setOrganisation($org);
+        }
+        $entityManager->persist($groupe);
+
+        $imported = 0;
+        foreach ($rows as $row) {
+            $tel = trim($row['Telephone'] ?? '');
+            if ($tel === '') continue;
+
+            $contact = new Contact();
+            $contact->setTelephone($tel);
+            $contact->setNom($row['Nom'] ?? null);
+            $contact->setPostnom($row['Postnom'] ?? null);
+            $contact->setAdresse($row['Adresse'] ?? null);
+            $contact->setFonction($row['Fonction'] ?? null);
+            $contact->setUser($this->getUser());
+            $contact->setCreatedAt(new \DateTime());
+
+            $cg = new ContactGroupe();
+            $cg->setContact($contact);
+            $cg->setGroupe($groupe);
+
+            $entityManager->persist($contact);
+            $entityManager->persist($cg);
+            $imported++;
+        }
+
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true, 'imported' => $imported, 'groupeID' => $groupe->getId()]);
+    }
+
     #[Route('/JsonAttributeContact', name: 'json_contact_attribute', methods: ['GET', 'POST'])]
     public function JsonAttributeContact(Request $request, EntityManagerInterface $entityManager,
                                    GroupeRepository $groupeRepository, ContactRepository $contactRepository,

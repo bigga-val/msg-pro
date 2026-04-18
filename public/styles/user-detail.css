@@ -1,0 +1,96 @@
+/* =============================================
+   MSG-PRO — Détail utilisateur (security/user_detail)
+   ============================================= */
+
+/* ===== EN-TÊTE ===== */
+.detail-header {
+    background: linear-gradient(135deg, #1a2e5a 0%, #2563eb 100%);
+    padding: 28px 32px;
+    border-radius: 12px 12px 0 0;
+    color: #fff;
+    display: flex; align-items: center; gap: 20px;
+}
+.detail-header h4 { margin: 0; font-size: 1.25rem; font-weight: 800; }
+.detail-header p  { margin: 2px 0 0; opacity: 0.75; font-size: 0.85rem; }
+.detail-header-meta { margin-top: 6px; }
+
+/* ===== AVATAR ===== */
+.detail-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; font-weight: 800; color: #fff;
+    flex-shrink: 0; overflow: hidden;
+    border: 3px solid rgba(255,255,255,0.35);
+}
+.detail-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ===== STAT BOXES ===== */
+.stat-box {
+    border-radius: 10px; padding: 16px 18px; text-align: center; flex: 1;
+}
+.stat-box .val { font-size: 1.7rem; font-weight: 800; line-height: 1; }
+.stat-box .lbl { font-size: 0.75rem; margin-top: 4px; opacity: 0.8; }
+.s-blue  { background: linear-gradient(135deg, #1a2e5a, #2563eb); color: #fff; }
+.s-green { background: linear-gradient(135deg, #065f46, #10b981); color: #fff; }
+.s-gray  { background: #f1f5f9; color: #334155; }
+.s-orange{ background: linear-gradient(135deg, #92400e, #f59e0b); color: #fff; }
+.stat-row { display: flex; gap: 8px; }
+
+/* ===== INFO ROWS ===== */
+.info-row .info-icon { width: 32px; height: 32px; margin-right: 12px; font-size: 0.85rem; }
+.info-label { font-size: 0.75rem; letter-spacing: 0.4px; }
+
+/* ===== PROGRESS BAR ===== */
+.sms-progress { height: 7px; }
+.sms-progress-bar { height: 7px; }
+.usage-hint { font-size: 0.78rem; color: #64748b; margin-bottom: 3px; }
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+    font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; color: #94a3b8; margin: 0 0 12px;
+}
+
+/* ===== TABLE ===== */
+.table-sm td, .table-sm th { font-size: 0.85rem; vertical-align: middle; }
+.code-success { color: #10b981; font-weight: 700; }
+.code-fail    { color: #ef4444; font-weight: 700; }
+.amount-added { color: #10b981; font-weight: 700; }
+.badge-sender {
+    background: #eff6ff; color: #2563eb;
+    padding: 2px 8px; border-radius: 10px;
+    font-size: 0.78rem; font-weight: 600;
+}
+.td-message {
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.td-date   { font-size: 0.82rem; }
+.text-empty { font-size: 0.88rem; }
+
+/* ===== ORGANISATION BADGE ===== */
+.org-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #eff6ff; color: #2563eb; border-radius: 20px;
+    padding: 4px 12px; font-size: 0.82rem; font-weight: 600; margin: 3px;
+}
+.org-badge.approved { background: #d1fae5; color: #065f46; }
+
+/* ===== CARD LAYOUTS ===== */
+.card-detail-body    { padding: 20px 22px; }
+.card-secondary-body { padding: 18px 20px; }
+.card-footer-detail  {
+    background: #f8fafc;
+    padding: 14px 22px;
+    display: flex;
+    gap: 8px;
+}
+.card-footer-detail form { flex: 1; }
+.card-header-light {
+    background: #f8fafc;
+    border-radius: 12px 12px 0 0;
+    padding: 14px 20px;
+}

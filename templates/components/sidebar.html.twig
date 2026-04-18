@@ -2,7 +2,7 @@
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="{{ path('app_landing') }}" class="brand-link">
-        <img src="{{ asset('msg-logo.PNG') }}" alt="MSG-PRO Logo" class="brand-image img-circle elevation-3" style="opacity:.9">
+        <img src="{{ asset('msg-logo.PNG') }}" alt="MSG-PRO Logo" class="brand-image img-circle elevation-3">
         <span class="brand-text">MSG-PRO</span>
     </a>
 
@@ -10,16 +10,16 @@
         <!-- User panel -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
             <div class="image">
-                <div style="width:36px;height:36px;border-radius:50%;background:rgba(37,99,235,0.25);display:flex;align-items:center;justify-content:center;">
-                    <i class="fas fa-user" style="color:#93c5fd;font-size:0.9rem;"></i>
+                <div class="sidebar-user-avatar">
+                    <i class="fas fa-user"></i>
                 </div>
             </div>
-            <div class="info ms-2" style="margin-left:10px;">
+            <div class="info ms-2 sidebar-info">
                 {% if app.user %}
-                    <span style="color:#e2e8f0;font-weight:700;font-size:0.88rem;display:block;">
+                    <span class="sidebar-username">
                         {{ app.user.username | upper }}
                     </span>
-                    <span class="badge badge-info" style="font-size:0.72rem;">
+                    <span class="badge badge-info">
                         <i class="fas fa-sms me-1"></i>
                         <span id="qty-sms">{{ app.user.totalSMS ?? 0 }}</span> SMS
                     </span>
@@ -125,7 +125,7 @@
                     </li>
 
                     {% if is_granted('ROLE_ADMIN') %}
-                        <li class="nav-item" style="margin-top:8px;">
+                        <li class="nav-item nav-admin-section">
                             <p class="nav-header">Administration</p>
                         </li>
                         <li class="nav-item">
@@ -148,7 +148,7 @@
                         </li>
                     {% endif %}
 
-                    <li class="nav-item" style="margin-top:8px; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px;">
+                    <li class="nav-item nav-logout-item">
                         <a href="{{ path('app_logout') }}" class="nav-link">
                             <i class="nav-icon fas fa-sign-out-alt"></i>
                             <p>Déconnexion</p>

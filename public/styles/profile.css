@@ -1,0 +1,62 @@
+/* =============================================
+   MSG-PRO — Profil utilisateur (security/profile)
+   ============================================= */
+
+/* ===== EN-TÊTE ===== */
+.profile-header {
+    display: flex; align-items: center; gap: 20px;
+    padding: 24px 28px;
+    background: linear-gradient(135deg, #1a2e5a 0%, #2563eb 100%);
+    color: #fff;
+    border-radius: 12px 12px 0 0;
+}
+.profile-header h4 { margin: 0; font-size: 1.3rem; font-weight: 800; }
+.profile-header p  { margin: 0; opacity: 0.8; font-size: 0.88rem; }
+.profile-header-meta { margin-top: 6px; }
+
+/* ===== AVATAR ===== */
+.profile-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a2e5a, #2563eb);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; font-weight: 800; color: #fff;
+    flex-shrink: 0;
+    overflow: hidden;
+    padding: 0;
+}
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* ===== STATS SMS ===== */
+.sms-stat {
+    border-radius: 10px;
+    padding: 16px 20px;
+    text-align: center;
+    flex: 1;
+}
+.sms-stat .val { font-size: 1.9rem; font-weight: 800; line-height: 1; }
+.sms-stat .lbl { font-size: 0.78rem; margin-top: 4px; opacity: 0.75; }
+.sms-stats-row { display: flex; gap: 12px; }
+
+.stat-blue  { background: linear-gradient(135deg, #1a2e5a, #2563eb); color: #fff; }
+.stat-green { background: linear-gradient(135deg, #065f46, #10b981); color: #fff; }
+.stat-gray  { background: #f1f5f9; color: #334155; }
+
+/* ===== INFO ROWS (profil) — taille légèrement différente ===== */
+.info-row { padding: 13px 0; }
+.info-row .info-icon { width: 34px; height: 34px; margin-right: 14px; }
+.info-row .info-label { font-size: 0.78rem; letter-spacing: 0.5px; }
+.info-row .info-value { font-size: 0.95rem; }
+
+/* ===== PROGRESS BAR SMS ===== */
+.sms-progress   { height: 8px; }
+.sms-progress-bar { height: 8px; }
+
+/* ===== CARD LAYOUT ===== */
+.card-body-profile { padding: 24px 28px; }
+.card-footer-profile { background: #f8fafc; padding: 16px 28px; }

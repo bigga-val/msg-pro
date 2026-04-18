@@ -1,0 +1,83 @@
+/* =============================================
+   MSG-PRO — Modifier profil (security/edit)
+   ============================================= */
+
+/* ===== EN-TÊTE ===== */
+.edit-header {
+    background: linear-gradient(135deg, #1a2e5a 0%, #2563eb 100%);
+    padding: 24px 28px;
+    border-radius: 12px 12px 0 0;
+    color: #fff;
+    display: flex; align-items: center; gap: 16px;
+}
+.edit-header h4 { margin: 0; font-size: 1.15rem; font-weight: 800; }
+.edit-header p  { margin: 0; opacity: 0.75; font-size: 0.85rem; }
+
+/* ===== AVATAR ÉDITEUR ===== */
+.avatar-wrap { position: relative; display: inline-block; cursor: pointer; }
+.avatar-preview {
+    width: 90px; height: 90px; border-radius: 50%; object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.4);
+}
+.avatar-initial {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; font-weight: 800; color: #fff;
+    border: 3px solid rgba(255,255,255,0.4);
+}
+.avatar-overlay {
+    position: absolute; inset: 0; border-radius: 50%;
+    background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: 0.2s; color: #fff; font-size: 1.2rem;
+}
+.avatar-wrap:hover .avatar-overlay { opacity: 1; }
+#avatar-input { display: none; }
+
+/* ===== CHAMPS DE FORMULAIRE ===== */
+.field-group { margin-bottom: 20px; }
+.field-group label {
+    font-size: 0.82rem; font-weight: 700; color: #475569;
+    text-transform: uppercase; letter-spacing: 0.4px;
+    margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+}
+.field-group label i { color: #2563eb; }
+.field-group .form-control {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    color: #1e293b;
+    transition: 0.2s;
+}
+.field-group .form-control:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    outline: none;
+}
+
+/* ===== BOUTONS ===== */
+.btn-save {
+    background: #2563eb; color: #fff; border: none;
+    border-radius: 8px; padding: 11px 28px;
+    font-weight: 700; font-size: 0.95rem; cursor: pointer;
+    transition: 0.2s;
+}
+.btn-save:hover { background: #1d4ed8; }
+.btn-cancel {
+    background: #f1f5f9; color: #475569; border: none;
+    border-radius: 8px; padding: 11px 20px;
+    font-weight: 600; font-size: 0.95rem;
+    text-decoration: none; transition: 0.2s;
+}
+.btn-cancel:hover { background: #e2e8f0; color: #1e293b; text-decoration: none; }
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+/* ===== CARD LAYOUT ===== */
+.card-body-form { padding: 28px; }

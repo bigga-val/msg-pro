@@ -3,37 +3,9 @@
 {% block title %}Envoyer SMS — MSG-PRO{% endblock %}
 
 {% block stylesheets %}
-<style>
-.envoi-form .form-control {
-    border-radius: 8px !important;
-    border: 1.5px solid #e2e8f0 !important;
-    font-size: 0.9rem;
-    padding: 10px 14px !important;
-}
-.envoi-form .form-control:focus {
-    border-color: #2563eb !important;
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.1) !important;
-}
-.envoi-form label { font-weight: 600; font-size: 0.85rem; color: #374151; margin-bottom: 5px; display: block; }
-.btn-variable {
-    background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af;
-    border-radius: 6px; padding: 4px 12px; font-size: 0.82rem; font-weight: 700;
-    cursor: pointer; transition: 0.2s; font-family: monospace;
-}
-.btn-variable:hover { background: #2563eb; color: #fff; border-color: #2563eb; }
-.char-counter {
-    font-size: 0.82rem; color: #64748b; margin-top: 6px;
-    display: flex; justify-content: space-between; align-items: center;
-}
-.char-counter .bar { flex: 1; height: 4px; background: #e2e8f0; border-radius: 4px; margin: 0 10px; }
-.char-counter .bar-fill { height: 100%; background: #2563eb; border-radius: 4px; transition: width 0.2s; }
-.callout-warning-box {
-    background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px;
-    padding: 12px 16px; font-size: 0.88rem; color: #92400e; margin-bottom: 20px;
-    display: flex; gap: 10px; align-items: flex-start;
-}
-.callout-warning-box i { color: #d97706; flex-shrink: 0; margin-top: 2px; }
-</style>
+<link rel="stylesheet" href="{{ asset('styles/envoi.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -46,7 +18,7 @@
                     <i class="fas fa-exclamation-triangle"></i>
                     <div>
                         Si votre organisation n'est pas encore approuvée par les opérateurs réseau, <strong>insoft</strong> sera utilisé comme expéditeur par défaut.
-                        <a href="{{ path('app_commande') }}" style="color:#92400e;font-weight:700;text-decoration:underline;">Demander l'approbation →</a>
+                        <a href="{{ path('app_commande') }}" class="link-warning">Demander l'approbation →</a>
                     </div>
                 </div>
 
@@ -54,7 +26,7 @@
                     <div class="card-header bg-gradient-dark">
                         <h5>Nouvelle campagne SMS</h5>
                     </div>
-                    <div class="card-body" style="padding:28px;">
+                    <div class="card-body card-body-padded">
 
                         <!-- Expéditeur & groupe -->
                         <div class="row g-3 mb-3">
@@ -78,11 +50,11 @@
                             </div>
                         </div>
 
-                        <hr style="border-color:#f1f5f9;margin:20px 0;">
+                        <hr class="hr-light">
 
                         <!-- Template -->
                         <div class="mb-3">
-                            <label>Modèle de message <span style="font-weight:400;color:#94a3b8;">(optionnel)</span></label>
+                            <label>Modèle de message <span class="label-optional">(optionnel)</span></label>
                             <select name="template" id="template" class="form-control">
                                 <option value="-1">Choisir un modèle existant</option>
                                 {% for template in templates %}
@@ -93,17 +65,16 @@
 
                         <!-- Message -->
                         <div class="mb-3">
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                                <label style="margin:0;">Message</label>
-                                <button id="save-model" type="button" class="btn btn-sm btn-info d-none"
-                                        data-toggle="modal" data-target="#modal-default"
-                                        style="border-radius:20px;font-size:0.78rem;padding:3px 12px;">
-                                    <i class="fas fa-save me-1" style="margin-right:4px;"></i> Sauvegarder comme modèle
+                            <div class="message-header">
+                                <label class="mb-0">Message</label>
+                                <button id="save-model" type="button" class="btn btn-sm btn-info d-none btn-save-model"
+                                        data-toggle="modal" data-target="#modal-default">
+                                    <i class="fas fa-save me-1"></i> Sauvegarder comme modèle
                                 </button>
                             </div>
 
-                            <div style="margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap;">
-                                <span style="font-size:0.8rem;color:#94a3b8;align-self:center;">Insérer :</span>
+                            <div class="variables-row">
+                                <span class="variables-label">Insérer :</span>
                                 <button class="btn-variable btn-include">[Nom]</button>
                                 <button class="btn-variable btn-include">[Postnom]</button>
                                 <button class="btn-variable btn-include">[Fonction]</button>
@@ -116,15 +87,14 @@
                             <div class="char-counter">
                                 <span><span id="longueur">0</span> / 160 caractères</span>
                                 <div class="bar"><div class="bar-fill" id="bar-fill" style="width:0%"></div></div>
-                                <span id="erreur-longueur" class="text-danger d-none" style="font-size:0.78rem;">
+                                <span id="erreur-longueur" class="text-danger d-none error-inline">
                                     <i class="fas fa-info-circle me-1"></i> Longueur variable avec les balises
                                 </span>
                             </div>
                         </div>
 
-                        <button type="button" id="btn-envoyer-sms" class="btn btn-primary w-100"
-                                style="border-radius:8px;font-weight:700;padding:13px;font-size:0.95rem;">
-                            <i class="fas fa-paper-plane" style="margin-right:8px;"></i> Envoyer la campagne
+                        <button type="button" id="btn-envoyer-sms" class="btn btn-primary w-100 btn-send-campaign">
+                            <i class="fas fa-paper-plane me-2"></i> Envoyer la campagne
                         </button>
 
                     </div>
@@ -158,8 +128,30 @@
     </div>
     <!-- /.modal -->
     <script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
+    <script src="{{ asset("plugins/select2/js/select2.min.js") }}"></script>
     <script>
         $(document).ready(function(){
+
+            // Select2 sur les dropdowns
+            $('#organisation').select2({
+                theme: 'bootstrap4',
+                placeholder: 'Choisir une organisation',
+                allowClear: true,
+                width: '100%'
+            });
+            $('#listes').select2({
+                theme: 'bootstrap4',
+                placeholder: '— Sélectionnez d\'abord une organisation —',
+                allowClear: true,
+                width: '100%'
+            });
+            $('#template').select2({
+                theme: 'bootstrap4',
+                placeholder: 'Choisir un modèle existant',
+                allowClear: true,
+                width: '100%'
+            });
+
             $("#organisation").on('change', function(e){
                // console.log($(this).val())
                 let options = ""
@@ -168,16 +160,14 @@
                     method: 'GET',
                     data: {},
                     success: function (data) {
-                        //console.log(data.length)
+                        options = '<option value="-1">— Choisir un groupe —</option>';
                         for(var i = 0; i < data.length; i++){
-                            console.log(data[i])
-                            options += "<option value='"+data[i]['id']+"'>"+data[i]['designation']+" ("+data[i]['totalContact']+")</option>"
+                            options += "<option value='"+data[i]['id']+"'>"+data[i]['designation']+" ("+data[i]['totalContact']+" contacts)</option>"
                         }
-                        $("#listes").html(options)
-                        //console.log(options)
+                        $("#listes").html(options).trigger('change.select2');
                     },
                     error: function () {
-                        $("#listes").html('<option value="-1">Impossible de charger les groupes. Réessayez.</option>');
+                        $("#listes").html('<option value="-1">Impossible de charger les groupes. Réessayez.</option>').trigger('change.select2');
                     }
                     //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
                 })

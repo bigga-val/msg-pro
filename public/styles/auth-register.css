@@ -1,0 +1,80 @@
+/* =============================================
+   MSG-PRO — Inscription (surcharges register)
+   ============================================= */
+
+.login-wrapper {
+    max-width: 980px;
+    min-height: 600px;
+}
+.login-brand {
+    flex: 0 0 340px;
+    padding: 50px 36px;
+}
+.login-brand .brand-headline { margin-top: 40px; }
+.login-brand .brand-headline h2 { font-size: 1.6rem; margin-bottom: 12px; }
+.login-brand .brand-features li { font-size: 0.88rem; }
+.login-brand .brand-features li i { width: 26px; height: 26px; font-size: 0.75rem; }
+.login-brand .brand-footer { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 32px; }
+
+.login-form-panel {
+    padding: 44px 48px;
+    overflow-y: auto;
+}
+.login-form-panel .form-title { margin-bottom: 24px; }
+.login-form-panel .form-title h3 { font-size: 1.55rem; }
+.login-form-panel .form-title p { font-size: 0.92rem; }
+.login-form-panel label { font-size: 0.84rem; margin-bottom: 4px; }
+.login-form-panel .form-control,
+.login-form-panel input[type="text"],
+.login-form-panel input[type="email"],
+.login-form-panel input[type="password"],
+.login-form-panel input[type="telephone"] {
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    padding: 10px 14px !important;
+    font-size: 0.93rem !important;
+    margin-bottom: 14px !important;
+    box-shadow: none !important;
+}
+.login-form-panel .form-control:focus,
+.login-form-panel input:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12) !important;
+    outline: none !important;
+}
+.login-form-panel .btn-submit { margin-top: 6px; }
+.login-form-panel .form-links { margin-top: 18px; }
+
+/* Champs côte à côte */
+.row-fields { display: flex; gap: 14px; }
+.row-fields > div { flex: 1; }
+
+/* Zone de retour AJAX */
+#msg-return .alert {
+    border-radius: 8px;
+    font-size: 0.88rem;
+    background-color: #fff3cd;
+    border-color: #e67e22;
+    color: #7d3c00;
+}
+
+/* CGU */
+.terms-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+.terms-label {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #555;
+    margin: 0;
+    cursor: pointer;
+}
+.terms-label a { color: #2563eb; font-weight: 600; }
+
+@media (max-width: 700px) {
+    .login-wrapper { max-width: 100%; }
+    .row-fields { flex-direction: column; gap: 0; }
+}

@@ -1,0 +1,92 @@
+/* =============================================
+   MSG-PRO — Page Envoi SMS (home/envoi)
+   ============================================= */
+
+/* ===== FORMULAIRE ===== */
+.envoi-form .form-control {
+    border-radius: 8px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    font-size: 0.9rem;
+    padding: 10px 14px !important;
+}
+.envoi-form .form-control:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1) !important;
+}
+.envoi-form label { font-weight: 600; font-size: 0.85rem; color: #374151; margin-bottom: 5px; display: block; }
+
+/* Lien dans la boîte d'avertissement */
+.link-warning {
+    color: #92400e;
+    font-weight: 700;
+    text-decoration: underline;
+}
+.link-warning:hover { color: #78350f; }
+
+/* Texte optionnel dans les labels */
+.label-optional { font-weight: 400; color: #94a3b8; }
+
+/* En-tête de la zone message */
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+/* ===== BOUTON VARIABLE ===== */
+.btn-variable {
+    background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af;
+    border-radius: 6px; padding: 4px 12px; font-size: 0.82rem; font-weight: 700;
+    cursor: pointer; transition: 0.2s; font-family: monospace;
+}
+.btn-variable:hover { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+/* Bouton "Sauvegarder comme modèle" */
+.btn-save-model {
+    border-radius: 20px;
+    font-size: 0.78rem;
+    padding: 3px 12px;
+}
+
+/* Zone d'insertion des variables */
+.variables-row {
+    margin-bottom: 8px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.variables-label { font-size: 0.8rem; color: #94a3b8; }
+
+/* ===== COMPTEUR DE CARACTÈRES ===== */
+.char-counter {
+    font-size: 0.82rem; color: #64748b; margin-top: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.char-counter .bar { flex: 1; height: 4px; background: #e2e8f0; border-radius: 4px; margin: 0 10px; }
+.char-counter .bar-fill { height: 100%; background: #2563eb; border-radius: 4px; transition: width 0.2s; }
+.char-counter .bar-fill.danger { background: #ef4444; }
+.error-inline { font-size: 0.78rem; }
+
+/* ===== AVERTISSEMENT EXPÉDITEUR ===== */
+.callout-warning-box {
+    background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px;
+    padding: 12px 16px; font-size: 0.88rem; color: #92400e; margin-bottom: 20px;
+    display: flex; gap: 10px; align-items: flex-start;
+}
+.callout-warning-box i { color: #d97706; flex-shrink: 0; margin-top: 2px; }
+
+/* ===== BOUTON ENVOYER ===== */
+.btn-send-campaign {
+    border-radius: 8px;
+    font-weight: 700;
+    padding: 13px;
+    font-size: 0.95rem;
+}
+
+/* Padding card body */
+.card-body-padded { padding: 28px; }
+
+/* Séparateur discret */
+.hr-light { border-color: #f1f5f9; margin: 20px 0; }

@@ -14,7 +14,7 @@ class ContactGroupe
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'contactGroupes')]
     private ?Contact $contact = null;
 
     #[ORM\ManyToOne]

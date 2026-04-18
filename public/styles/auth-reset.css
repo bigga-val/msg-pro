@@ -1,0 +1,41 @@
+/* =============================================
+   MSG-PRO — Réinitialisation mot de passe
+   reset.html.twig + resetter.html.twig
+   ============================================= */
+
+.login-wrapper {
+    max-width: 900px;
+    min-height: 500px;
+}
+.login-brand {
+    flex: 0 0 340px;
+    padding: 50px 36px;
+}
+.login-brand .brand-headline { margin-top: 40px; }
+.login-brand .brand-headline h2 { font-size: 1.6rem; margin-bottom: 12px; }
+.login-brand .brand-footer { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 32px; }
+
+.login-form-panel { padding: 50px 48px; }
+.login-form-panel .form-title { margin-bottom: 28px; }
+.login-form-panel .form-title h3 { font-size: 1.55rem; }
+.login-form-panel label { font-size: 0.84rem; margin-bottom: 5px; }
+.login-form-panel .form-control {
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    padding: 11px 14px !important;
+    font-size: 0.93rem !important;
+    margin-bottom: 16px !important;
+    box-shadow: none !important;
+}
+.login-form-panel .form-control:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12) !important;
+    outline: none !important;
+}
+.login-form-panel .form-links { margin-top: 18px; }
+
+@media (max-width: 700px) {
+    .login-brand { display: none; }
+    .login-form-panel { padding: 36px 24px; }
+    .login-wrapper { border-radius: 16px; }
+}

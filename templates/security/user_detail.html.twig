@@ -3,57 +3,7 @@
 {% block title %}Détails — {{ user.username }}{% endblock %}
 
 {% block stylesheets %}
-<style>
-    .detail-header {
-        background: linear-gradient(135deg, #1a2e5a 0%, #2563eb 100%);
-        padding: 28px 32px;
-        border-radius: 12px 12px 0 0;
-        color: #fff;
-        display: flex; align-items: center; gap: 20px;
-    }
-    .detail-avatar {
-        width: 72px; height: 72px; border-radius: 50%;
-        background: rgba(255,255,255,0.2);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 1.8rem; font-weight: 800; color: #fff;
-        flex-shrink: 0; overflow: hidden;
-        border: 3px solid rgba(255,255,255,0.35);
-    }
-    .detail-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .detail-header h4 { margin: 0; font-size: 1.25rem; font-weight: 800; }
-    .detail-header p  { margin: 2px 0 0; opacity: 0.75; font-size: 0.85rem; }
-    .badge-actif   { background:#d1fae5; color:#065f46; padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:700; }
-    .badge-inactif { background:#fee2e2; color:#991b1b; padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:700; }
-    .stat-box {
-        border-radius: 10px; padding: 16px 18px; text-align: center; flex: 1;
-    }
-    .stat-box .val { font-size: 1.7rem; font-weight: 800; line-height: 1; }
-    .stat-box .lbl { font-size: 0.75rem; margin-top: 4px; opacity: 0.8; }
-    .s-blue  { background: linear-gradient(135deg,#1a2e5a,#2563eb); color:#fff; }
-    .s-green { background: linear-gradient(135deg,#065f46,#10b981); color:#fff; }
-    .s-gray  { background: #f1f5f9; color:#334155; }
-    .s-orange{ background: linear-gradient(135deg,#92400e,#f59e0b); color:#fff; }
-    .info-row { display:flex; align-items:center; padding:11px 0; border-bottom:1px solid #f1f5f9; }
-    .info-row:last-child { border-bottom: none; }
-    .info-icon { width:32px; height:32px; border-radius:8px; background:#eff6ff;
-        display:flex; align-items:center; justify-content:center; color:#2563eb;
-        margin-right:12px; flex-shrink:0; font-size:0.85rem; }
-    .info-label { font-size:0.75rem; color:#94a3b8; font-weight:700; text-transform:uppercase; letter-spacing:.4px; }
-    .info-value { font-size:0.93rem; color:#1e293b; font-weight:600; }
-    .section-title { font-size:0.8rem; font-weight:700; text-transform:uppercase;
-        letter-spacing:.5px; color:#94a3b8; margin:0 0 12px; }
-    .sms-progress { background:#e2e8f0; border-radius:8px; height:7px; overflow:hidden; margin-top:6px; }
-    .sms-progress-bar { background:linear-gradient(90deg,#2563eb,#60a5fa); height:7px; border-radius:8px; }
-    .table-sm td, .table-sm th { font-size: 0.85rem; vertical-align: middle; }
-    .code-success { color: #10b981; font-weight: 700; }
-    .code-fail    { color: #ef4444; font-weight: 700; }
-    .org-badge {
-        display:inline-flex; align-items:center; gap:6px;
-        background:#eff6ff; color:#2563eb; border-radius:20px;
-        padding:4px 12px; font-size:0.82rem; font-weight:600; margin:3px;
-    }
-    .org-badge.approved { background:#d1fae5; color:#065f46; }
-</style>
+<link rel="stylesheet" href="{{ asset('styles/user-detail.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -71,7 +21,7 @@
 
                 {# ── Colonne gauche : infos + stats ── #}
                 <div class="col-lg-4 mb-4">
-                    <div class="card" style="border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+                    <div class="card card-elevated">
                         <div class="detail-header">
                             <div class="detail-avatar">
                                 {% if user.avatar %}
@@ -83,25 +33,25 @@
                             <div>
                                 <h4>{{ user.username }}</h4>
                                 <p>{{ user.email ?? 'Aucun email' }}</p>
-                                <div style="margin-top:6px;">
+                                <div class="detail-header-meta">
                                     {% if user.isConfirmer() %}
                                         <span class="badge-actif">Actif</span>
                                     {% else %}
                                         <span class="badge-inactif">Inactif</span>
                                     {% endif %}
                                     {% if 'ROLE_ADMIN' in user.roles %}
-                                        <span style="background:rgba(255,255,255,0.2);color:#fff;padding:3px 10px;border-radius:20px;font-size:0.75rem;font-weight:700;margin-left:4px;">Admin</span>
+                                        <span class="badge-admin-detail">Admin</span>
                                     {% endif %}
                                 </div>
                             </div>
                         </div>
 
-                        <div class="card-body" style="padding:20px 22px;">
+                        <div class="card-body card-detail-body">
                             {# Stats SMS #}
                             {% set total = user.totalSms ?? 0 %}
                             {% set used  = user.usedSms  ?? 0 %}
                             {% set grand = total + used %}
-                            <div class="d-flex mb-3" style="gap:8px;">
+                            <div class="stat-row mb-3">
                                 <div class="stat-box s-blue">
                                     <div class="val">{{ total }}</div>
                                     <div class="lbl">Restants</div>
@@ -117,7 +67,7 @@
                             </div>
                             {% if grand > 0 %}
                             <div class="mb-3">
-                                <div style="font-size:0.78rem;color:#64748b;margin-bottom:3px;">
+                                <div class="usage-hint">
                                     {{ ((used / grand)*100)|round }}% utilisés
                                 </div>
                                 <div class="sms-progress">
@@ -168,8 +118,8 @@
                             </div>
                         </div>
 
-                        <div class="card-footer" style="background:#f8fafc; padding:14px 22px; display:flex; gap:8px;">
-                            <form action="{{ path('app_toggle_user', {id: user.id}) }}" method="POST" style="flex:1;">
+                        <div class="card-footer card-footer-detail">
+                            <form action="{{ path('app_toggle_user', {id: user.id}) }}" method="POST">
                                 <input type="hidden" name="_token" value="{{ csrf_token('toggle_user_' ~ user.id) }}">
                                 {% if user.isConfirmer() %}
                                     <button type="submit" class="btn btn-warning btn-sm btn-block"
@@ -192,8 +142,8 @@
 
                     {# Organisations #}
                     {% if organisations|length > 0 %}
-                    <div class="card mt-3" style="border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-                        <div class="card-body" style="padding:18px 20px;">
+                    <div class="card card-soft mt-3">
+                        <div class="card-body card-secondary-body">
                             <p class="section-title"><i class="fas fa-building mr-1"></i> Expéditeurs / Organisations</p>
                             {% for org in organisations %}
                                 <span class="org-badge {{ org.isApproved ? 'approved' : '' }}">
@@ -214,8 +164,8 @@
                 <div class="col-lg-8">
 
                     {# Historique recharges #}
-                    <div class="card mb-4" style="border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-                        <div class="card-header" style="background:#f8fafc; border-radius:12px 12px 0 0; padding:14px 20px;">
+                    <div class="card card-soft mb-4">
+                        <div class="card-header card-header-light">
                             <p class="section-title mb-0"><i class="fas fa-bolt mr-1"></i> Historique des recharges ({{ recharges|length }})</p>
                         </div>
                         <div class="card-body p-0">
@@ -237,7 +187,7 @@
                                     <td class="text-muted">{{ loop.index }}</td>
                                     <td>{{ r.utilisateur ? r.utilisateur.username : '-' }}</td>
                                     <td>{{ r.oldQuantite ?? 0 }}</td>
-                                    <td><span style="color:#10b981; font-weight:700;">+{{ r.quantite }}</span></td>
+                                    <td><span class="amount-added">+{{ r.quantite }}</span></td>
                                     <td><strong>{{ (r.oldQuantite ?? 0) + (r.quantite ?? 0) }}</strong></td>
                                     <td class="text-muted">
                                         {% if r.date %}{{ r.date|format_datetime(pattern='dd/MM/yyyy HH:mm') }}{% else %}-{% endif %}
@@ -247,14 +197,14 @@
                                 </tbody>
                             </table>
                             {% else %}
-                                <p class="text-muted text-center py-3 mb-0" style="font-size:0.88rem;">Aucune recharge pour cet utilisateur.</p>
+                                <p class="text-muted text-center py-3 mb-0 text-empty">Aucune recharge pour cet utilisateur.</p>
                             {% endif %}
                         </div>
                     </div>
 
                     {# Historique SMS #}
-                    <div class="card" style="border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-                        <div class="card-header" style="background:#f8fafc; border-radius:12px 12px 0 0; padding:14px 20px;">
+                    <div class="card card-soft">
+                        <div class="card-header card-header-light">
                             <p class="section-title mb-0"><i class="fas fa-paper-plane mr-1"></i> Derniers SMS envoyés ({{ historiques|length }})</p>
                         </div>
                         <div class="card-body p-0">
@@ -275,8 +225,8 @@
                                 <tr>
                                     <td class="text-muted">{{ loop.index }}</td>
                                     <td>{{ h.numero ?? '-' }}</td>
-                                    <td><span style="background:#eff6ff;color:#2563eb;padding:2px 8px;border-radius:10px;font-size:0.78rem;font-weight:600;">{{ h.sender ?? '-' }}</span></td>
-                                    <td style="max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ h.message }}">
+                                    <td><span class="badge-sender">{{ h.sender ?? '-' }}</span></td>
+                                    <td class="td-message" title="{{ h.message }}">
                                         {{ h.message|length > 50 ? h.message|slice(0,50) ~ '…' : h.message ?? '-' }}
                                     </td>
                                     <td>
@@ -286,7 +236,7 @@
                                             <span class="code-fail"><i class="fas fa-times-circle"></i> Échec</span>
                                         {% endif %}
                                     </td>
-                                    <td class="text-muted" style="font-size:0.82rem;">
+                                    <td class="text-muted td-date">
                                         {% if h.date %}{{ h.date|format_datetime(pattern='dd/MM HH:mm') }}{% else %}-{% endif %}
                                     </td>
                                 </tr>
@@ -294,7 +244,7 @@
                                 </tbody>
                             </table>
                             {% else %}
-                                <p class="text-muted text-center py-3 mb-0" style="font-size:0.88rem;">Aucun SMS envoyé par cet utilisateur.</p>
+                                <p class="text-muted text-center py-3 mb-0 text-empty">Aucun SMS envoyé par cet utilisateur.</p>
                             {% endif %}
                         </div>
                     </div>
@@ -318,7 +268,7 @@
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('recharge') }}">
                     <input type="hidden" name="user" value="{{ user.id }}">
                     <div class="form-group mb-0">
-                        <label style="font-size:0.85rem; font-weight:600;">Nombre de SMS à ajouter</label>
+                        <label class="modal-label">Nombre de SMS à ajouter</label>
                         <input name="quantite" type="number" min="1" class="form-control" placeholder="ex: 100" required>
                     </div>
                 </div>

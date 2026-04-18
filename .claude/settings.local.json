@@ -11,7 +11,28 @@
       "WebFetch(domain:africastalking.com)",
       "WebFetch(domain:help.africastalking.com)",
       "WebFetch(domain:helloduty.com)",
-      "WebFetch(domain:www.twilio.com)"
+      "WebFetch(domain:www.twilio.com)",
+      "Bash(mkdir -p /tmp/deploy)",
+      "Bash(chmod 600 /tmp/deploy/id_rsa)",
+      "Bash(ssh:*)",
+      "Read(//mnt/d/Projects/rapide-sms/**)",
+      "Read(//mnt/d/Projects/rapide-sms/rapide-app/**)",
+      "Bash(curl -s https://raw.githubusercontent.com/bigga-val/msg-pro/main/deploy.sh)",
+      "WebFetch(domain:test.msg-pro.com)",
+      "Bash(php bin/console doctrine:migrations:diff)",
+      "Bash(php bin/console doctrine:migrations:migrate --no-interaction)",
+      "Bash(php bin/console doctrine:migrations:version DoctrineMigrations\\\\\\\\Version20250401111811 --add --no-interaction)",
+      "Bash(php bin/console doctrine:migrations:version \"DoctrineMigrations\\\\Version20250401111811\" --add --no-interaction)",
+      "Bash(php bin/console cache:clear)",
+      "Bash(php bin/console messenger:failed:show)",
+      "Bash(php bin/console dbal:run-sql \"SELECT * FROM messenger_messages ORDER BY created_at DESC LIMIT 5\")",
+      "Bash(php bin/console debug:container --show-arguments SendEmailMessage)",
+      "Bash(php bin/console messenger:dispatch-after-current-bus)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)",
+      "Bash(node:*)",
+      "Bash(rm:*)"
     ]
   }
 }

@@ -1,0 +1,170 @@
+/* =============================================
+   MSG-PRO — Dashboard Theme Overrides
+   Surcharges AdminLTE pour le tableau de bord
+   ============================================= */
+
+/* ===== SIDEBAR ===== */
+.main-sidebar, .main-sidebar::before {
+    background: #1a2e5a !important;
+}
+.brand-link {
+    background: #162447 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+}
+.brand-link:hover { background: #1e3a8a !important; }
+.brand-text { color: #fff !important; font-weight: 700 !important; letter-spacing: 0.5px; }
+.brand-image { opacity: 0.9; }
+
+/* User panel */
+.user-panel { border-bottom: 1px solid rgba(255,255,255,0.1) !important; }
+.user-panel .info a { color: #e2e8f0 !important; }
+
+/* Nav items */
+.nav-sidebar .nav-link {
+    color: rgba(255,255,255,0.72) !important;
+    border-radius: 6px !important;
+    margin: 1px 8px !important;
+    padding: 9px 12px !important;
+    transition: 0.2s !important;
+}
+.nav-sidebar .nav-link:hover,
+.nav-sidebar .nav-link.active {
+    background: rgba(37,99,235,0.25) !important;
+    color: #fff !important;
+}
+.nav-sidebar .nav-link.active { background: #2563eb !important; }
+.nav-sidebar .nav-icon { color: rgba(255,255,255,0.5) !important; margin-right: 10px; }
+.nav-sidebar .nav-link:hover .nav-icon,
+.nav-sidebar .nav-link.active .nav-icon { color: #fff !important; }
+.nav-treeview .nav-link { margin-left: 16px !important; }
+
+/* Nav section label */
+.nav-sidebar .nav-header {
+    color: rgba(255,255,255,0.35) !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 1.2px !important;
+    padding: 12px 20px 4px !important;
+}
+
+/* Badge SMS */
+.sidebar .badge-info {
+    background: #2563eb !important;
+    font-size: 0.72rem;
+    padding: 3px 8px;
+    border-radius: 20px;
+}
+
+/* ===== SIDEBAR USER PANEL ===== */
+.sidebar-user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(37,99,235,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sidebar-user-avatar i {
+    color: #93c5fd;
+    font-size: 0.9rem;
+}
+.sidebar-info { margin-left: 10px; }
+.sidebar-username {
+    color: #e2e8f0;
+    font-weight: 700;
+    font-size: 0.88rem;
+    display: block;
+}
+.nav-admin-section { margin-top: 8px; }
+.nav-logout-item {
+    margin-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 8px;
+}
+
+/* ===== TOPBAR ===== */
+.main-header.navbar {
+    background: #fff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06) !important;
+}
+.main-header .nav-link { color: #475569 !important; font-size: 0.9rem; }
+.main-header .nav-link:hover { color: #2563eb !important; }
+.main-header .navbar-brand { color: #1a2e5a !important; font-weight: 700; }
+
+/* Topbar SMS badge */
+.topbar-sms-badge {
+    background: #eff6ff;
+    color: #1e40af;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border: 1px solid #bfdbfe;
+}
+/* Topbar recharge button */
+.btn-topbar-recharge {
+    border-radius: 20px !important;
+    padding: 5px 14px !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    margin-right: 8px;
+}
+/* Topbar user info */
+.topbar-username {
+    color: #475569;
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-right: 4px;
+}
+.topbar-logout {
+    color: #dc2626;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+/* ===== CARDS ===== */
+.card { border: 1px solid #e2e8f0 !important; border-radius: 10px !important; box-shadow: 0 1px 8px rgba(0,0,0,0.04) !important; }
+.card-header { border-bottom: 1px solid #e2e8f0 !important; border-radius: 10px 10px 0 0 !important; }
+.card-header.bg-gradient-dark,
+.card-header.bg-dark {
+    background: linear-gradient(135deg, #1a2e5a 0%, #2563eb 100%) !important;
+    color: #fff !important;
+}
+.card-header.bg-gradient-dark h3,
+.card-header.bg-gradient-dark h4,
+.card-header.bg-gradient-dark h5,
+.card-header.bg-gradient-dark h6 { color: #fff !important; margin: 0; font-size: 1rem; font-weight: 700; }
+
+/* ===== STAT BOXES ===== */
+.small-box { border-radius: 10px !important; overflow: hidden; }
+.small-box.bg-info    { background: #2563eb !important; }
+.small-box.bg-success { background: #0d9488 !important; }
+.small-box.bg-warning { background: #d97706 !important; }
+.small-box.bg-danger  { background: #dc2626 !important; }
+.small-box .small-box-footer { background: rgba(0,0,0,0.15) !important; }
+.small-box .small-box-footer:hover { background: rgba(0,0,0,0.25) !important; }
+
+/* ===== BUTTONS ===== */
+.btn-primary, .btn-info { background: #2563eb !important; border-color: #2563eb !important; }
+.btn-primary:hover, .btn-info:hover { background: #1d4ed8 !important; border-color: #1d4ed8 !important; }
+.btn-success { background: #0d9488 !important; border-color: #0d9488 !important; }
+.btn-success:hover { background: #0f766e !important; border-color: #0f766e !important; }
+
+/* ===== FORMS ===== */
+.form-control:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12) !important;
+}
+label { font-weight: 600; font-size: 0.88rem; color: #374151; }
+
+/* ===== TABLES ===== */
+.table thead th { background: #f8fafc; color: #374151; font-weight: 700; font-size: 0.85rem; border-bottom: 2px solid #e2e8f0 !important; }
+.table tbody tr:hover td { background: #f8fafc; }
+
+/* ===== CONTENT AREA ===== */
+.content-wrapper { background: #f1f5f9 !important; }
+.content { padding: 20px !important; }
+
+/* ===== FOOTER ===== */
+.main-footer { border-top: 1px solid #e2e8f0 !important; background: #fff !important; color: #94a3b8 !important; font-size: 0.82rem; }

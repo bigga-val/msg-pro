@@ -7,29 +7,29 @@
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="{{ path('app_landing') }}" class="nav-link">
-                <i class="fas fa-globe me-1" style="margin-right:4px;"></i> Voir le site
+                <i class="fas fa-globe me-1"></i> Voir le site
             </a>
         </li>
     </ul>
 
     <ul class="navbar-nav ml-auto align-items-center">
         {% if app.user %}
-            <li class="nav-item me-2" style="margin-right:12px;">
-                <span style="background:#eff6ff;color:#1e40af;border-radius:20px;padding:4px 14px;font-size:0.82rem;font-weight:700;border:1px solid #bfdbfe;">
-                    <i class="fas fa-sms" style="margin-right:5px;"></i>
+            <li class="nav-item me-2">
+                <span class="topbar-sms-badge">
+                    <i class="fas fa-sms me-1"></i>
                     <span id="qty-sms-top">{{ app.user.totalSMS ?? 0 }}</span> SMS restants
                 </span>
             </li>
             <li class="nav-item">
-                <a href="{{ path('app_commande') }}" class="btn btn-sm btn-primary" style="border-radius:20px;padding:5px 14px;font-size:0.82rem;font-weight:700;margin-right:8px;">
-                    <i class="fas fa-plus me-1" style="margin-right:4px;"></i> Recharger
+                <a href="{{ path('app_commande') }}" class="btn btn-sm btn-primary btn-topbar-recharge">
+                    <i class="fas fa-plus me-1"></i> Recharger
                 </a>
             </li>
             <li class="nav-item">
-                <span style="color:#475569;font-size:0.88rem;font-weight:600;margin-right:4px;">
+                <span class="topbar-username">
                     {{ app.user.username | upper }}
                 </span>
-                <a href="{{ path('app_logout') }}" style="color:#dc2626;font-size:0.82rem;font-weight:600;">
+                <a href="{{ path('app_logout') }}" class="topbar-logout">
                     Déconnexion
                 </a>
             </li>

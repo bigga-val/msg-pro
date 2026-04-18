@@ -1,0 +1,105 @@
+/* =============================================
+   MSG-PRO — Composants partagés du dashboard
+   Utilisés sur plusieurs pages
+   ============================================= */
+
+/* ===== BADGES STATUT ===== */
+.badge-sms {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+.badge-actif   { background: #d1fae5; color: #065f46; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+.badge-inactif { background: #fee2e2; color: #991b1b; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+
+/* Badge Admin (fond coloré, utilisé dans les en-têtes colorées) */
+.badge-admin-header {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: 6px;
+}
+.badge-admin-detail {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+/* ===== PROGRESS BAR SMS ===== */
+.sms-progress {
+    background: #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+.sms-progress-bar {
+    background: linear-gradient(90deg, #2563eb, #60a5fa);
+    border-radius: 8px;
+    transition: width 0.4s;
+}
+
+/* SMS bar (mini — liste utilisateurs) */
+.sms-bar-wrap { background: #e5e7eb; border-radius: 8px; height: 6px; min-width: 80px; }
+.sms-bar { background: #2563eb; border-radius: 8px; height: 6px; }
+
+/* ===== INFO ROW (profil & détail utilisateur) ===== */
+.info-row {
+    display: flex;
+    align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+.info-row:last-child { border-bottom: none; }
+.info-icon {
+    border-radius: 8px;
+    background: #eff6ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2563eb;
+    flex-shrink: 0;
+}
+.info-label {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+.info-value {
+    font-size: 0.93rem;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+/* ===== CARTE AVEC OMBRE (réutilisable) ===== */
+.card-elevated {
+    border-radius: 12px !important;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08) !important;
+}
+.card-soft {
+    border-radius: 12px !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+}
+
+/* ===== HINT D'UTILISATION ===== */
+.usage-hint {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+/* ===== MODAL LABEL ===== */
+.modal-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+}

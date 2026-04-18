@@ -1,192 +1,238 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau Groupe de Contact{% endblock %}
+{% block title %}Importer des contacts — MSG-PRO{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('styles/import.css') }}">
+{% endblock %}
 
 {% block body %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-gradient-dark">
-                        <h4>Nouveau Groupe de contacts</h4>
+<div class="container-fluid py-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="import-card">
+
+                <!-- Header -->
+                <div class="import-header">
+                    <div>
+                        <h4><i class="fas fa-file-excel me-2"></i>Importer des contacts via Excel</h4>
+                        <p>Créez un groupe et importez vos contacts en une seule opération.</p>
                     </div>
-                    <div class="card-body">
-{#                        {{ include('groupe/_form.html.twig') }}#}
+                    <a href="{{ path('app_groupe_index') }}" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Retour
+                    </a>
+                </div>
 
-                        <p class="alert alert-default-warning m-3 d-block text-black">Vous êtes sur le point de créer des contacts directement liés à un Groupe de Contact. veuillez trouver ci-bas, le modèle excel à remplir et uploader.</p>
+                <!-- Step 1 : Infos groupe -->
+                <div class="import-section">
+                    <div class="import-step-label"><span>1</span> Informations du groupe</div>
 
-                        <form action="">
-
-                            <div class="form-group">
-                                <label for="organisation_organisation">Organisation</label>
-                                <select name="groupe_organisation" id="groupe_organisation" class="form-control">
-                                    {% for organisation in organisations %}
-                                        <option value="{{ organisation.id }}">{{ organisation.designation }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group">
-{#                                <input type="submit" class="btn btn-success">#}
-                            </div>
-                            <div class="form-group">
-                                <label for="groupe_designation">Designation</label>
-                                <input type="text" class="form-control" name="groupe_designation" id="groupe_designation">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="card-footer">
-                        <a href="{{ path('app_groupe_index') }}">Voir la liste</a>
-
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="import-label">Organisation</label>
+                            <select id="groupe_organisation" class="form-control import-input">
+                                <option value="">— Choisir une organisation —</option>
+                                {% for organisation in organisations %}
+                                    <option value="{{ organisation.id }}">
+                                        {{ organisation.designation }}
+                                        {% if not organisation.isApproved %} (en attente){% endif %}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="import-label">Nom du groupe <span class="text-danger">*</span></label>
+                            <input type="text" id="groupe_designation" class="form-control import-input"
+                                   placeholder="ex : Clients VIP, Équipe RH…">
+                        </div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-header bg-gradient-dark">
-                        <h4>Importation de fichier de contacts</h4>
-                    </div>
-                    <div class="card-body">
-                        <input accept=".xlsx" id="excelFileInput" name="excelFileInput" type="file">
-                        <button class="btn btn-primary btn-sm" id="btn-savexlsx">Enregistrer</button>
-                        <br>
-                        <span class="alert alert-default-info m-3 d-block text-black"><a class="text-secondary" href="{{ asset('template_contacts.xlsx') }}">Veuillez telecharger le template du fichier des contacts ici .XLSX</a></span>
-                        <br>
-                        <span id="error-msg" class="text-danger"></span>
-                        <hr>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Telephone</th>
-                                <th>Nom</th>
-                                <th>Postnom</th>
-                                <th>Adresse</th>
-                                <th>Fonction</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tbody">
+                <!-- Step 2 : Upload fichier -->
+                <div class="import-section">
+                    <div class="import-step-label"><span>2</span> Fichier Excel</div>
 
-                            </tbody>
+                    <div class="upload-zone" id="upload-zone">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">Glissez votre fichier ici ou <label for="excelFileInput" class="upload-browse">parcourez</label></p>
+                        <p class="upload-hint">Format accepté : <strong>.xlsx</strong> — colonnes : Telephone, Nom, Postnom, Adresse, Fonction</p>
+                        <input type="file" id="excelFileInput" accept=".xlsx" class="d-none">
+                    </div>
+
+                    <div class="upload-template-link">
+                        <i class="fas fa-download me-1"></i>
+                        <a href="{{ asset('template_contacts.xlsx') }}">Télécharger le modèle Excel</a>
+                    </div>
+                </div>
+
+                <!-- Step 3 : Prévisualisation -->
+                <div class="import-section d-none" id="section-preview">
+                    <div class="import-step-label"><span>3</span> Prévisualisation <span id="preview-count" class="preview-count"></span></div>
+
+                    <div class="preview-table-wrap">
+                        <table class="table preview-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Téléphone</th>
+                                    <th>Nom</th>
+                                    <th>Postnom</th>
+                                    <th>Adresse</th>
+                                    <th>Fonction</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody"></tbody>
                         </table>
                     </div>
-                    <div class="card-footer">
-{#                        <a href="{{ path('app_groupe_index') }}">Voir la liste</a>#}
+                </div>
 
+                <!-- Erreur & Actions -->
+                <div class="import-footer">
+                    <span id="error-msg" class="import-error"></span>
+                    <div class="import-actions">
+                        <div class="import-progress d-none" id="import-progress">
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill" id="progress-fill"></div>
+                            </div>
+                            <span id="progress-label">Importation…</span>
+                        </div>
+                        <button id="btn-savexlsx" class="btn btn-primary btn-import" disabled>
+                            <i class="fas fa-upload me-2"></i> Importer les contacts
+                        </button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-    <script src="{{ asset("plugins/jquery/jquery.js") }}"></script>
+</div>
 
-    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-    <script src="https://unpkg.com/handsontable/dist/handsontable.full.min.js">
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+<script>
+let importData = [];
 
-    </script> <script src="https://cdn.jsdelivr.net/npm/moment02.29.4/moment.min.js">
+function esc(v) { return $('<span>').text(v ?? '').html(); }
 
-    </script> <script src="https://cdn.jsdelivr.net/npm/pikaday01.8.2/pikaday.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday@1.8.2/css/pikaday.css">
-    <link rel="stylesheet" href="https://unpkg.com/handsontable/dist/handsontable.full.min.css">
-    <script>
-        const result =[]
-        const container = document.getElementById('previewTable')
-        $('#btn-savexlsx').attr("disabled", "true")
-        $('#excelFileInput').on('change', function(e){
-            //container.innerHTML = '<span>No file uploaded</span>'
-            //console.log("changed")
-            const file = e.target.files[0]
-            const reader = new FileReader()
+// Drag & drop
+const zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file);
+});
 
-            reader.onload = function(e){
-                let data = e.target.result//new Uint8Array(e.target.result)
-                const workbook = XLSX.read(data, {type: 'array'})
-                const sheetName = workbook.SheetNames[0]
-                const worksheet = workbook.Sheets[sheetName]
-                //console.log(workbook, worksheet, sheetName)
-                //const jsonData = XLSX.utils.sheet_to_json(worksheet, {header:1, range:12, cellDates: true})
-                data = XLSX.utils.sheet_to_json(worksheet);
-                //console.log(workbook, worksheet, sheetName)
-                //console.log(data, typeof worksheet)
-                function esc(v) { return $('<span>').text(v ?? '').html(); }
-                let tbody = ""
-                for(let i = 0; i < data.length; i++){
-                    tbody += "<tr><td>" + esc(data[i]['Telephone']) + "</td>"
-                        + "<td>" + esc(data[i]['Nom']) + "</td>"
-                        + "<td>" + esc(data[i]['Postnom']) + "</td>"
-                        + "<td>" + esc(data[i]['Adresse']) + "</td>"
-                        + "<td>" + esc(data[i]['Fonction']) + "</td></tr>"
-                }
-                $('#btn-savexlsx').removeAttr("disabled")
+$('#excelFileInput').on('change', function () {
+    if (this.files[0]) handleFile(this.files[0]);
+});
 
+function handleFile(file) {
+    if (!file.name.endsWith('.xlsx')) {
+        showError('Seuls les fichiers .xlsx sont acceptés.');
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const workbook = XLSX.read(e.target.result, { type: 'array' });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        importData = XLSX.utils.sheet_to_json(worksheet);
 
-                $("#tbody").html(tbody)
+        if (importData.length === 0) {
+            showError('Le fichier est vide ou ne contient pas de données valides.');
+            return;
+        }
 
-                $('#btn-savexlsx').on('click', function(e){
-                  //  console.log('clicked')
-                    if($('#groupe_designation').val() === ''){
-                    //    console.log('empty')
-                        $('#groupe_designation').addClass('border border-danger')
-                        $('#error-msg').text('La designation du groupe de contact est encore vide')
-                    }else if($('#tbody').find('tr').length === 0 ){
-                        $('#groupe_designation').removeClass('border border-danger')
-                        $('#error-msg').text('La table des donnees a inserer parait vide. Veuillez choisir un fichier')
-                    }else{
-                        $('#groupe_designation').removeClass('border border-danger')
-                        $('#error-msg').text('')
+        // Afficher la prévisualisation
+        let tbody = '';
+        importData.forEach(row => {
+            tbody += '<tr>'
+                + '<td>' + esc(row['Telephone']) + '</td>'
+                + '<td>' + esc(row['Nom']) + '</td>'
+                + '<td>' + esc(row['Postnom']) + '</td>'
+                + '<td>' + esc(row['Adresse']) + '</td>'
+                + '<td>' + esc(row['Fonction']) + '</td>'
+                + '</tr>';
+        });
+        $('#tbody').html(tbody);
+        $('#preview-count').text('(' + importData.length + ' contacts)');
+        $('#section-preview').removeClass('d-none');
 
-                        let lines = $("#tbody tr")
-                        console.log(data)
-                        console.log($("#groupe_designation").val(), $("#groupe_organisation").val())
-                        $.ajax({
-                            url: '/groupe/JsonSaveGroupe?designation='
-                                + encodeURIComponent($('#groupe_designation').val())
-                                + '&organisationID=' + encodeURIComponent($('#groupe_organisation').val()),
-                            method: 'GET',
-                            data: {},
-                            success: function (groupeID) {
-                                console.log(data, 'done')
-                                let mylastGroupID = groupeID
-                                for(let i = 0; i < data.length; i++){
-                                    //console.log(data[i]['Telephone'], data[i]['Nom'], data[i]['Postnom'], data[i]['Adresse'], data[i]['Fonction'])
-                                    $.ajax({
-                                        url: '/contact/JsonSaveContact?'
-                                            + 'telephone=' + encodeURIComponent(data[i]['Telephone'] ?? '')
-                                            + '&nom=' + encodeURIComponent(data[i]['Nom'] ?? '')
-                                            + '&postnom=' + encodeURIComponent(data[i]['Postnom'] ?? '')
-                                            + '&adresse=' + encodeURIComponent(data[i]['Adresse'] ?? '')
-                                            + '&fonction=' + encodeURIComponent(data[i]['Fonction'] ?? '')
-                                            + '&groupeID=' + encodeURIComponent(mylastGroupID)
-                                        ,method: 'GET',
-                                        data: {},
-                                        success: function (data) {
-                                            console.log(data, 'done - lastgroupe: ', mylastGroupID)
-                                            //window.location.replace('{{ path('app_contact_index') }}');
+        // Mettre à jour la zone upload
+        zone.classList.add('file-loaded');
+        zone.querySelector('.upload-text').innerHTML = '<i class="fas fa-check-circle me-2 text-success"></i><strong>' + file.name + '</strong>';
 
-                                            //for(let i = 0; i < data.length; i++){
-                                                //console.log(data[i]['Telephone'], data[i]['Nom'], data[i]['Postnom'], data[i]['Adresse'], data[i]['Fonction'])
-                                                window.location.replace('{{ path('app_contact_index') }}');
-                                            //}
-                                        },
-                                        error: function () {
-                                            $('#error-msg').text("Impossible d'enregistrer le contact. Vérifiez votre connexion et réessayez.");
-                                        }
-                                        //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
-                                    })
-                                }
-                            },
-                            error: function () {
-                                $('#error-msg').text("Impossible de créer le groupe. Vérifiez votre connexion et réessayez.");
-                            }
-                            //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
-                        })
+        $('#btn-savexlsx').prop('disabled', false);
+        showError('');
+    };
+    reader.readAsArrayBuffer(file);
+}
 
+$('#btn-savexlsx').on('click', function () {
+    const designation = $('#groupe_designation').val().trim();
+    const organisationID = $('#groupe_organisation').val();
 
-                    }
-                })
+    if (!designation) {
+        showError('Veuillez saisir un nom de groupe.');
+        $('#groupe_designation').focus();
+        return;
+    }
+    if (importData.length === 0) {
+        showError('Veuillez charger un fichier Excel.');
+        return;
+    }
 
+    showError('');
+    $('#btn-savexlsx').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i> Importation…');
+    $('#import-progress').removeClass('d-none');
+    animateProgress();
+
+    $.ajax({
+        url: '{{ path('json_import_contacts') }}',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            designation: designation,
+            organisationID: organisationID || null,
+            contacts: importData
+        }),
+        success: function (res) {
+            if (res.success) {
+                $('#progress-fill').css('width', '100%');
+                $('#progress-label').text(res.imported + ' contacts importés avec succès !');
+                $('#btn-savexlsx').html('<i class="fas fa-check me-2"></i> Importé !').addClass('btn-success').removeClass('btn-primary');
+                setTimeout(() => { window.location.href = '{{ path('app_contact_index') }}'; }, 1200);
+            } else {
+                showError(res.message ?? 'Une erreur est survenue.');
+                resetBtn();
             }
-            reader.readAsArrayBuffer(file)
-        })
+        },
+        error: function () {
+            showError('Impossible d\'importer. Vérifiez votre connexion et réessayez.');
+            resetBtn();
+        }
+    });
+});
 
+function animateProgress() {
+    let w = 0;
+    const iv = setInterval(() => {
+        w = Math.min(w + 2, 90);
+        $('#progress-fill').css('width', w + '%');
+        if (w >= 90) clearInterval(iv);
+    }, 40);
+}
 
-    </script>
+function showError(msg) {
+    $('#error-msg').text(msg);
+}
 
+function resetBtn() {
+    $('#btn-savexlsx').prop('disabled', false).html('<i class="fas fa-upload me-2"></i> Importer les contacts');
+    $('#import-progress').addClass('d-none');
+    $('#progress-fill').css('width', '0%');
+}
+</script>
 {% endblock %}

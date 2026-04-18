@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ContactRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,6 +40,14 @@ class Contact
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\OneToMany(targetEntity: ContactGroupe::class, mappedBy: 'contact')]
+    private Collection $contactGroupes;
+
+    public function __construct()
+    {
+        $this->contactGroupes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -138,5 +148,10 @@ class Contact
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function getContactGroupes(): Collection
+    {
+        return $this->contactGroupes;
     }
 }

@@ -3,46 +3,7 @@
 {% block title %}Mon Profil — {{ app.user.username }}{% endblock %}
 
 {% block stylesheets %}
-<style>
-    .profile-avatar {
-        width: 80px; height: 80px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #1a2e5a, #2563eb);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 2rem; font-weight: 800; color: #fff;
-        flex-shrink: 0;
-    }
-    .profile-header {
-        display: flex; align-items: center; gap: 20px;
-        padding: 24px 28px;
-        background: linear-gradient(135deg, #1a2e5a 0%, #2563eb 100%);
-        color: #fff;
-        border-radius: 12px 12px 0 0;
-    }
-    .profile-header h4 { margin: 0; font-size: 1.3rem; font-weight: 800; }
-    .profile-header p  { margin: 0; opacity: 0.8; font-size: 0.88rem; }
-    .sms-stat {
-        border-radius: 10px;
-        padding: 16px 20px;
-        text-align: center;
-        flex: 1;
-    }
-    .sms-stat .val { font-size: 1.9rem; font-weight: 800; line-height: 1; }
-    .sms-stat .lbl { font-size: 0.78rem; margin-top: 4px; opacity: 0.75; }
-    .stat-blue  { background: linear-gradient(135deg,#1a2e5a,#2563eb); color:#fff; }
-    .stat-green { background: linear-gradient(135deg,#065f46,#10b981); color:#fff; }
-    .stat-gray  { background: #f1f5f9; color: #334155; }
-    .info-row { display: flex; align-items: center; padding: 13px 0; border-bottom: 1px solid #f1f5f9; }
-    .info-row:last-child { border-bottom: none; }
-    .info-row .info-icon { width: 34px; height: 34px; border-radius: 8px; background:#eff6ff;
-        display:flex; align-items:center; justify-content:center; color:#2563eb; margin-right:14px; flex-shrink:0; }
-    .info-row .info-label { font-size: 0.78rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    .info-row .info-value { font-size: 0.95rem; color: #1e293b; font-weight: 600; }
-    .badge-actif   { background:#d1fae5; color:#065f46; padding:3px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
-    .badge-inactif { background:#fee2e2; color:#991b1b; padding:3px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; }
-    .sms-progress { background:#e2e8f0; border-radius:8px; height:8px; overflow:hidden; margin-top:8px; }
-    .sms-progress-bar { background: linear-gradient(90deg,#2563eb,#60a5fa); height:8px; border-radius:8px; transition:.4s; }
-</style>
+<link rel="stylesheet" href="{{ asset('styles/profile.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -59,15 +20,15 @@
                 {% endfor %}
             {% endfor %}
 
-            <div class="card" style="border-radius:12px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+            <div class="card card-elevated">
 
                 {# Header #}
                 <div class="profile-header">
-                    <div class="profile-avatar" style="overflow:hidden; padding:0;">
+                    <div class="profile-avatar">
                         {% if app.user.avatar %}
                             <img src="{{ asset('uploads/avatars/' ~ app.user.avatar) }}"
                                  alt="avatar"
-                                 style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                                 class="avatar-img">
                         {% else %}
                             {{ app.user.username|first|upper }}
                         {% endif %}
@@ -75,26 +36,26 @@
                     <div>
                         <h4>{{ app.user.username }}</h4>
                         <p>{{ app.user.email ?? 'Aucun email renseigné' }}</p>
-                        <div style="margin-top:6px;">
+                        <div class="profile-header-meta">
                             {% if app.user.isConfirmer() %}
                                 <span class="badge-actif">Compte actif</span>
                             {% else %}
                                 <span class="badge-inactif">Compte inactif</span>
                             {% endif %}
                             {% if is_granted('ROLE_ADMIN') %}
-                                <span style="background:rgba(255,255,255,0.2); color:#fff; padding:3px 10px; border-radius:20px; font-size:0.8rem; font-weight:700; margin-left:6px;">Admin</span>
+                                <span class="badge-admin-header">Admin</span>
                             {% endif %}
                         </div>
                     </div>
                 </div>
 
-                <div class="card-body" style="padding: 24px 28px;">
+                <div class="card-body card-body-profile">
 
                     {# Solde SMS #}
                     {% set total = app.user.totalSms ?? 0 %}
                     {% set used  = app.user.usedSms  ?? 0 %}
                     {% set grand = total + used %}
-                    <div class="d-flex gap-3 mb-4" style="gap:12px; display:flex;">
+                    <div class="sms-stats-row mb-4">
                         <div class="sms-stat stat-blue">
                             <div class="val">{{ total }}</div>
                             <div class="lbl">SMS restants</div>
@@ -110,7 +71,7 @@
                     </div>
                     {% if grand > 0 %}
                     <div class="mb-4">
-                        <div style="font-size:0.8rem; color:#64748b; margin-bottom:4px;">
+                        <div class="usage-hint">
                             Utilisation : {{ ((used / grand) * 100)|round }}% des SMS utilisés
                         </div>
                         <div class="sms-progress">
@@ -157,7 +118,7 @@
 
                 </div>
 
-                <div class="card-footer" style="background:#f8fafc; padding:16px 28px;">
+                <div class="card-footer card-footer-profile">
                     <a href="{{ path('edit_profile') }}" class="btn btn-primary btn-sm">
                         <i class="fas fa-pen mr-1"></i> Modifier mon profil
                     </a>

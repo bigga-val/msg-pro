@@ -3,96 +3,7 @@
 {% block title %}Confirmez votre compte — MSG-PRO{% endblock %}
 
 {% block stylesheets %}
-<style>
-    html, body.hold-transition.login-page {
-        height: 100% !important;
-        min-height: 100vh !important;
-        background: #f1f5f9 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        font-family: 'Source Sans Pro', sans-serif;
-    }
-    .confirm-card {
-        background: #fff;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-        padding: 56px 48px;
-        max-width: 520px;
-        width: 100%;
-        text-align: center;
-    }
-    .confirm-icon {
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 28px;
-    }
-    .confirm-icon i {
-        font-size: 2rem;
-        color: #059669;
-    }
-    .confirm-card h2 {
-        font-size: 1.6rem;
-        font-weight: 800;
-        color: #1a2e5a;
-        margin-bottom: 12px;
-    }
-    .confirm-card p {
-        color: #64748b;
-        font-size: 0.95rem;
-        line-height: 1.7;
-        margin-bottom: 10px;
-    }
-    .confirm-card p strong {
-        color: #1e293b;
-    }
-    .confirm-steps {
-        background: #f8fafc;
-        border-radius: 12px;
-        padding: 20px 24px;
-        margin: 24px 0;
-        text-align: left;
-    }
-    .confirm-steps p {
-        margin: 0 0 8px;
-        font-size: 0.88rem;
-        color: #475569;
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    .confirm-steps p:last-child { margin-bottom: 0; }
-    .confirm-steps i {
-        color: #2563eb;
-        margin-top: 2px;
-        flex-shrink: 0;
-    }
-    .btn-home {
-        display: inline-block;
-        margin-top: 8px;
-        padding: 12px 32px;
-        background: #2563eb;
-        color: #fff;
-        border-radius: 8px;
-        font-weight: 700;
-        font-size: 0.95rem;
-        text-decoration: none;
-        transition: 0.2s;
-    }
-    .btn-home:hover { background: #1d4ed8; color: #fff; text-decoration: none; }
-    .confirm-logo {
-        margin-bottom: 32px;
-    }
-    .confirm-logo img { height: 42px; width: auto; }
-    @media (max-width: 600px) {
-        .confirm-card { padding: 36px 24px; margin: 20px; }
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('styles/auth-confirm.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -115,10 +26,10 @@
         <p><i class="fas fa-check-circle"></i> <span>Ouvrez votre boîte email et cherchez un message de <strong>info@msg-pro.com</strong></span></p>
         <p><i class="fas fa-check-circle"></i> <span>Cliquez sur le lien <strong>« Votre lien unique »</strong> pour activer votre compte</span></p>
         <p><i class="fas fa-check-circle"></i> <span>Une fois activé, vous recevrez <strong>5 SMS gratuits</strong> pour commencer</span></p>
-        <p><i class="fas fa-exclamation-circle" style="color:#f59e0b;"></i> <span>Pensez à vérifier vos <strong>spams</strong> si vous ne voyez pas l'email</span></p>
+        <p><i class="fas fa-exclamation-circle icon-warning"></i> <span>Pensez à vérifier vos <strong>spams</strong> si vous ne voyez pas l'email</span></p>
     </div>
 
-    <p style="font-size:0.82rem; color:#94a3b8;">Un problème ? Contactez-nous sur <a href="mailto:info@msg-pro.com" style="color:#2563eb;">info@msg-pro.com</a> ou au +243 851 331 051</p>
+    <p class="text-contact">Un problème ? Contactez-nous sur <a href="mailto:info@msg-pro.com">info@msg-pro.com</a> ou au +243 851 331 051</p>
 
     <a href="{{ path('app_landing') }}" class="btn-home">Retour à l'accueil</a>
 </div>
