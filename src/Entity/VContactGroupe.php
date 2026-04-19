@@ -30,9 +30,6 @@ class VContactGroupe
     #[ORM\Column(name: "groupe", type: "string", length: 150, nullable: true)]
     private ?string $groupe = null;
 
-    #[ORM\Column(name: "organisation", type: "string", length: 150, nullable: true)]
-    private ?string $organisation = null;
-
     #[ORM\Column(type: "integer")]
     private ?int $user = null;
 
@@ -73,15 +70,10 @@ class VContactGroupe
         return $this->groupe;
     }
 
-    public function getOrganisation(): ?string
-    {
-        return $this->organisation;
-    }
-
     public function getUser(): ?int
     {
         return $this->user;
     }
-    #select `c`.`id` AS `id`,`c`.`telephone` AS `telephone`,`c`.`nom` AS `nom`,`c`.`postnom` AS `postnom`,`c`.`adresse` AS `adresse`,`c`.`fonction` AS `fonction`,`g`.`designation` AS `groupe`,`o`.`designation` AS `organisation`,`c`.`user_id` AS `user` from (((`db_cgssms`.`contact` `c` left join `db_cgssms`.`contact_groupe` `cg` on(`c`.`id` = `cg`.`contact_id`)) left join `db_cgssms`.`groupe` `g` on(`g`.`id` = `cg`.`groupe_id`)) left join `db_cgssms`.`organisation` `o` on(`o`.`id` = `g`.`organisation_id`))
+    #select `c`.`id` AS `id`,`c`.`telephone` AS `telephone`,`c`.`nom` AS `nom`,`c`.`postnom` AS `postnom`,`c`.`adresse` AS `adresse`,`c`.`fonction` AS `fonction`,`g`.`designation` AS `groupe`,`c`.`user_id` AS `user` from ((`db_cgssms`.`contact` `c` left join `db_cgssms`.`contact_groupe` `cg` on(`c`.`id` = `cg`.`contact_id`)) left join `db_cgssms`.`groupe` `g` on(`g`.`id` = `cg`.`groupe_id`))
 
 }

@@ -21,15 +21,13 @@ class GroupeRepository extends ServiceEntityRepository
     {
         $em = $this->getEntityManager();
         $query = $em->createQuery(
-            'select g.id, g.designation, o.designation organisation
-            , (select count(cg.id) from App\Entity\ContactGroupe cg where cg.groupe = g.id ) as totalContact
-                    from App\Entity\Groupe g, App\Entity\Organisation o 
-                    where g.organisation = o.id
-                    and o.user = :user
-            '
+            'select g.id, g.designation,
+             (select count(cg.id) from App\Entity\ContactGroupe cg where cg.groupe = g.id) as totalContact
+             from App\Entity\Groupe g
+             where g.user = :user
+             order by g.id desc'
         );
         $query->setParameter('user', $value);
-        //$query->setParameter('mydate', $mydate->format('Y-m-d'));
         return $query->getResult();
     }
 
@@ -37,34 +35,13 @@ class GroupeRepository extends ServiceEntityRepository
     {
         $em = $this->getEntityManager();
         $query = $em->createQuery(
-            'select g.id, g.designation, o.designation organisation
-            , (select count(cg.id) from App\Entity\ContactGroupe cg where cg.groupe = g.id) as totalContact
-                    from App\Entity\Groupe g, App\Entity\Organisation o 
-                    where g.organisation = o.id
-                    
-            '
+            'select g.id, g.designation,
+             (select count(cg.id) from App\Entity\ContactGroupe cg where cg.groupe = g.id) as totalContact
+             from App\Entity\Groupe g
+             order by g.id desc'
         );
-        //$query->setParameter('user', $value);
-        //$query->setParameter('mydate', $mydate->format('Y-m-d'));
         return $query->getResult();
     }
-
-    public function findGroupesByOrganisation($value): array
-    {
-        $em = $this->getEntityManager();
-        $query = $em->createQuery(
-            'select g.id, g.designation, o.designation organisation
-                    , (select count(c.id) from App\Entity\ContactGroupe c where c.groupe = g.id) as totalContact
-                    from App\Entity\Groupe g, App\Entity\Organisation o
-                    where g.organisation = o.id
-                    and g.organisation = :organisation
-            '
-        );
-        $query->setParameter('organisation', $value);
-        //$query->setParameter('mydate', $mydate->format('Y-m-d'));
-        return $query->getResult();
-    }
-
 
     public function findContactNotInGroupe($groupeID): array
     {

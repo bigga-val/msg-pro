@@ -183,16 +183,21 @@
     </div>
 </div>
 
-<script src="{{ asset('plugins/jquery/jquery.js') }}"></script>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
 <script>
-$('#btn-envoyer').on('click', function(e) {
-    let qty = parseInt($('#qty-sms').text()) || 0;
-    if (qty <= 0) {
-        $('#error-msg').text('Solde insuffisant. Veuillez recharger votre compte.');
-        e.preventDefault();
-    } else {
-        $('#error-msg').text('');
-    }
+$(function() {
+    $('#btn-envoyer').on('click', function(e) {
+        let qty = parseInt($('#qty-sms').text()) || 0;
+        if (qty <= 0) {
+            $('#error-msg').text('Solde insuffisant. Veuillez recharger votre compte.');
+            e.preventDefault();
+        } else {
+            $('#error-msg').text('');
+        }
+    });
 });
 </script>
 {% endblock %}

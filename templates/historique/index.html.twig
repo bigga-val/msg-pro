@@ -1,27 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Historique{% endblock %}
+{% block title %}Historique des envois{% endblock %}
 
 {% block body %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-gradient-dark">
-                    <h3 class="card-title mb-0">Historique des envois</h3>
+                <div class="card-header d-flex justify-content-between align-items-center" style="background:#fff; border-bottom:2px solid #e9ecef;">
+                    <div>
+                        <i class="fas fa-history text-primary mr-2"></i>
+                        <span class="font-weight-bold" style="font-size:1.05rem;">Historique des envois</span>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <table class="table table-striped table-hover datatable">
-                        <thead class="thead-dark">
+                <div class="card-body p-0">
+                    <table class="table table-hover datatable mb-0">
+                        <thead style="background:#f4f6f9;">
                         <tr>
-                            <th>#</th>
+                            <th style="width:40px;">#</th>
                             <th>Date</th>
-                            <th>Par</th>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <th>Utilisateur</th>
+                            {% endif %}
                             <th>Expéditeur</th>
                             <th>Numéro</th>
                             <th>Message</th>
-                            <th>Ticket</th>
-                            <th>Réponse</th>
+                            <th style="width:80px;">Statut</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -29,36 +33,47 @@
                         {% for historique in historiques %}
                             {% set counter = counter + 1 %}
                             <tr>
-                                <td>{{ counter }}</td>
-                                <td>{{ historique.date | format_datetime() }}</td>
+                                <td class="text-muted">{{ counter }}</td>
+                                <td style="white-space:nowrap;font-size:0.85rem;">
+                                    {{ historique.date | format_datetime(pattern='dd/MM/yyyy HH:mm') }}
+                                </td>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <td>
+                                        {% if historique.user %}
+                                            {{ historique.user.username }}
+                                        {% else %}
+                                            <em class="text-muted">—</em>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                                <td><span class="badge badge-secondary">{{ historique.sender }}</span></td>
+                                <td style="font-family:monospace;font-size:0.88rem;">
+                                    {{ historique.numero | replace({'%2b': '+'}) }}
+                                </td>
+                                <td style="max-width:260px;font-size:0.88rem;word-break:break-word;">
+                                    {{ historique.message | replace({'+': ' '}) | slice(0, 80) }}{% if historique.message|length > 80 %}…{% endif %}
+                                </td>
                                 <td>
-                                    {% if historique.user %}
-                                        {{ historique.user.username }}
+                                    {% if historique.reponse == '0' or historique.reponse == 0 %}
+                                        <span class="badge badge-success"><i class="fas fa-check mr-1"></i>OK</span>
                                     {% else %}
-                                        <em class="text-muted">Utilisateur supprimé</em>
+                                        <span class="badge badge-danger" title="{{ historique.ticket }}">
+                                            <i class="fas fa-times mr-1"></i>Erreur
+                                        </span>
                                     {% endif %}
                                 </td>
-                                <td>{{ historique.sender }}</td>
-                                <td>{{ historique.numero | replace({'%2b': '+'}) }}</td>
-                                <td>{{ historique.message | replace({'+': ' '}) }}</td>
-                                <td>
-                                    {% if historique.ticket == 0 %}
-                                        <span class="badge badge-success">OK</span>
-                                    {% else %}
-                                        <span class="badge badge-danger">{{ historique.ticket }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>{{ historique.reponse }}</td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="8" class="text-center text-muted">Aucun historique disponible</td>
+                                <td colspan="7" class="text-center py-4 text-muted">
+                                    <i class="fas fa-inbox fa-2x d-block mb-2" style="color:#cbd5e1;"></i>
+                                    Aucun envoi enregistré
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
-                <div class="card-footer"></div>
             </div>
         </div>
     </div>

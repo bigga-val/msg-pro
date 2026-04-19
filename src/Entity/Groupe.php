@@ -18,7 +18,7 @@ class Groupe
     private ?string $designation = null;
 
     #[ORM\ManyToOne]
-    private ?Organisation $organisation = null;
+    private ?User $user = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isActive = null;
@@ -43,14 +43,14 @@ class Groupe
         return $this;
     }
 
-    public function getOrganisation(): ?Organisation
+    public function getUser(): ?User
     {
-        return $this->organisation;
+        return $this->user;
     }
 
-    public function setOrganisation(?Organisation $organisation): static
+    public function setUser(?User $user): static
     {
-        $this->organisation = $organisation;
+        $this->user = $user;
 
         return $this;
     }

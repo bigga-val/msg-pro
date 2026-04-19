@@ -2,26 +2,33 @@
 
 {% block title %}Liste des Groupes{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/import.css') }}">
+{% endblock %}
+
 {% block body %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-gradient-dark d-flex justify-content-between align-items-center">
-                    <h3 class="card-title mb-0">Liste des Groupes de contacts</h3>
-                    <a class="btn btn-success btn-sm" href="{{ path('app_groupe_new') }}">
-                        <i class="fas fa-plus"></i> Nouveau groupe
+                <div class="card-header d-flex justify-content-between align-items-center" style="background:#fff; border-bottom:2px solid #e9ecef;">
+                    <div>
+                        <i class="fas fa-layer-group text-primary mr-2"></i>
+                        <span class="font-weight-bold" style="font-size:1.05rem;">Groupes de contacts</span>
+                    </div>
+                    <a class="btn btn-primary btn-sm" href="{{ path('app_groupe_new') }}">
+                        <i class="fas fa-plus mr-1"></i> Nouveau groupe
                     </a>
                 </div>
-                <div class="card-body">
-                    <table class="table table-striped table-hover datatable">
-                        <thead class="thead-dark">
+                <div class="card-body p-0">
+                    <table class="table table-hover datatable mb-0">
+                        <thead style="background:#f4f6f9;">
                         <tr>
-                            <th>#</th>
+                            <th style="width:40px;">#</th>
                             <th>Désignation</th>
-                            <th>Total Contacts</th>
-                            <th>Organisation</th>
-                            <th>Actions</th>
+                            <th>Contacts</th>
+                            <th style="width:200px;">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -29,19 +36,27 @@
                         {% for groupe in groupes %}
                             {% set counter = counter + 1 %}
                             <tr>
-                                <td>{{ counter }}</td>
-                                <td>{{ groupe.designation }}</td>
+                                <td class="text-muted">{{ counter }}</td>
+                                <td><strong>{{ groupe.designation }}</strong></td>
                                 <td><span class="badge badge-info">{{ groupe.totalContact }}</span></td>
-                                <td>{{ groupe.organisation }}</td>
                                 <td>
-                                    <a href="{{ path('app_groupe_show', {'id': groupe.id}) }}" class="btn btn-sm btn-default">Détails</a>
-                                    <a href="{{ path('app_groupe_edit', {'id': groupe.id}) }}" class="btn btn-sm btn-primary">Modifier</a>
-                                    <a href="{{ path('app_groupe_attribuer', {'id': groupe.id}) }}" class="btn btn-sm btn-info">Gérer</a>
+                                    <a href="{{ path('app_groupe_show', {'id': groupe.id}) }}" class="btn btn-sm btn-default btn-xs">
+                                        <i class="fas fa-eye"></i> Voir
+                                    </a>
+                                    <a href="{{ path('app_groupe_attribuer', {'id': groupe.id}) }}" class="btn btn-sm btn-info btn-xs">
+                                        <i class="fas fa-users"></i> Gérer
+                                    </a>
+                                    <a href="{{ path('app_groupe_edit', {'id': groupe.id}) }}" class="btn btn-sm btn-warning btn-xs">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
                                 </td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="5" class="text-center text-muted">Aucun groupe trouvé</td>
+                                <td colspan="4" class="text-center py-4 text-muted">
+                                    <i class="fas fa-layer-group fa-2x mb-2 d-block"></i>
+                                    Aucun groupe trouvé
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>

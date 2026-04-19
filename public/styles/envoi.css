@@ -90,3 +90,29 @@
 
 /* Séparateur discret */
 .hr-light { border-color: #f1f5f9; margin: 20px 0; }
+
+/* ===== FEEDBACK ENVOI ===== */
+.feedback-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.feedback-box i { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+.feedback-success {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    color: #166534;
+}
+.feedback-success i { color: #16a34a; }
+.feedback-error {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+}
+.feedback-error i { color: #dc2626; }
+.feedback-link { color: #166534; font-weight: 700; text-decoration: underline; }
+.feedback-link:hover { color: #14532d; }

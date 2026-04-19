@@ -46,6 +46,25 @@
     background: #f8fafc;
 }
 
+/* ===== DÉTAIL CONTACT ===== */
+.contact-info-item {
+    margin-bottom: 18px;
+}
+.contact-info-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+.contact-info-label i { color: #2563eb; }
+.contact-info-value {
+    font-size: 0.95rem;
+    color: #1e293b;
+    font-weight: 500;
+}
+
 /* ===== BADGES GROUPE ===== */
 .contact-table .badge-info {
     background: #eff6ff;

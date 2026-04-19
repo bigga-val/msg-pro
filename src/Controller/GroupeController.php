@@ -3,13 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Groupe;
-use App\Entity\Organisation;
 use App\Form\GroupeType;
 use App\Repository\ContactGroupeRepository;
 use App\Repository\ContactRepository;
 use App\Repository\GroupeRepository;
-use App\Repository\OrganisationRepository;
-use Couchbase\RegexpSearchQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,40 +39,26 @@ final class GroupeController extends AbstractController
 
     #[Route('/new', name: 'app_groupe_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager,
-        OrganisationRepository $organisationRepository
+        GroupeRepository $groupeRepository
     ): Response
     {
         if(!$this->getUser()){
             return $this->redirectToRoute('app_login');
         }
-        $groupe = new Groupe();
-        $form = $this->createForm(GroupeType::class, $groupe);
+
         if ($this->isGranted('ROLE_ADMIN')) {
-            $organisations = $organisationRepository->findAll();
+            $groupes = $groupeRepository->findGroupes();
         } else {
-            $organisations = $organisationRepository->findBy(['user' => $this->getUser()]);
-        }
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $groupe->setActive(true);
-            $entityManager->persist($groupe);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_groupe_index', [], Response::HTTP_SEE_OTHER);
+            $groupes = $groupeRepository->findGroupesByUser($this->getUser());
         }
 
         return $this->render('groupe/new.html.twig', [
-            'groupe' => $groupe,
-            'form' => $form,
-            'organisations' => $organisations,
+            'groupes' => $groupes,
         ]);
     }
 
     #[Route('/JsonSaveGroupe', name: 'json_groupe_new', methods: ['GET', 'POST'])]
-    public function JsonSaveGroupe(Request $request, EntityManagerInterface $entityManager,
-        OrganisationRepository $organisationRepository
-    ): JsonResponse
+    public function JsonSaveGroupe(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         if(!$this->getUser()){
             return $this->redirectToRoute('app_login');
@@ -83,7 +66,7 @@ final class GroupeController extends AbstractController
         $groupe = new Groupe();
         $groupe->setActive(true);
         $groupe->setDesignation($request->get('designation'));
-        $groupe->setOrganisation($organisationRepository->find($request->get('organisationID')));
+        $groupe->setUser($this->getUser());
         $entityManager->persist($groupe);
         $entityManager->flush();
 
@@ -100,15 +83,15 @@ final class GroupeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_groupe_show', methods: ['GET'])]
-    public function show(Groupe $groupe, ContactRepository $contactRepository): Response
+    public function show(Groupe $groupe, ContactGroupeRepository $contactGroupeRepository): Response
     {
         if(!$this->getUser()){
             return $this->redirectToRoute('app_login');
         }
-        $contacts = $contactRepository->findBy(['groupe' => $groupe]);
+        $contactGroupes = $contactGroupeRepository->findBy(['groupe' => $groupe]);
         return $this->render('groupe/show.html.twig', [
             'groupe' => $groupe,
-            'contacts' => $contacts,
+            'contactGroupes' => $contactGroupes,
         ]);
     }
 
@@ -169,10 +152,4 @@ final class GroupeController extends AbstractController
     }
 
 
-    #[Route('/JsonListGroupsByOrganisation/{id}', name: 'JsonListGroupsByOrganisation', methods: ['GET'])]
-    public function JsonListGroupsByOrganisation(Request $request, Organisation $organisation): JsonResponse
-    {
-
-        return new JsonResponse(['data'=>$organisation]);
-    }
 }

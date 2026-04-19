@@ -45,7 +45,10 @@
                             <div class="col-md-6">
                                 <label>Groupe de contacts</label>
                                 <select name="listes" id="listes" class="form-control">
-                                    <option value="-1">— Sélectionnez d'abord une organisation —</option>
+                                    <option value="-1">Choisir un groupe</option>
+                                    {% for groupe in groupes %}
+                                        <option value="{{ groupe.id }}">{{ groupe.designation }} ({{ groupe.totalContact }} contacts)</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -97,6 +100,21 @@
                             <i class="fas fa-paper-plane me-2"></i> Envoyer la campagne
                         </button>
 
+                        <!-- Feedback envoi -->
+                        <div id="feedback-success" class="feedback-box feedback-success d-none mt-3">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong id="feedback-count"></strong>
+                                <div style="font-size:0.85rem;margin-top:2px;">
+                                    <a href="{{ path('app_historique_index') }}" class="feedback-link">Voir l'historique →</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="feedback-error" class="feedback-box feedback-error d-none mt-3">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span id="feedback-error-msg"></span>
+                        </div>
+
                     </div>
                 </div>
 
@@ -127,52 +145,23 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-    <script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
     <script src="{{ asset("plugins/select2/js/select2.min.js") }}"></script>
     <script>
         $(document).ready(function(){
 
-            // Select2 sur les dropdowns
-            $('#organisation').select2({
-                theme: 'bootstrap4',
-                placeholder: 'Choisir une organisation',
-                allowClear: true,
-                width: '100%'
-            });
-            $('#listes').select2({
-                theme: 'bootstrap4',
-                placeholder: '— Sélectionnez d\'abord une organisation —',
-                allowClear: true,
-                width: '100%'
-            });
-            $('#template').select2({
-                theme: 'bootstrap4',
-                placeholder: 'Choisir un modèle existant',
-                allowClear: true,
-                width: '100%'
-            });
+            $('#organisation').select2({ theme: 'bootstrap4', placeholder: 'Choisir une organisation', allowClear: true, width: '100%' });
+            $('#listes').select2({ theme: 'bootstrap4', placeholder: 'Choisir un groupe', allowClear: true, width: '100%' });
+            $('#template').select2({ theme: 'bootstrap4', placeholder: 'Choisir un modèle existant', allowClear: true, width: '100%' });
 
-            $("#organisation").on('change', function(e){
-               // console.log($(this).val())
-                let options = ""
-                $.ajax({
-                    url: `JsonListGroupsByOrganisation/`+$(this).val(),
-                    method: 'GET',
-                    data: {},
-                    success: function (data) {
-                        options = '<option value="-1">— Choisir un groupe —</option>';
-                        for(var i = 0; i < data.length; i++){
-                            options += "<option value='"+data[i]['id']+"'>"+data[i]['designation']+" ("+data[i]['totalContact']+" contacts)</option>"
-                        }
-                        $("#listes").html(options).trigger('change.select2');
-                    },
-                    error: function () {
-                        $("#listes").html('<option value="-1">Impossible de charger les groupes. Réessayez.</option>').trigger('change.select2');
-                    }
-                    //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
-                })
-            })
-
+            // Focus automatique sur le champ de recherche à l'ouverture
+            $(document).on('select2:open', function() {
+                document.querySelector('.select2-container--open .select2-search__field').focus();
+            });
 
             $('.btn-include').click(function() {
                 var texteAInserer = $(this).text();
@@ -249,45 +238,51 @@
             })
 
             $("#btn-envoyer-sms").on("click", function(e){
-                // $(this).attr("disabled", true)
                 let message = $("#message").val()
                 let listID = $("#listes").val()
                 let sender = $("#organisation").val()
-                // console.log(message, listID, sender)
-                if(sender < 0 ){
-                    $("#organisation").addClass('border border-danger')
-                }else if(listID < 0){
-                    $("#listes").addClass('border border-danger')
-                }else if(message.length <= 0){
-                    $("#message").addClass('border border-danger')
-                }else{
-                    $("#organisation, #message, #listes").removeClass('border border-danger')
-                    $.ajax({
-                        url: 'JsonEnvoyerSMS?sender='+encodeURIComponent(sender)+'&message='+encodeURIComponent(message)+'&groupeID='+encodeURIComponent(listID)+'&expID='+encodeURIComponent(sender),
-                        method: 'GET',
-                        data: {},
-                        success: function (data) {
-                            console.log(data)
-                            if(data){
-                                //window.location.replace('{{ path('app_historique_index') }}');
-                            }else{
-                                $("#erreur-longueur")
-                                    .text(data)
-                                    .removeClass("d-none")
-                            }
-                        },
-                        error: function () {
-                            $("#erreur-longueur").text("Échec de l'envoi. Vérifiez votre connexion et réessayez.").removeClass("d-none");
-                        }
-                        //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
-                    })
+
+                $("#feedback-success, #feedback-error").addClass('d-none')
+                $("#organisation, #message, #listes").removeClass('border border-danger')
+
+                if(sender < 0){
+                    $("#organisation").addClass('border border-danger'); return;
+                }
+                if(listID < 0){
+                    $("#listes").addClass('border border-danger'); return;
+                }
+                if(message.length <= 0){
+                    $("#message").addClass('border border-danger'); return;
                 }
 
+                let $btn = $(this)
+                $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i> Envoi en cours…')
+
+                $.ajax({
+                    url: 'JsonEnvoyerSMS?sender='+encodeURIComponent(sender)+'&message='+encodeURIComponent(message)+'&groupeID='+encodeURIComponent(listID)+'&expID='+encodeURIComponent(sender),
+                    method: 'GET',
+                    success: function(data) {
+                        $btn.prop('disabled', false).html('<i class="fas fa-paper-plane me-2"></i> Envoyer la campagne')
+                        if(typeof data === 'string' && data.includes('%2b')) {
+                            // success: backend returned phone numbers string
+                            let count = (data.match(/%2b/g) || []).length
+                            $("#feedback-count").text(count + ' SMS envoyé' + (count > 1 ? 's' : '') + ' avec succès !')
+                            $("#feedback-success").removeClass('d-none')
+                            $("#message").val('')
+                            $("#longueur").text('0')
+                        } else {
+                            // backend returned an error message string
+                            $("#feedback-error-msg").text(data)
+                            $("#feedback-error").removeClass('d-none')
+                        }
+                    },
+                    error: function() {
+                        $btn.prop('disabled', false).html('<i class="fas fa-paper-plane me-2"></i> Envoyer la campagne')
+                        $("#feedback-error-msg").text("Échec de l'envoi. Vérifiez votre connexion et réessayez.")
+                        $("#feedback-error").removeClass('d-none')
+                    }
+                })
             })
         })
     </script>
-
 {% endblock %}
-
-
-

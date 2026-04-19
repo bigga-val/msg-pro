@@ -1,142 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Groupe{% endblock %}
+{% block title %}Modifier le Groupe{% endblock %}
 
 {% block body %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-
-                <div class="card">
-                    <div class="card-header bg-gradient-dark">
-                        <h3>Modifier le Groupe</h3>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center" style="background:#fff; border-bottom:2px solid #e9ecef;">
+                    <div>
+                        <i class="fas fa-edit text-primary mr-2"></i>
+                        <span class="font-weight-bold">Modifier le groupe</span>
                     </div>
-                    <div class="card-body m-3">
-                        {{ include('groupe/_form.html.twig', {'button_label': 'Update'}) }}
-                    </div>
-                    <div class="card-footer">
-                        <a href="{{ path('app_groupe_index') }}">back to list</a>
-                        {{ include('groupe/_delete_form.html.twig') }}
-                    </div>
+                    <a href="{{ path('app_groupe_index') }}" class="btn btn-default btn-sm">
+                        <i class="fas fa-arrow-left mr-1"></i> Retour
+                    </a>
                 </div>
-                <div class="card">
-                    <div class="card-header bg-gradient-dark">
-                        <h4>Importation de fichier de contacts</h4>
-                    </div>
-                    <div class="card-body">
-                        <input accept=".xlsx" id="excelFileInput" name="excelFileInput" type="file">
-                        <button class="btn btn-primary btn-sm" id="btn-savexlsx">Enregistrer</button>
-                        <br>
-                        <span class="alert alert-default-info m-3 d-block text-black"><a class="text-secondary" href="{{ asset('template_contacts.xlsx') }}">Veuillez telecharger le template du fichier des contacts ici .XLSX</a></span>
-                        <br>
-                        <span id="error-msg" class="text-danger"></span>
-                        <hr>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Telephone</th>
-                                <th>Nom</th>
-                                <th>Postnom</th>
-                                <th>Adresse</th>
-                                <th>Fonction</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tbody">
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer">
-                        <a href="{{ path('app_groupe_index') }}">Voir la liste</a>
-
-                    </div>
+                <div class="card-body">
+                    {{ include('groupe/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+                </div>
+                <div class="card-footer text-right">
+                    {{ include('groupe/_delete_form.html.twig') }}
                 </div>
             </div>
         </div>
     </div>
-
-    <script src="{{ asset("plugins/jquery/jquery.js") }}"></script>
-
-    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-    <script src="https://unpkg.com/handsontable/dist/handsontable.full.min.js">
-
-    </script> <script src="https://cdn.jsdelivr.net/npm/moment02.29.4/moment.min.js">
-
-</script> <script src="https://cdn.jsdelivr.net/npm/pikaday01.8.2/pikaday.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday@1.8.2/css/pikaday.css">
-    <link rel="stylesheet" href="https://unpkg.com/handsontable/dist/handsontable.full.min.css">
-    <script>
-        const result =[]
-        const container = document.getElementById('previewTable')
-        $('#excelFileInput').on('change', function(e){
-            //container.innerHTML = '<span>No file uploaded</span>'
-            //console.log("changed")
-            const file = e.target.files[0]
-            const reader = new FileReader()
-            const groupeID = {{ groupe.id }}
-            reader.onload = function(e){
-                let data = e.target.result//new Uint8Array(e.target.result)
-                const workbook = XLSX.read(data, {type: 'array'})
-                const sheetName = workbook.SheetNames[0]
-                const worksheet = workbook.Sheets[sheetName]
-                //console.log(workbook, worksheet, sheetName)
-                //const jsonData = XLSX.utils.sheet_to_json(worksheet, {header:1, range:12, cellDates: true})
-                data = XLSX.utils.sheet_to_json(worksheet);
-                //console.log(workbook, worksheet, sheetName)
-                console.log(data, typeof worksheet)
-                function esc(v) { return $('<span>').text(v ?? '').html(); }
-                let tbody = ""
-                for(let i = 0; i < data.length; i++){
-                    tbody += "<tr><td>" + esc(data[i]['Telephone']) + "</td>"
-                        + "<td>" + esc(data[i]['Nom']) + "</td>"
-                        + "<td>" + esc(data[i]['Postnom']) + "</td>"
-                        + "<td>" + esc(data[i]['Adresse']) + "</td>"
-                        + "<td>" + esc(data[i]['Fonction']) + "</td></tr>"
-                }
-                $("#tbody").html(tbody)
-                $('#btn-savexlsx').on('click', function(e){
-                    if($('#groupe_designation').val() === ''){
-                        console.log('empty')
-                        $('#groupe_designation').addClass('border border-danger')
-                        $('#error-msg').text('La designation du groupe de contact est encore vide')
-                    }else if($('#tbody').find('tr').length === 0 ){
-                        $('#groupe_designation').removeClass('border border-danger')
-                        $('#error-msg').text('La table des donnees a inserer parait vide. Veuillez choisir un fichier')
-                    }else{
-                        $('#groupe_designation').removeClass('border border-danger')
-                        $('#error-msg').text('')
-                        let lines = $("#tbody tr")
-                        for(let i = 0; i < data.length; i++){
-                                    //console.log(data[i]['Telephone'], data[i]['Nom'], data[i]['Postnom'], data[i]['Adresse'], data[i]['Fonction'])
-                                    $.ajax({
-                                        url: '/contact/JsonSaveContact?'
-                                            + 'telephone=' + encodeURIComponent(data[i]['Telephone'] ?? '')
-                                            + '&nom=' + encodeURIComponent(data[i]['Nom'] ?? '')
-                                            + '&postnom=' + encodeURIComponent(data[i]['Postnom'] ?? '')
-                                            + '&adresse=' + encodeURIComponent(data[i]['Adresse'] ?? '')
-                                            + '&fonction=' + encodeURIComponent(data[i]['Fonction'] ?? '')
-                                            + '&groupeID=' + encodeURIComponent(groupeID)
-                                        ,method: 'GET',
-                                        data: {},
-                                        success: function (data) {
-                                            console.log(data, 'done')
-                                            for(let i = 0; i < data.length; i++){
-                                                //console.log(data[i]['Telephone'], data[i]['Nom'], data[i]['Postnom'], data[i]['Adresse'], data[i]['Fonction'])
-                                            }
-                                            window.location.replace('{{ path('app_contact_index') }}');
-                                        },
-                                        error: function () {
-                                            $('#error-msg').text("Impossible d'enregistrer le contact. Vérifiez votre connexion et réessayez.");
-                                        }
-                                        //let qty = $(this).parent("td").siblings("td").children("input[x-model='item.quantity']")
-                                    })
-                                }
-                    }
-                })
-
-            }
-            reader.readAsArrayBuffer(file)
-        })
-    </script>
-
+</div>
 {% endblock %}

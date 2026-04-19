@@ -1,66 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Groupe{% endblock %}
+{% block title %}Groupe — {{ groupe.designation }}{% endblock %}
 
 {% block body %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-gradient-dark">
-                        Groupe {{ groupe.designation }}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center" style="background:#fff; border-bottom:2px solid #e9ecef;">
+                    <div>
+                        <i class="fas fa-users text-primary mr-2"></i>
+                        <span class="font-weight-bold" style="font-size:1.05rem;">{{ groupe.designation }}</span>
+                        <span class="badge badge-info ml-2">{{ contactGroupes|length }} contact(s)</span>
                     </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
+                    <div>
+                        <a href="{{ path('app_groupe_attribuer', {'id': groupe.id}) }}" class="btn btn-info btn-sm mr-1">
+                            <i class="fas fa-user-plus mr-1"></i> Gérer les contacts
+                        </a>
+                        <a href="{{ path('app_groupe_index') }}" class="btn btn-default btn-sm">
+                            <i class="fas fa-arrow-left mr-1"></i> Retour
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead style="background:#f4f6f9;">
+                        <tr>
+                            <th style="width:40px;">#</th>
+                            <th>Téléphone</th>
+                            <th>Nom</th>
+                            <th>Postnom</th>
+                            <th>Adresse</th>
+                            <th>Fonction</th>
+                            <th style="width:120px;">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set counter = 0 %}
+                        {% for cg in contactGroupes %}
+                            {% set counter = counter + 1 %}
                             <tr>
-                                <th>#</th>
-                                <th>Telephone</th>
-                                <th>Nom</th>
-                                <th>Postnom</th>
-                                <th>Adresse</th>
-                                <th>Fonction</th>
-                                <th>actions</th>
+                                <td class="text-muted">{{ counter }}</td>
+                                <td>{{ cg.contact.telephone }}</td>
+                                <td>{{ cg.contact.nom }}</td>
+                                <td>{{ cg.contact.postnom }}</td>
+                                <td>{{ cg.contact.adresse }}</td>
+                                <td>{{ cg.contact.fonction }}</td>
+                                <td>
+                                    <a href="{{ path('app_contact_show', {'id': cg.contact.id}) }}" class="btn btn-sm btn-default btn-xs">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_contact_edit', {'id': cg.contact.id}) }}" class="btn btn-sm btn-warning btn-xs">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {% set counter = 0 %}
-                            {% for contact in contacts %}
-                                {% set counter = counter + 1 %}
-                                <tr>
-                                    <td>{{ counter }}</td>
-                                    <td>{{ contact.telephone }}</td>
-                                    <td>{{ contact.nom }}</td>
-                                    <td>{{ contact.postnom }}</td>
-                                    <td>{{ contact.adresse }}</td>
-                                    <td>{{ contact.fonction }}</td>
-                                    <td>
-                                        <a href="{{ path('app_contact_show', {'id': contact.id}) }}">show</a>
-                                        <a href="{{ path('app_contact_edit', {'id': contact.id}) }}">edit</a>
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="8">no records found</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-
-                    </div>
-                    <div class="card-footer">
-                            <a href="{{ path('app_groupe_index') }}">Voir la liste</a>
-
-                    </div>
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">
+                                    <i class="fas fa-user-slash fa-2x mb-2 d-block"></i>
+                                    Aucun contact dans ce groupe
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
-{#    <a href="{{ path('app_groupe_edit', {'id': groupe.id}) }}">edit</a>#}
-
-{#    {{ include('groupe/_delete_form.html.twig') }}#}
+</div>
 {% endblock %}

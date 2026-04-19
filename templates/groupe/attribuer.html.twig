@@ -1,156 +1,131 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Groupe{% endblock %}
+{% block title %}Gérer les contacts — {{ groupe.designation }}{% endblock %}
 
 {% block body %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-gradient-dark">
-                        Groupe {{ groupe.designation }}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center" style="background:#fff; border-bottom:2px solid #e9ecef;">
+                    <div>
+                        <i class="fas fa-users text-primary mr-2"></i>
+                        <span class="font-weight-bold">{{ groupe.designation }}</span>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header bg-default">
-                                      {{ allcontacts | length}}  Contacts Disponibles
-                                    </div>
-                                    <div class="card-body">
-{#                                        <input placeholder="Recherche..." type="text" id="myInput1" name="myInput1">#}
-                                <table class="table table-striped datatable">
-                                    <thead>
+                    <a href="{{ path('app_groupe_index') }}" class="btn btn-default btn-sm">
+                        <i class="fas fa-arrow-left mr-1"></i> Retour
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Contacts disponibles -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center" style="background:#f4f6f9;">
+                            <span><i class="fas fa-address-book mr-1 text-muted"></i> Contacts disponibles <span class="badge badge-secondary ml-1">{{ allcontacts|length }}</span></span>
+                            <button class="btn btn-success btn-sm" id="btn-transfer">
+                                Ajouter <i class="fas fa-chevron-right ml-1"></i>
+                            </button>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-hover datatable mb-0">
+                                <thead style="background:#f4f6f9;">
+                                <tr>
+                                    <th>Téléphone</th>
+                                    <th>Nom</th>
+                                    <th>Fonction</th>
+                                    <th style="width:40px;"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="myTable1">
+                                {% for contact in allcontacts %}
                                     <tr>
-                                        <th>Telephone</th>
-                                        <th>Noms</th>
-                                        <th>Fonction</th>
-                                        <th>
-                                            <button class="btn btn-outline-success btn-sm" id="btn-transfer">Transferer >></button>
-                                        </th>
+                                        <td>{{ contact.telephone }}</td>
+                                        <td>{{ contact.nom ~ ' ' ~ contact.postnom }}</td>
+                                        <td>{{ contact.fonction }}</td>
+                                        <td>
+                                            <input type="checkbox" name="{{ contact.contactID }}" class="check-unselected">
+                                        </td>
                                     </tr>
-                                    </thead>
-                                    <tbody id="myTable1">
-                                    {% set counter = 0 %}
-                                    {% for contact in allcontacts %}
-                                        {% set counter = counter + 1 %}
-                                        <tr>
-                                            <td>{{ contact.telephone }}</td>
-                                            <td>{{ contact.nom ~ ' ' ~ contact.postnom  }}</td>
-                                            <td>{{ contact.fonction }} </td>
-                                            <td>
-                                                <input type="checkbox" name="{{ contact.contactID }}" class="check-unselected">
-                                            </td>
-                                        </tr>
-                                    {% else %}
-                                        <tr>
-                                            <td colspan="8">no records found</td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header bg-default">
-                                        {{ contacts | length }} Contacts sélectionnés
-                                    </div>
-                                    <div class="card-body">
-{#                                        <input placeholder="Recherche..." type="text" id="myInput2" name="myInput2">#}
-
-                                        <table class="table table-striped datatable">
-                                            <thead>
-                                            <tr>
-                                                <th>Telephone</th>
-                                                <th>Noms</th>
-                                                <th>Fonction</th>
-                                                <th>
-                                                    <a id="btn-disallocate" class="btn btn-outline-danger btn-sm" href="#"> << Enlever</a>
-
-                                                </th>
-                                            </tr>
-                                            </thead>
-                                            <tbody id="myTable2">
-
-                                            {% set counter = 0 %}
-                                            {% for contact in contacts %}
-                                                {% set counter = counter + 1 %}
-                                                <tr>
-                                                    <td>{{ contact.contact.telephone }}</td>
-                                                    <td>{{ contact.contact.nom ~ ' ' ~ contact.contact.postnom  }}</td>
-                                                    <td>{{ contact.contact.fonction }} </td>
-                                                    <td>
-                                                        <input type="checkbox" name="{{ contact.id }}" class="check-selected">
-                                                    </td>
-                                                </tr>
-                                            {% else %}
-                                                <tr>
-                                                    <td colspan="8">no records found</td>
-                                                </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
-
-                                    </div>
-                                </div>
-                            </div>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-3">Aucun contact disponible</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="card-footer">
-                            <a href="{{ path('app_groupe_index') }}">Voir la liste</a>
+                </div>
 
+                <!-- Contacts dans le groupe -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center" style="background:#f4f6f9;">
+                            <span><i class="fas fa-users mr-1 text-primary"></i> Dans le groupe <span class="badge badge-info ml-1">{{ contacts|length }}</span></span>
+                            <a id="btn-disallocate" class="btn btn-danger btn-sm" href="#">
+                                <i class="fas fa-chevron-left mr-1"></i> Retirer
+                            </a>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-hover datatable mb-0">
+                                <thead style="background:#f4f6f9;">
+                                <tr>
+                                    <th>Téléphone</th>
+                                    <th>Nom</th>
+                                    <th>Fonction</th>
+                                    <th style="width:40px;"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="myTable2">
+                                {% for contact in contacts %}
+                                    <tr>
+                                        <td>{{ contact.contact.telephone }}</td>
+                                        <td>{{ contact.contact.nom ~ ' ' ~ contact.contact.postnom }}</td>
+                                        <td>{{ contact.contact.fonction }}</td>
+                                        <td>
+                                            <input type="checkbox" name="{{ contact.id }}" class="check-selected">
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-3">Aucun contact dans ce groupe</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
+</div>
+{% endblock %}
 
-
-    <script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
-
-    <script>
-        $(document).ready(function(){
-            $("#myInput1").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#myTable1 tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
+{% block javascripts %}
+{{ parent() }}
+<script>
+$(document).ready(function(){
+    $("#btn-transfer").on("click", function(e){
+        e.preventDefault();
+        $(".check-unselected:checked").each(function(){
+            $.getJSON("{{ path('json_contact_attribute') }}", {contactID: $(this).attr('name'), groupeID: {{ groupe.id }} }, function(){
+                window.location.reload();
             });
-
-            $("#myInput2").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#myTable2 tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-
-            $("#btn-transfer").on("click", function(e){
-                $(".check-unselected").each(function(i, e) {
-                    if ($(this).prop("checked")){
-                        //console.log( i + "- "+ e +" : " + $( this ).attr('name') );
-                        $.getJSON("{{ path("json_contact_attribute") }}", {contactID:$(this).attr('name'), groupeID:{{ groupe.id }}}, function(data){
-                            window.location.reload()
-                        })
-                    }
-
-                });
-            })
-
-            $("#btn-disallocate").on("click", function(e){
-
-                $(".check-selected").each(function(i, e) {
-                    if ($(this).prop("checked")){
-                        //console.log( i + "- "+ e +" : " + $( this ).attr('name') );
-                        $.getJSON("{{ path("json_contact_disallocate") }}", {contactID:$(this).attr('name'), groupeID:{{ groupe.id }}}, function(data){
-                            window.location.reload()
-                            //console.log(data)
-                        })
-                    }
-
-                });
-            })
         });
-    </script>
+    });
+
+    $("#btn-disallocate").on("click", function(e){
+        e.preventDefault();
+        $(".check-selected:checked").each(function(){
+            $.getJSON("{{ path('json_contact_disallocate') }}", {contactID: $(this).attr('name'), groupeID: {{ groupe.id }} }, function(){
+                window.location.reload();
+            });
+        });
+    });
+});
+</script>
 {% endblock %}

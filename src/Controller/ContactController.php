@@ -9,8 +9,6 @@ use App\Form\ContactType;
 use App\Repository\ContactGroupeRepository;
 use App\Repository\ContactRepository;
 use App\Repository\GroupeRepository;
-use App\Repository\OrganisationRepository;
-use App\Repository\VContactGroupeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use \Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,20 +21,16 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ContactController extends AbstractController
 {
     #[Route(name: 'app_contact_index', methods: ['GET'])]
-    public function index(ContactRepository $contactRepository, VContactGroupeRepository $VContactGroupeRepository): Response
+    public function index(ContactRepository $contactRepository): Response
     {
         if(!$this->getUser()){
             return $this->redirectToRoute('app_login');
         }
         if($this->isGranted('ROLE_ADMIN')){
             $contacts = $contactRepository->findAll();
-
-        }else{
-
-           // $contacts = $contactRepository->findContactsByUserV2($this->getUser()->getId());
-            $contacts = $VContactGroupeRepository->findBy(['user' => $this->getUser()], ['id' => 'DESC']);
+        } else {
+            $contacts = $contactRepository->findBy(['user' => $this->getUser()], ['id' => 'DESC']);
         }
-        //dd($contacts);
         return $this->render('contact/index.html.twig', [
             'contacts' => $contacts,
         ]);
@@ -49,7 +43,7 @@ final class ContactController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
         $contact = new Contact();
-        $form = $this->createForm(ContactType::class, $contact);
+        $form = $this->createForm(ContactType::class, $contact, ['user' => $this->getUser()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -115,7 +109,6 @@ final class ContactController extends AbstractController
 
         $payload = json_decode($request->getContent(), true);
         $designation = trim($payload['designation'] ?? '');
-        $organisationID = $payload['organisationID'] ?? null;
         $rows = $payload['contacts'] ?? [];
 
         if ($designation === '') {
@@ -129,10 +122,7 @@ final class ContactController extends AbstractController
         $groupe = new Groupe();
         $groupe->setDesignation($designation);
         $groupe->setActive(true);
-        if ($organisationID) {
-            $org = $entityManager->getReference(\App\Entity\Organisation::class, $organisationID);
-            $groupe->setOrganisation($org);
-        }
+        $groupe->setUser($this->getUser());
         $entityManager->persist($groupe);
 
         $imported = 0;
@@ -169,6 +159,9 @@ final class ContactController extends AbstractController
                                     ContactGroupeRepository $contactGroupeRepository
     ): JsonResponse
     {
+        if (!$this->getUser()) {
+            return new JsonResponse(['error' => 'Non authentifié'], 401);
+        }
         $contact = $contactRepository->find($request->query->get('contactID'));
         $groupe = $groupeRepository->find($request->query->get('groupeID'));
         $contactgroupe = new ContactGroupe();
@@ -186,6 +179,9 @@ final class ContactController extends AbstractController
                                          ContactGroupeRepository $contactGroupeRepository
     ): JsonResponse
     {
+        if (!$this->getUser()) {
+            return new JsonResponse(['error' => 'Non authentifié'], 401);
+        }
         try {
             $contactgroupe = $contactGroupeRepository->find($request->query->get('contactID'));
 
@@ -215,7 +211,7 @@ final class ContactController extends AbstractController
         if(!$this->getUser()){
             return $this->redirectToRoute('app_login');
         }
-        $form = $this->createForm(ContactType::class, $contact);
+        $form = $this->createForm(ContactType::class, $contact, ['user' => $this->getUser()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

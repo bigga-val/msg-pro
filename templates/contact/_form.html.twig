@@ -1,28 +1,41 @@
 {{ form_start(form) }}
-{#   // {{ form_widget(form) }}#}
-    <div class="form-group">
-        <label for="">Telephone *</label>
-        {{ form_widget(form.telephone, {'attr': {'class':'form-control'}}) }}
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Téléphone <span class="text-danger">*</span></label>
+            {{ form_widget(form.telephone, {'attr': {'class': 'form-control', 'placeholder': 'ex : 0851234567'}}) }}
+        </div>
     </div>
-<div class="form-group">
-    <label for="">Nom *</label>
-    {{ form_widget(form.nom, {'attr': {'class':'form-control'}}) }}
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Nom</label>
+            {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom de famille'}}) }}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Postnom</label>
+            {{ form_widget(form.postnom, {'attr': {'class': 'form-control', 'placeholder': 'Postnom'}}) }}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Fonction</label>
+            {{ form_widget(form.fonction, {'attr': {'class': 'form-control', 'placeholder': 'ex : Directeur, Agent…'}}) }}
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>Adresse</label>
+            {{ form_widget(form.adresse, {'attr': {'class': 'form-control', 'placeholder': 'Adresse complète'}}) }}
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>Groupe <span class="text-muted" style="font-weight:400;">(optionnel)</span></label>
+            {{ form_widget(form.groupe, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
 </div>
-<div class="form-group">
-    <label for="">Postnom *</label>
-    {{ form_widget(form.postnom, {'attr': {'class':'form-control'}}) }}
-</div>
-<div class="form-group">
-    <label for="">Adresse *</label>
-    {{ form_widget(form.adresse, {'attr': {'class':'form-control'}}) }}
-</div>
-<div class="form-group">
-    <label for="">Fonction *</label>
-    {{ form_widget(form.fonction, {'attr': {'class':'form-control'}}) }}
-</div>
-<div class="form-group">
-    <label for="">Groupe *</label>
-    {{ form_widget(form.groupe, {'attr': {'class':'form-control'}}) }}
-</div>
-    <button class="btn btn-success">{{ button_label|default('Save') }}</button>
+<button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}

@@ -126,31 +126,26 @@ class HomeController extends AbstractController
         if ($this->isGranted('ROLE_ADMIN')) {
             $organisations = $organisationRepository->findAll();
             $templates     = $templatesmsRepository->findAll();
+            $groupes       = $groupeRepository->findGroupes();
         } else {
             $organisations = $organisationRepository->findBy(['user' => $this->getUser()]);
             $templates     = $templatesmsRepository->findBy(['user' => $this->getUser()]);
+            $groupes       = $groupeRepository->findGroupesByUser($this->getUser());
         }
 
         return $this->render('home/envoi.html.twig', [
             'organisations' => $organisations,
             'templates'     => $templates,
+            'groupes'       => $groupes,
         ]);
-    }
-
-    #[Route('/JsonListGroupsByOrganisation/{id}', name: 'JsonListGroupsByOrganisation', methods: ['GET'])]
-    public function JsonListGroupsByOrganisation(
-        Request                $request,
-        GroupeRepository       $groupeRepository,
-    ): JsonResponse
-    {
-        $groupes = $groupeRepository->findGroupesByOrganisation($request->get('id'));
-
-        return new JsonResponse($groupes);
     }
 
     #[Route('/JsonSaveTemplate', name: 'JsonSaveTemplate', methods: ['GET'])]
     public function JsonSaveTemplate(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
+        if (!$this->getUser()) {
+            return new JsonResponse(['error' => 'Non authentifié'], 401);
+        }
         $templatesms = new Templatesms();
         $templatesms->setUser($this->getUser());
         $templatesms->setTexte($request->get('texte'));
@@ -176,6 +171,9 @@ class HomeController extends AbstractController
         SmsService             $smsService,
     ): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
         $message = $request->get('message');
         $sender  = $request->get('expediteur');
 
@@ -223,6 +221,9 @@ class HomeController extends AbstractController
         SmsService               $smsService,
     ): JsonResponse
     {
+        if (!$this->getUser()) {
+            return new JsonResponse(['error' => 'Non authentifié'], 401);
+        }
         $message      = $request->get('message');
         $organisation = $organisationRepository->find($request->get('expID'));
         $sender       = ($organisation !== null && $organisation->isApproved()) ? $organisation->getDesignation() : 'insoft';

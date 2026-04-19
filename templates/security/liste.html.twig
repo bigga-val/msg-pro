@@ -170,9 +170,12 @@
     </div>
 </div>
 
-<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
 <script>
-$(document).ready(function () {
+$(function () {
     $('.btn-recharge').on('click', function () {
         $('#user_id_input').val($(this).attr('id'));
         $('#user_name').text($(this).attr('title'));

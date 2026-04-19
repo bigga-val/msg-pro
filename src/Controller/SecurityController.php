@@ -117,8 +117,17 @@ class SecurityController extends AbstractController
     EntityManagerInterface $entityManager,
     ): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $userID   = $request->get('user');
         $quantite = $request->get('quantite');
+
+        if (!$this->isCsrfTokenValid('recharge', $request->get('_csrf_token'))) {
+            $this->addFlash('danger', 'Token de sécurité invalide.');
+            return $this->redirectToRoute('app_liste_users');
+        }
 
         $user = $userRepository->find($userID);
         if ($user === null) {

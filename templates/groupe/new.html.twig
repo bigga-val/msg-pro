@@ -3,6 +3,7 @@
 {% block title %}Importer des contacts — MSG-PRO{% endblock %}
 
 {% block stylesheets %}
+{{ parent() }}
 <link rel="stylesheet" href="{{ asset('styles/import.css') }}">
 {% endblock %}
 
@@ -29,19 +30,7 @@
                     <div class="import-step-label"><span>1</span> Informations du groupe</div>
 
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="import-label">Organisation</label>
-                            <select id="groupe_organisation" class="form-control import-input">
-                                <option value="">— Choisir une organisation —</option>
-                                {% for organisation in organisations %}
-                                    <option value="{{ organisation.id }}">
-                                        {{ organisation.designation }}
-                                        {% if not organisation.isApproved %} (en attente){% endif %}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <label class="import-label">Nom du groupe <span class="text-danger">*</span></label>
                             <input type="text" id="groupe_designation" class="form-control import-input"
                                    placeholder="ex : Clients VIP, Équipe RH…">
@@ -172,7 +161,6 @@ function handleFile(file) {
 
 $('#btn-savexlsx').on('click', function () {
     const designation = $('#groupe_designation').val().trim();
-    const organisationID = $('#groupe_organisation').val();
 
     if (!designation) {
         showError('Veuillez saisir un nom de groupe.');
@@ -195,7 +183,6 @@ $('#btn-savexlsx').on('click', function () {
         contentType: 'application/json',
         data: JSON.stringify({
             designation: designation,
-            organisationID: organisationID || null,
             contacts: importData
         }),
         success: function (res) {
